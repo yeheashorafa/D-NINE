@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "siteName": "D-NINE — Design & Media Production",
+    "defaultTitle": "D-NINE | Creative Agency, Media Production & Brand Identity",
+    "titleTemplate": "%s | D-NINE — Marketing & Media",
+    "description": "D-NINE Creative Agency in Riyadh & Dubai. Video production, brand identity, graphic design, and short-form video reels."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About D-NINE",
+    "services": "Services",
+    "work": "Our Work",
+    "blog": "Blog",
+    "contact": "Contact",
+    "getStarted": "Get a Consultation",
+    "openMenu": "Open Menu",
+    "closeMenu": "Close Menu",
+    "switchTheme": "Toggle Theme",
+    "switchToLight": "Switch to Light Mode",
+    "switchToDark": "Switch to Dark Mode",
+    "switchLang": "العربية"
+  },
+  "common": {
+    "loading": "Loading...",
+    "loadingMore": "Loading more items...",
+    "close": "Close",
+    "all": "All",
+    "watchVideo": "Watch Video",
+    "pauseVideo": "Pause Video",
+    "conceptProject": "Concept Project",
+    "readMore": "Read More",
+    "exploreMore": "Explore More"
+  },
+  "footer": {
+    "allRightsReserved": "All Rights Reserved © D-NINE — Media Production & Design",
+    "tagline": "Creative agency specializing in brand identity, graphic design, media production, and short-form video reels across the Gulf region.",
+    "quickLinks": "Quick Links",
+    "services": "Creative Services",
+    "contactInfo": "Contact Information",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "backToTop": "Back to Top"
+  },
+  "home": {
+    "hero": {
+      "badge": "Strategy & Digital Creativity",
+      "title": "We Build Digital Identities & Stories That",
+      "titleHighlight": "Lead The Market & Multiply Impact",
+      "subtitle": "A creative agency combining brand identity design and visual video production for ambitious brands.",
+      "ctaPrimary": "Get Free Consultation",
+      "ctaSecondary": "Explore Our Work"
+    },
+    "creativeSnapshot": {
+      "badge": "Cinematic Visual Innovation",
+      "heading": "We Turn Ideas Into Visual Experiences",
+      "description": "D-NINE combines brand identity design, cinematic video production, and short-form vertical reels to elevate your brand presence.",
+      "capabilities": {
+        "design": {
+          "title": "Brand Identity & Graphic Design",
+          "desc": "Distinctive brand identity systems and visuals."
+        },
+        "production": {
+          "title": "Video & Media Production",
+          "desc": "High-end commercial video production and filming."
+        },
+        "editing": {
+          "title": "Motion, Reels & Editing",
+          "desc": "Fast-paced vertical short-form reels and shorts."
+        }
+      },
+      "ctaWatchShowreel": "Watch Showreel",
+      "ctaExploreWork": "Explore Our Work"
+    },
+    "featuredWork": {
+      "badge": "Showcase Gallery",
+      "title": "Exceptional Projects Crafted for Excellence",
+      "all": "All",
+      "viewCaseStudy": "View Project",
+      "viewAll": "View All Work",
+      "empty": "No projects available in this category currently."
+    },
+    "coreServices": {
+      "badge": "Core Services",
+      "title": "Creative Solutions Tailored to Your Brand",
+      "subtitle": "Covering primary creative disciplines from brand identity to video production and motion editing.",
+      "viewAll": "All Services",
+      "learnMore": "Service Details"
+    },
+    "process": {
+      "badge": "Our Process",
+      "title": "A Clear Path From Concept to Reality",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Discovery & Analysis",
+          "description": "Understanding project goals and brand requirements."
+        },
+        {
+          "number": "02",
+          "title": "Strategy & Innovation",
+          "description": "Formulating creative concepts and visual direction."
+        },
+        {
+          "number": "03",
+          "title": "Execution & Production",
+          "description": "Executing designs, video production, and final polishing."
+        }
+      ]
+    },
+    "bookACall": {
+      "badge": "Consultation",
+      "title": "Ready to Take Your Brand to The Next Level?",
+      "subtitle": "Book a strategic session with D-NINE to discuss your project vision and visual direction.",
+      "cta": "Book a Session Now"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "D-NINE Story",
+      "title": "A Creative Agency Specializing in Design & Visual Production",
+      "subtitle": "Combining strategic thinking and artistic passion to serve ambitious brands in the region."
+    },
+    "story": {
+      "badge": "Our Vision",
+      "title": "Crafting Visual Experiences That Elevate Your Brand",
+      "p1": "D-NINE was founded to deliver advanced visual and media solutions covering brand identity, media production, and short-form video reels.",
+      "p2": "We act as a collaborative partner, translating goals into high-impact deliverables."
+    },
+    "missionVision": {
+      "missionTitle": "Our Mission",
+      "missionDesc": "To craft distinctive visual identities and commercial media productions that empower brands to dominate their markets.",
+      "visionTitle": "Our Vision",
+      "visionDesc": "To be the leading creative media production agency across the GCC region, setting benchmarks for quality and storytelling."
+    },
+    "values": {
+      "badge": "Core Values",
+      "title": "What Drives Our Creative Work",
+      "items": [
+        {
+          "title": "Artistic Excellence",
+          "description": "Uncompromising standards in graphic design and cinematography."
+        },
+        {
+          "title": "Strategic Integrity",
+          "description": "Aligning visual output directly with client business objectives."
+        },
+        {
+          "title": "Innovation & Speed",
+          "description": "Mastering modern vertical video formats and digital tools."
+        },
+        {
+          "title": "Client Partnership",
+          "description": "Transparent communication and dedicated creative collaboration."
+        }
+      ]
+    }
+  },
+  "servicesPage": {
+    "badge": "Our Services",
+    "title": "Innovative Design & Media Production Services",
+    "subtitle": "Browse our specialized service offerings across key creative disciplines.",
+    "allFilter": "All Services",
+    "empty": "No services available in this category currently."
+  },
+  "serviceDetail": {
+    "overview": "Service Overview",
+    "benefits": "Key Benefits",
+    "deliverables": "Deliverables & Artifacts",
+    "process": "Service Process",
+    "faqTitle": "Frequently Asked Questions",
+    "relatedProjects": "Featured Work in This Category"
+  },
+  "workPage": {
+    "badge": "Work Showcase",
+    "title": "Explore Our Portfolio & Creative Projects",
+    "subtitle": "Discover selected projects and concept showcases across design, video, and reels.",
+    "allFilter": "All Projects",
+    "empty": "No projects available in this category currently."
+  },
+  "caseStudy": {
+    "challenge": "The Challenge",
+    "strategy": "Strategic Approach",
+    "solution": "The Solution",
+    "deliverables": "Deliverables",
+    "relatedProjects": "Related Projects"
+  },
+  "blogPage": {
+    "badge": "Blog & Insights",
+    "title": "Latest Articles & Insights in Design & Production",
+    "subtitle": "Specialized articles discussing best practices and modern trends in media production and brand identity.",
+    "searchPlaceholder": "Search articles & insights...",
+    "allFilter": "All Categories",
+    "empty": "No articles found matching your search."
+  },
+  "blogDetail": {
+    "relatedArticles": "Related Articles"
+  },
+  "contactPage": {
+    "badge": "Contact Us",
+    "title": "Let's Discuss Your Next Project",
+    "subtitle": "Reach out to inquire or request a creative consultation for your upcoming project.",
+    "formTitle": "Send Us a Message",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email Address",
+    "serviceLabel": "Requested Service",
+    "messageLabel": "Project Details",
+    "submitBtn": "Submit Request",
+    "sending": "Sending...",
+    "successMessage": "Your message has been sent successfully! Our team will contact you shortly."
+  },
+  "forms": {
+    "validation": {
+      "nameRequired": "Full name is required",
+      "emailInvalid": "Please enter a valid email address",
+      "serviceRequired": "Please select a service",
+      "messageMin": "Message must be at least 10 characters"
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "desc": "Sorry, the page you are looking for does not exist or has been moved.",
+    "homeBtn": "Return to Home Page"
+  }
+}

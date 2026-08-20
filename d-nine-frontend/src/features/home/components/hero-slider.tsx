@@ -1,0 +1,268 @@
+'use client';
+
+import React, { useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { useLocale } from 'next-intl';
+import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
+import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+
+/**
+ * PENDING_LICENSED_DNINE_SLIDER_EXPORTS
+ * Note: The slide artwork currently contains external studio marks.
+ * Prior to production deployment, slide images must be replaced with official licensed D-NINE exports.
+ */
+const SLIDES = [
+  { id: 1, src: '/slider/slide-01.jpg', altKey: 'slide1' },
+  { id: 2, src: '/slider/slide-02.jpg', altKey: 'slide2' },
+  { id: 3, src: '/slider/slide-03.jpg', altKey: 'slide3' },
+  { id: 4, src: '/slider/slide-04.jpg', altKey: 'slide4' },
+];
+
+export const HeroSlider: React.FC = () => {
+  const locale = useLocale();
+  const isArabic = locale === 'ar';
+  const prefersReducedMotion = useReducedMotion();
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleNext = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection('next');
+    setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
+  }, [isAnimating]);
+
+  const handlePrev = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection('prev');
+    setCurrentIndex((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  }, [isAnimating]);
+
+  const handleGoTo = useCallback(
+    (index: number) => {
+      if (isAnimating || index === currentIndex) return;
+      setIsAnimating(true);
+      setDirection(index > currentIndex ? 'next' : 'prev');
+      setCurrentIndex(index);
+    },
+    [isAnimating, currentIndex]
+  );
+
+  // Auto-play timer
+  React.useEffect(() => {
+    if (!isPlaying || prefersReducedMotion) return;
+    timerRef.current = setInterval(() => {
+      handleNext();
+    }, 6000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isPlaying, prefersReducedMotion, handleNext]);
+
+  // Keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') {
+      if (isArabic) handleNext(); else handlePrev();
+    } else if (e.key === 'ArrowRight') {
+      if (isArabic) handlePrev(); else handleNext();
+    }
+  };
+
+  const currentSlide = SLIDES[currentIndex];
+
+  // Clip Path Masks for Direction-Aware Reveal
+  const getMaskVariant = (): Variants => {
+    if (prefersReducedMotion) {
+      return {
+        initial: { opacity: 0, scale: 1 },
+        animate: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+        exit: { opacity: 0, scale: 1, transition: { duration: 0.3 } },
+      };
+    }
+
+    const isNext = direction === 'next';
+    const isRtl = isArabic;
+
+    // Direction calculation respecting RTL
+    const slideFromRight = (isNext && !isRtl) || (!isNext && isRtl);
+
+    return {
+      initial: {
+        clipPath: slideFromRight
+          ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
+          : 'polygon(0 0, 0 0, 0 100%, 0 100%)',
+        scale: 1.05,
+      },
+      animate: {
+        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        scale: 1,
+        transition: {
+          duration: 1.0,
+          ease: [0.76, 0, 0.24, 1],
+        },
+      },
+      exit: {
+        clipPath: slideFromRight
+          ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+          : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
+        scale: 0.96,
+        transition: {
+          duration: 1.0,
+          ease: [0.76, 0, 0.24, 1],
+        },
+      },
+    };
+  };
+
+  return (
+    <section
+      className="relative w-full h-[100svh] overflow-hidden bg-[#0b031d] text-white select-none focus:outline-none"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-roledescription="carousel"
+      aria-label={isArabic ? 'معرض الأعمال والمشاريع البارزة' : 'Featured Work & Agency Showcase'}
+    >
+      {/* Accessible Localized H1 Heading */}
+      <h1 className="sr-only">
+        {isArabic
+          ? 'دي ناين — وكالة إبداعية متخصصة في الإنتاج الإعلامي والهوية البصرية'
+          : 'D-NINE — Creative Agency Specializing in Media Production & Brand Identity'}
+      </h1>
+
+      {/* Screen Reader Live Announcement */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {isArabic
+          ? `الشريحة ${currentIndex + 1} من ${SLIDES.length}`
+          : `Slide ${currentIndex + 1} of ${SLIDES.length}`}
+      </div>
+
+      {/* Main Slide Presentation Container */}
+      <AnimatePresence
+        initial={false}
+        custom={direction}
+        onExitComplete={() => setIsAnimating(false)}
+      >
+        <motion.div
+          key={currentSlide.id}
+          variants={getMaskVariant()}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className="absolute inset-0 w-full h-full"
+        >
+          {/* Dual-Layer Responsive Art-Directed Image Container */}
+          {/* Layer 1: Blurred/Dimmed Background for Mobile & Ultra-Wide fill */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden opacity-40 blur-xl scale-110">
+            <Image
+              src={currentSlide.src}
+              alt=""
+              fill
+              priority={currentIndex === 0}
+              sizes="100vw"
+              className="pointer-events-none"
+            />
+          </div>
+
+          {/* Layer 2: Sharp Un-cropped Artwork Foreground */}
+          <div className="relative w-full h-full">
+            <div className="relative w-full h-full">
+              <Image
+                src={currentSlide.src}
+                alt={isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`}
+                fill
+                priority={currentIndex === 0}
+                quality={95}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 95vw, 1600px"
+                className="pointer-events-none drop-shadow-2xl"
+              />
+            </div>
+          </div>
+
+          {/* Color Wash Accent Overlay during Slide Transition */}
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-purple/20 via-transparent to-brand-cyan/20 pointer-events-none z-10" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Top & Bottom Contrast Gradients */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 via-black/20 to-transparent pointer-events-none z-20" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0b031d] via-[#0b031d]/60 to-transparent pointer-events-none z-20" />
+
+      {/* Floating Interactive Control Dock */}
+      <div className="absolute bottom-6 sm:bottom-10 left-0 right-0 z-30 flex items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Navigation Arrow Controls */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={isArabic ? handleNext : handlePrev}
+            disabled={isAnimating}
+            className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan disabled:opacity-50"
+            aria-label={isArabic ? 'الشريحة السابقة' : 'Previous slide'}
+          >
+            {isArabic ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={isArabic ? handlePrev : handleNext}
+            disabled={isAnimating}
+            className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan disabled:opacity-50"
+            aria-label={isArabic ? 'الشريحة التالية' : 'Next slide'}
+          >
+            {isArabic ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+          </button>
+
+          {/* Autoplay Pause / Resume Toggle */}
+          <button
+            type="button"
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan ml-1"
+            aria-label={isPlaying ? (isArabic ? 'إيقاف التبديل التلقائي' : 'Pause slideshow') : (isArabic ? 'تشغيل التبديل التلقائي' : 'Play slideshow')}
+          >
+            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
+          </button>
+        </div>
+
+        {/* Counter & Animated Progress Indicator */}
+        <div className="flex items-center gap-4">
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-slate-300">
+            0{currentIndex + 1} / 0{SLIDES.length}
+          </span>
+
+          <div className="flex items-center gap-2">
+            {SLIDES.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleGoTo(idx)}
+                className={`relative h-2 rounded-full overflow-hidden transition-all duration-300 ${
+                  currentIndex === idx
+                    ? 'w-10 sm:w-12 bg-white/30'
+                    : 'w-2 sm:w-2.5 bg-white/20 hover:bg-white/40'
+                }`}
+                aria-label={isArabic ? `الانتقال إلى الشريحة ${idx + 1}` : `Go to slide ${idx + 1}`}
+              >
+                {currentIndex === idx && isPlaying && !prefersReducedMotion && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-brand-purple to-brand-cyan origin-left"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 6, ease: 'linear' }}
+                  />
+                )}
+                {currentIndex === idx && (!isPlaying || prefersReducedMotion) && (
+                  <div className="absolute inset-0 bg-brand-cyan" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};

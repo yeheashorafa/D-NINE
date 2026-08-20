@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-purple: #6D2878;
+  --color-brand-purple-dark: #4C1D63;
+  --color-brand-purple-light: #9C36AD;
+  --color-brand-cyan: #16B5C5;
+  --color-brand-cyan-dark: #168CA8;
+  --color-brand-cyan-light: #38D4E3;
+  --color-brand-dark: #091522;
+  --color-brand-slate: #101426;
+
+  /* Aliases for missing tailwind class names */
+  --color-deep-purple: #4C1D63;
+  --color-deep-cyan: #0E7490;
+
+  --font-sans: var(--font-ibm-plex-latin), system-ui, -apple-system, sans-serif;
+  --font-arabic: var(--font-ibm-plex-arabic), system-ui, -apple-system, sans-serif;
+}
+
+/* Semantic Design Tokens for Light & Dark Modes */
+:root {
+  --background: #FAFAFC;
+  --foreground: #0F172A;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F5F9;
+  --card: #FFFFFF;
+  --card-border: #E2E8F0;
+  --border: #E2E8F0;
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --input: #F8FAFC;
+  --overlay: rgba(15, 23, 42, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+
+  --book-call-bg: #FDFBF7;
+  --book-call-card-bg: #FFFFFF;
+}
+
+.dark {
+  --background: #091522;
+  --foreground: #F8FAFC;
+  --surface: #0F1B2C;
+  --surface-muted: #162438;
+  --card: #111D30;
+  --card-border: #1E2E4A;
+  --border: #1E2E4A;
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --input: #0D1929;
+  --overlay: rgba(0, 0, 0, 0.7);
+  --glass-bg: rgba(15, 27, 44, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  --book-call-bg: #0B1626;
+  --book-call-card-bg: #0F1D30;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-input: var(--input);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Glassmorphism, animations and gradient helpers */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(22, 181, 197, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(22, 181, 197, 0.2);
+}
+
+.text-gradient-purple-cyan {
+  background: linear-gradient(135deg, #16B5C5 0%, #A855F7 50%, #6D2878 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #38D4E3 0%, #16B5C5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gradient-cyan {
+  background: linear-gradient(135deg, #38D4E3 0%, #60EFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-brand {
+  background: linear-gradient(135deg, #6D2878 0%, #16B5C5 100%);
+}
+
+.bg-radial-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(109, 40, 120, 0.12) 0%, rgba(22, 181, 197, 0.05) 45%, transparent 70%);
+}
+
+.dark .bg-radial-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(109, 40, 120, 0.25) 0%, rgba(22, 181, 197, 0.12) 45%, transparent 70%);
+}
+
+.glow-purple {
+  box-shadow: 0 0 50px -10px rgba(109, 40, 120, 0.35);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 50px -10px rgba(22, 181, 197, 0.35);
+}
+
+/* Reduced Motion Override Helper */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
