@@ -1,0 +1,22 @@
+{
+  "name": "d-nine",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "d-nine-frontend",
+    "d-nine-backend",
+    "d-nine-studio",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:frontend": "npm run dev --workspace=d-nine-frontend",
+    "dev:backend": "npm run dev --workspace=d-nine-backend",
+    "dev:studio": "npm run dev --workspace=d-nine-studio",
+    "build:frontend": "npm run build --workspace=d-nine-frontend",
+    "build:backend": "npm run build --workspace=d-nine-backend",
+    "build:studio": "npm run build --workspace=d-nine-studio",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  }
+}
