@@ -206,7 +206,8 @@
     "messageLabel": "Project Details",
     "submitBtn": "Submit Request",
     "sending": "Sending...",
-    "successMessage": "Your message has been sent successfully! Our team will contact you shortly."
+    "successMessage": "Your message has been sent successfully! Our team will contact you shortly.",
+    "unexpectedError": "An unexpected error occurred. Please try again."
   },
   "forms": {
     "validation": {
@@ -220,5 +221,10 @@
     "title": "Page Not Found",
     "desc": "Sorry, the page you are looking for does not exist or has been moved.",
     "homeBtn": "Return to Home Page"
+  },
+  "api": {
+    "errors": {
+      "unexpected": "An unexpected error occurred. Please try again."
+    }
   }
 }

@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  title: D-NINE Transactional API
+  description: API for handling contact forms, booking requests, and newsletter subscriptions for the D-NINE website.
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local development server
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Returns the health status of the API.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /ready:
+    get:
+      summary: Readiness check
+      description: Returns the readiness status (including database connection).
+      responses:
+        '200':
+          description: Ready
+        '503':
+          description: Service Unavailable
+
+  /contact:
+    post:
+      summary: Submit contact form
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullName
+                - email
+                - serviceSlug
+                - message
+              properties:
+                fullName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                serviceSlug:
+                  type: string
+                message:
+                  type: string
+                website:
+                  type: string
+                  description: Honeypot field. Must be empty.
+                locale:
+                  type: string
+                  enum: [ar, en]
+                sourcePage:
+                  type: string
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request (Validation or Honeypot)
+        '422':
+          description: Validation Error
+
+  /book-call:
+    post:
+      summary: Submit a book-a-call request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullName
+                - email
+                - serviceSlug
+                - preferredDate
+                - preferredTime
+                - timezone
+              properties:
+                fullName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+                companyName:
+                  type: string
+                serviceSlug:
+                  type: string
+                preferredDate:
+                  type: string
+                preferredTime:
+                  type: string
+                timezone:
+                  type: string
+                notes:
+                  type: string
+                website:
+                  type: string
+                locale:
+                  type: string
+                  enum: [ar, en]
+                sourcePage:
+                  type: string
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+
+  /newsletter:
+    post:
+      summary: Subscribe to the newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                website:
+                  type: string
+                locale:
+                  type: string
+                  enum: [ar, en]
+                sourcePage:
+                  type: string
+      responses:
+        '201':
+          description: Subscribed successfully
+        '200':
+          description: Already subscribed
+        '400':
+          description: Bad Request

@@ -12,11 +12,14 @@
     "dev:frontend": "npm run dev --workspace=d-nine-frontend",
     "dev:backend": "npm run dev --workspace=d-nine-backend",
     "dev:studio": "npm run dev --workspace=d-nine-studio",
+    "build:contracts": "npm run build --workspace=@d-nine/contracts",
     "build:frontend": "npm run build --workspace=d-nine-frontend",
     "build:backend": "npm run build --workspace=d-nine-backend",
     "build:studio": "npm run build --workspace=d-nine-studio",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "build": "npm run build --workspaces --if-present"
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "verify": "npm run build --workspace=@d-nine/contracts && npm run typecheck --workspace=@d-nine/contracts && npm run prisma:validate --workspace=d-nine-backend && npm run prisma:generate --workspace=d-nine-backend && npm run migrate:status --workspace=d-nine-backend && npm run typecheck --workspace=d-nine-backend && npm run test --workspace=d-nine-backend -- --run && npm run build --workspace=d-nine-backend && npm run assets:check --workspace=d-nine-frontend && npm run typecheck --workspace=d-nine-frontend && npm run lint:strict --workspace=d-nine-frontend && npm run build --workspace=d-nine-frontend"
   }
 }

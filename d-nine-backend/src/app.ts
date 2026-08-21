@@ -1,33 +1,43 @@
 import express from 'express';
-import cors from 'cors';
 import helmet from 'helmet';
+import { env } from './config/env.js';
+import { requestIdMiddleware } from './middleware/request-id.js';
+import { requestLogger } from './middleware/request-logger.js';
+import { corsMiddleware } from './middleware/cors.js';
+import { globalRateLimiter } from './middleware/rate-limit.js';
+import { notFoundHandler } from './middleware/not-found.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { apiRoutes } from './routes/index.js';
 
-import { apiRouter } from './routes/index.js';
-
-export const app = express();
+const app = express();
 
 app.disable('x-powered-by');
 
+// Trust proxy if we are behind a reverse proxy
+if (env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
+// Security Middlewares
 app.use(helmet());
+app.use(corsMiddleware);
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_ORIGIN ?? 'http://localhost:3000',
-    credentials: true,
-  }),
-);
+// Rate limiting
+app.use(globalRateLimiter);
 
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+// Parsers with size limits
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
-app.use('/api/v1', apiRouter);
+// Logging & Request ID
+app.use(requestIdMiddleware);
+app.use(requestLogger);
 
-app.use((_request, response) => {
-  response.status(404).json({
-    success: false,
-    error: {
-      code: 'NOT_FOUND',
-      message: 'The requested resource was not found.',
-    },
-  });
-});
+// API Routes
+app.use('/api/v1', apiRoutes);
+
+// Fallbacks
+app.use(notFoundHandler);
+app.use(errorHandler);
+
+export default app;

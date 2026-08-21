@@ -19,22 +19,44 @@ export const ContactForm: React.FC<ContactFormProps> = ({ categories }) => {
   const tForm = useTranslations('forms.validation');
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
   });
 
-  const onSubmit = async (_data: ContactFormData) => {
-    // Prepared API form submission
-    void _data;
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSubmitted(true);
-    reset();
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      setServerError(null);
+      const sourcePage = typeof window !== 'undefined' ? window.location.pathname : '';
+      const { submitContactForm } = await import('@/services/contact.service');
+      
+      await submitContactForm(data, locale, sourcePage);
+      
+      setIsSubmitted(true);
+      reset();
+    } catch (error: unknown) {
+      if ((error as Error).name === 'ApiError') {
+        const apiError = error as { status?: number; errors?: { field?: string; message?: string }[]; message?: string };
+        if (apiError.status === 422 && apiError.errors) {
+          apiError.errors.forEach((err: { field?: string; message?: string }) => {
+            if (err.field) {
+              setError(err.field as keyof ContactFormData, { message: err.message });
+            }
+          });
+        } else {
+          setServerError(apiError.message || t('unexpectedError'));
+        }
+      } else {
+        setServerError(t('unexpectedError'));
+      }
+    }
   };
 
   const getErrorMessage = (key?: string) => {
@@ -66,6 +88,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({ categories }) => {
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {serverError && (
+            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm">
+              {serverError}
+            </div>
+          )}
+          
           {/* Full Name */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-foreground">{t('nameLabel')}</label>

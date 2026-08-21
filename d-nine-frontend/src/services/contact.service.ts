@@ -1,16 +1,23 @@
 import { ContactFormData } from '@/features/contact/schemas/contact.schema';
+import { apiClient } from '@/lib/api/api-client';
+import { API_ENDPOINTS } from '@/lib/api/endpoints';
+import { ContactSubmissionResponseData } from '@d-nine/contracts';
 
-export async function submitContactForm(_data: ContactFormData): Promise<{ success: boolean; message: string }> {
-  // Prepared boundary for future API / backend endpoint
-  if (_data) {
-    // validated input
-  }
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        message: 'Contact form submitted successfully.',
-      });
-    }, 500);
+export async function submitContactForm(
+  data: ContactFormData,
+  locale: string,
+  sourcePage: string
+): Promise<ContactSubmissionResponseData> {
+  const payload = {
+    ...data,
+    locale,
+    sourcePage,
+    website: '' // honeypot
+  };
+
+  return apiClient<ContactSubmissionResponseData>(API_ENDPOINTS.contact, {
+    method: 'POST',
+    body: payload,
+    locale,
   });
 }
