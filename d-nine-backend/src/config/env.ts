@@ -1,9 +1,30 @@
 import { z } from 'zod';
-import * as dotenv from 'dotenv';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {config} from 'dotenv';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const backendRoot = path.resolve(currentDirectory, '../..');
+const mode = process.env.NODE_ENV ?? 'development';
 
+const environmentFiles = [
+  `.env.${mode}.local`,
+  '.env.local',
+  `.env.${mode}`,
+  '.env',
+];
+
+for (const fileName of environmentFiles) {
+  const filePath = path.join(backendRoot, fileName);
+
+  if (fs.existsSync(filePath)) {
+    config({
+      path: filePath,
+      quiet: true,
+    });
+  }
+}
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   HOST: z.string().default('0.0.0.0'),
@@ -32,8 +53,12 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error('❌ Invalid environment variables:', parsed.error.format());
-  process.exit(1);
+  console.error(
+    '❌ Invalid environment variables:',
+    parsed.error.flatten().fieldErrors,
+  );
+
+  throw new Error('Invalid backend environment configuration');
 }
 
 export const env = parsed.data;

@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { draftMode } from "next/headers";
 import { routing, Locale } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { VisualEditing } from "@/components/sanity/visual-editing";
 import { ibmPlexSansArabic, ibmPlexSansEnglish } from "@/app/fonts";
 import "@/styles/globals.css";
 
@@ -82,6 +84,8 @@ export default async function RootLayout({
     ? ibmPlexSansArabic.variable
     : ibmPlexSansEnglish.variable;
 
+  const isDraft = (await draftMode()).isEnabled;
+
   return (
     <html
       lang={locale}
@@ -96,6 +100,7 @@ export default async function RootLayout({
             <Header />
             <div className="flex-1 w-full">{children}</div>
             <Footer />
+            {isDraft && <VisualEditing />}
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

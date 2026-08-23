@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     qualities: [60, 75, 90, 95],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
