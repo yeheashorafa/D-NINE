@@ -22,3 +22,18 @@ export * from './enums.js';
  * 
  */
 export type ContactSubmission = Prisma.ContactSubmissionModel
+/**
+ * Model BookCallRequest
+ * 
+ */
+export type BookCallRequest = Prisma.BookCallRequestModel
+/**
+ * Model NewsletterSubscription
+ * 
+ */
+export type NewsletterSubscription = Prisma.NewsletterSubscriptionModel
+/**
+ * Model EmailDelivery
+ * 
+ */
+export type EmailDelivery = Prisma.EmailDeliveryModel

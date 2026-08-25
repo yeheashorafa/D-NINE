@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma.js';
 import { ContactSubmissionPayload } from '@d-nine/contracts';
-import { SubmissionStatus } from '../../generated/prisma/index.js';
+import { SubmissionStatus } from '../../generated/prisma/enums.js';
 
 export class ContactRepository {
   async createSubmission(payload: ContactSubmissionPayload) {

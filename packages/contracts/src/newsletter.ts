@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { localeSchema } from './locale';
+import { localeSchema } from './locale.js';
 
 export const newsletterSubscriptionSchema = z.object({
   email: z.string().trim().toLowerCase().email('Invalid email address').max(254, 'Email must be at most 254 characters'),

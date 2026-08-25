@@ -51,7 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  ContactSubmission: 'ContactSubmission'
+  ContactSubmission: 'ContactSubmission',
+  BookCallRequest: 'BookCallRequest',
+  NewsletterSubscription: 'NewsletterSubscription',
+  EmailDelivery: 'EmailDelivery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,12 +81,61 @@ export const ContactSubmissionScalarFieldEnum = {
   serviceSlug: 'serviceSlug',
   message: 'message',
   locale: 'locale',
+  sourcePage: 'sourcePage',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ContactSubmissionScalarFieldEnum = (typeof ContactSubmissionScalarFieldEnum)[keyof typeof ContactSubmissionScalarFieldEnum]
+
+
+export const BookCallRequestScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  companyName: 'companyName',
+  serviceSlug: 'serviceSlug',
+  preferredDate: 'preferredDate',
+  preferredTime: 'preferredTime',
+  timezone: 'timezone',
+  notes: 'notes',
+  locale: 'locale',
+  sourcePage: 'sourcePage',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookCallRequestScalarFieldEnum = (typeof BookCallRequestScalarFieldEnum)[keyof typeof BookCallRequestScalarFieldEnum]
+
+
+export const NewsletterSubscriptionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  locale: 'locale',
+  sourcePage: 'sourcePage',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NewsletterSubscriptionScalarFieldEnum = (typeof NewsletterSubscriptionScalarFieldEnum)[keyof typeof NewsletterSubscriptionScalarFieldEnum]
+
+
+export const EmailDeliveryScalarFieldEnum = {
+  id: 'id',
+  to: 'to',
+  subject: 'subject',
+  status: 'status',
+  referenceId: 'referenceId',
+  error: 'error',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailDeliveryScalarFieldEnum = (typeof EmailDeliveryScalarFieldEnum)[keyof typeof EmailDeliveryScalarFieldEnum]
 
 
 export const SortOrder = {

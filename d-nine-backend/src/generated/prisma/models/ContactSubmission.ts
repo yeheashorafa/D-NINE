@@ -32,7 +32,8 @@ export type ContactSubmissionMinAggregateOutputType = {
   serviceSlug: string | null
   message: string | null
   locale: string | null
-  status: $Enums.InquiryStatus | null
+  sourcePage: string | null
+  status: $Enums.SubmissionStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -45,7 +46,8 @@ export type ContactSubmissionMaxAggregateOutputType = {
   serviceSlug: string | null
   message: string | null
   locale: string | null
-  status: $Enums.InquiryStatus | null
+  sourcePage: string | null
+  status: $Enums.SubmissionStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,6 +60,7 @@ export type ContactSubmissionCountAggregateOutputType = {
   serviceSlug: number
   message: number
   locale: number
+  sourcePage: number
   status: number
   createdAt: number
   updatedAt: number
@@ -73,6 +76,7 @@ export type ContactSubmissionMinAggregateInputType = {
   serviceSlug?: true
   message?: true
   locale?: true
+  sourcePage?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -86,6 +90,7 @@ export type ContactSubmissionMaxAggregateInputType = {
   serviceSlug?: true
   message?: true
   locale?: true
+  sourcePage?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +104,7 @@ export type ContactSubmissionCountAggregateInputType = {
   serviceSlug?: true
   message?: true
   locale?: true
+  sourcePage?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -185,7 +191,8 @@ export type ContactSubmissionGroupByOutputType = {
   serviceSlug: string
   message: string
   locale: string
-  status: $Enums.InquiryStatus
+  sourcePage: string | null
+  status: $Enums.SubmissionStatus
   createdAt: Date
   updatedAt: Date
   _count: ContactSubmissionCountAggregateOutputType | null
@@ -219,7 +226,8 @@ export type ContactSubmissionWhereInput = {
   serviceSlug?: Prisma.StringFilter<"ContactSubmission"> | string
   message?: Prisma.StringFilter<"ContactSubmission"> | string
   locale?: Prisma.StringFilter<"ContactSubmission"> | string
-  status?: Prisma.EnumInquiryStatusFilter<"ContactSubmission"> | $Enums.InquiryStatus
+  sourcePage?: Prisma.StringNullableFilter<"ContactSubmission"> | string | null
+  status?: Prisma.EnumSubmissionStatusFilter<"ContactSubmission"> | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeFilter<"ContactSubmission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContactSubmission"> | Date | string
 }
@@ -232,6 +240,7 @@ export type ContactSubmissionOrderByWithRelationInput = {
   serviceSlug?: Prisma.SortOrder
   message?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  sourcePage?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -248,7 +257,8 @@ export type ContactSubmissionWhereUniqueInput = Prisma.AtLeast<{
   serviceSlug?: Prisma.StringFilter<"ContactSubmission"> | string
   message?: Prisma.StringFilter<"ContactSubmission"> | string
   locale?: Prisma.StringFilter<"ContactSubmission"> | string
-  status?: Prisma.EnumInquiryStatusFilter<"ContactSubmission"> | $Enums.InquiryStatus
+  sourcePage?: Prisma.StringNullableFilter<"ContactSubmission"> | string | null
+  status?: Prisma.EnumSubmissionStatusFilter<"ContactSubmission"> | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeFilter<"ContactSubmission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContactSubmission"> | Date | string
 }, "id">
@@ -261,6 +271,7 @@ export type ContactSubmissionOrderByWithAggregationInput = {
   serviceSlug?: Prisma.SortOrder
   message?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  sourcePage?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -280,7 +291,8 @@ export type ContactSubmissionScalarWhereWithAggregatesInput = {
   serviceSlug?: Prisma.StringWithAggregatesFilter<"ContactSubmission"> | string
   message?: Prisma.StringWithAggregatesFilter<"ContactSubmission"> | string
   locale?: Prisma.StringWithAggregatesFilter<"ContactSubmission"> | string
-  status?: Prisma.EnumInquiryStatusWithAggregatesFilter<"ContactSubmission"> | $Enums.InquiryStatus
+  sourcePage?: Prisma.StringNullableWithAggregatesFilter<"ContactSubmission"> | string | null
+  status?: Prisma.EnumSubmissionStatusWithAggregatesFilter<"ContactSubmission"> | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ContactSubmission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ContactSubmission"> | Date | string
 }
@@ -293,7 +305,8 @@ export type ContactSubmissionCreateInput = {
   serviceSlug: string
   message: string
   locale?: string
-  status?: $Enums.InquiryStatus
+  sourcePage?: string | null
+  status?: $Enums.SubmissionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -306,7 +319,8 @@ export type ContactSubmissionUncheckedCreateInput = {
   serviceSlug: string
   message: string
   locale?: string
-  status?: $Enums.InquiryStatus
+  sourcePage?: string | null
+  status?: $Enums.SubmissionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -319,7 +333,8 @@ export type ContactSubmissionUpdateInput = {
   serviceSlug?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
+  sourcePage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -332,7 +347,8 @@ export type ContactSubmissionUncheckedUpdateInput = {
   serviceSlug?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
+  sourcePage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -345,7 +361,8 @@ export type ContactSubmissionCreateManyInput = {
   serviceSlug: string
   message: string
   locale?: string
-  status?: $Enums.InquiryStatus
+  sourcePage?: string | null
+  status?: $Enums.SubmissionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -358,7 +375,8 @@ export type ContactSubmissionUpdateManyMutationInput = {
   serviceSlug?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
+  sourcePage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -371,7 +389,8 @@ export type ContactSubmissionUncheckedUpdateManyInput = {
   serviceSlug?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
+  sourcePage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -384,6 +403,7 @@ export type ContactSubmissionCountOrderByAggregateInput = {
   serviceSlug?: Prisma.SortOrder
   message?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  sourcePage?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -397,6 +417,7 @@ export type ContactSubmissionMaxOrderByAggregateInput = {
   serviceSlug?: Prisma.SortOrder
   message?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  sourcePage?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -410,6 +431,7 @@ export type ContactSubmissionMinOrderByAggregateInput = {
   serviceSlug?: Prisma.SortOrder
   message?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  sourcePage?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -423,8 +445,8 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type EnumInquiryStatusFieldUpdateOperationsInput = {
-  set?: $Enums.InquiryStatus
+export type EnumSubmissionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.SubmissionStatus
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -441,6 +463,7 @@ export type ContactSubmissionSelect<ExtArgs extends runtime.Types.Extensions.Int
   serviceSlug?: boolean
   message?: boolean
   locale?: boolean
+  sourcePage?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -454,6 +477,7 @@ export type ContactSubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.T
   serviceSlug?: boolean
   message?: boolean
   locale?: boolean
+  sourcePage?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -467,6 +491,7 @@ export type ContactSubmissionSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   serviceSlug?: boolean
   message?: boolean
   locale?: boolean
+  sourcePage?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -480,12 +505,13 @@ export type ContactSubmissionSelectScalar = {
   serviceSlug?: boolean
   message?: boolean
   locale?: boolean
+  sourcePage?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ContactSubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "email" | "phone" | "serviceSlug" | "message" | "locale" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["contactSubmission"]>
+export type ContactSubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "email" | "phone" | "serviceSlug" | "message" | "locale" | "sourcePage" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["contactSubmission"]>
 
 export type $ContactSubmissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContactSubmission"
@@ -498,7 +524,8 @@ export type $ContactSubmissionPayload<ExtArgs extends runtime.Types.Extensions.I
     serviceSlug: string
     message: string
     locale: string
-    status: $Enums.InquiryStatus
+    sourcePage: string | null
+    status: $Enums.SubmissionStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["contactSubmission"]>
@@ -931,7 +958,8 @@ export interface ContactSubmissionFieldRefs {
   readonly serviceSlug: Prisma.FieldRef<"ContactSubmission", 'String'>
   readonly message: Prisma.FieldRef<"ContactSubmission", 'String'>
   readonly locale: Prisma.FieldRef<"ContactSubmission", 'String'>
-  readonly status: Prisma.FieldRef<"ContactSubmission", 'InquiryStatus'>
+  readonly sourcePage: Prisma.FieldRef<"ContactSubmission", 'String'>
+  readonly status: Prisma.FieldRef<"ContactSubmission", 'SubmissionStatus'>
   readonly createdAt: Prisma.FieldRef<"ContactSubmission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ContactSubmission", 'DateTime'>
 }

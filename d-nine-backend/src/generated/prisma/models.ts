@@ -9,4 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/ContactSubmission.js'
+export type * from './models/BookCallRequest.js'
+export type * from './models/NewsletterSubscription.js'
+export type * from './models/EmailDelivery.js'
 export type * from './commonInputTypes.js'

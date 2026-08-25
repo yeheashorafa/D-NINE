@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma.js';
 import { NewsletterSubscriptionPayload } from '@d-nine/contracts';
-import { SubscriptionStatus } from '../../generated/prisma/index.js';
+import { SubscriptionStatus } from '../../generated/prisma/enums.js';
 
 export class NewsletterRepository {
   async findByEmail(email: string) {

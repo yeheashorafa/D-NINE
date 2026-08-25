@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { localeSchema } from './locale';
-import { serviceSlugSchema } from './service-slug';
+import { localeSchema } from './locale.js';
+import { serviceSlugSchema } from './service-slug.js';
 
 export const bookCallRequestSchema = z.object({
   fullName: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters'),

@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma.js';
 import { BookCallRequestPayload } from '@d-nine/contracts';
-import { BookingStatus } from '../../generated/prisma/index.js';
+import { BookingStatus } from '../../generated/prisma/enums.js';
 
 export class BookCallRepository {
   async createRequest(payload: BookCallRequestPayload) {
