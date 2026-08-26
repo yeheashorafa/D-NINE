@@ -1,5 +1,5 @@
 import { StructureResolver } from 'sanity/structure';
-import { singletonListItem } from './singletons.js';
+import { singletonListItem } from './singletons';
 import {
   TagIcon,
   SparklesIcon,

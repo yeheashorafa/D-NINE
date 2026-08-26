@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity';
-import { MEDIA_ASPECT_RATIOS } from '../../lib/constants.js';
+import { MEDIA_ASPECT_RATIOS } from '../../lib/constants';
 
 export const projectMedia = defineType({
   name: 'projectMedia',
