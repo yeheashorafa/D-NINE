@@ -11,7 +11,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isArabic = locale === 'ar';
-  const pageData = await getContactPage();
+  const pageData = await getContactPage({ stega: false });
 
   const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'تواصل معنا | دي ناين' : 'Contact Us | D-NINE'));
   const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'تواصل مع فريق دي ناين' : 'Get in touch with D-NINE team'));

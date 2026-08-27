@@ -59,12 +59,13 @@ const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   }
 }`;
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+export async function getSiteSettings(options: { stega?: boolean } = {}): Promise<SiteSettings> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
     const data = await sanityFetch<any>({
       query: siteSettingsQuery,
       tags: ['siteSettings'],
+      stega: options.stega,
     });
 
     if (data) {

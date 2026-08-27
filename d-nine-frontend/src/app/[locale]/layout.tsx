@@ -26,7 +26,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isArabic = locale === "ar";
-  const settings = await getSiteSettings();
+  const settings = await getSiteSettings({ stega: false });
 
   const title = stegaClean(isArabic
     ? settings.companyName.ar + " | وكالة إبداعية وإنتاج إعلامي وتصميم الهوية"

@@ -11,7 +11,7 @@ export async function ContactPage() {
   const t = await getTranslations('contactPage');
   const locale = await getLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
-  const categories = await getCategories();
+  const categories = await getCategories({ stega: false });
   const pageData = await getContactPageData();
 
   return (

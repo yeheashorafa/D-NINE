@@ -6,12 +6,13 @@ import { categoriesQuery, categoryBySlugQuery } from '@/sanity/queries/categorie
 import { mapSanityCategory } from '@/sanity/mappers/category.mapper';
 import { SanityCategoryDoc } from '@/sanity/types';
 
-export async function getCategories(): Promise<ContentCategory[]> {
+export async function getCategories(options: { stega?: boolean } = {}): Promise<ContentCategory[]> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
     const data = await sanityFetch<SanityCategoryDoc[]>({
       query: categoriesQuery,
       tags: ['categories'],
+      stega: options.stega,
     });
     return (data || []).map(mapSanityCategory);
   }

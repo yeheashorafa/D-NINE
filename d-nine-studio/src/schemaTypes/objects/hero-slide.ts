@@ -6,6 +6,35 @@ export const heroSlide = defineType({
   type: 'object',
   fields: [
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'localizedString',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'localizedString',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'localizedText',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'ctaText',
+      title: 'CTA Text',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'ctaLink',
+      title: 'CTA Link',
+      type: 'string',
+      description: 'URL or relative path (e.g., /services or https://example.com)',
+    }),
+    defineField({
       name: 'image',
       title: 'Background Image',
       type: 'image',
@@ -26,22 +55,17 @@ export const heroSlide = defineType({
       initialValue: true,
       description: 'Turn off to hide this slide without deleting it',
     }),
-    defineField({
-      name: 'link',
-      title: 'Optional Link',
-      type: 'string',
-      description: 'URL or relative path (e.g., /services or https://example.com)',
-    }),
   ],
   preview: {
     select: {
       media: 'image',
-      altEn: 'image.alt.en',
+      titleEn: 'title.en',
+      titleAr: 'title.ar',
       active: 'active',
     },
-    prepare({ media, altEn, active }) {
+    prepare({ media, titleEn, titleAr, active }) {
       return {
-        title: altEn || 'Slide Image',
+        title: titleEn || titleAr || 'Slide',
         subtitle: active ? 'Active' : 'Hidden',
         media,
       };

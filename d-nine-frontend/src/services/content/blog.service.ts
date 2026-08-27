@@ -33,6 +33,7 @@ export async function getAllBlogSlugs(): Promise<string[]> {
     const data = await sanityFetch<string[]>({
       query: allBlogSlugsQuery,
       tags: ['blog'],
+      stega: false,
     });
     return data || [];
   }

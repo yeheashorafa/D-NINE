@@ -49,6 +49,7 @@ export async function getAllServiceSlugs(): Promise<string[]> {
     const data = await sanityFetch<string[]>({
       query: allServiceSlugsQuery,
       tags: ['services'],
+      stega: false,
     });
     return data || [];
   }
