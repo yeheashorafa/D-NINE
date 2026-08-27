@@ -57,6 +57,7 @@ export function mapSanityService(doc: SanityServiceDoc): ServiceItem {
       })),
     },
     featured: doc.featured ?? true,
+    seo: doc.seo,
   };
 }
 

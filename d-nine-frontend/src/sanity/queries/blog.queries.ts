@@ -44,7 +44,13 @@ export const blogPostBySlugQuery = groq`
     },
     body,
     featured,
-    tags
+    tags,
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      canonicalUrl
+    }
   }
 `;
 

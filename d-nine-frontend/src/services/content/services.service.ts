@@ -28,13 +28,14 @@ export async function getServices(): Promise<ServiceItem[]> {
   return PRIMARY_SERVICES;
 }
 
-export async function getServiceBySlug(slug: string): Promise<ServiceItem | null> {
+export async function getServiceBySlug(slug: string, options: { stega?: boolean } = {}): Promise<ServiceItem | null> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
     const data = await sanityFetch<SanityServiceDoc | null>({
       query: serviceBySlugQuery,
       params: { slug },
       tags: ['services', `service:${slug}`],
+      stega: options.stega,
     });
     return data ? mapSanityService(data) : null;
   }

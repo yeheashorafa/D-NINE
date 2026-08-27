@@ -15,10 +15,11 @@ import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
 export interface BlogGridProps {
   initialPosts: BlogPost[];
   categories: ContentCategory[];
+  searchPlaceholder: string;
+  allLabel: string;
 }
 
-export const BlogGrid: React.FC<BlogGridProps> = ({ initialPosts, categories }) => {
-  const t = useTranslations('blogPage');
+export function BlogGrid({ initialPosts, categories, searchPlaceholder, allLabel }: BlogGridProps) {
 
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -65,6 +66,7 @@ export const BlogGrid: React.FC<BlogGridProps> = ({ initialPosts, categories }) 
       <BlogSearch
         searchQuery={searchQuery}
         onSearchChange={(q) => setSearchQuery(q)}
+        placeholder={searchPlaceholder}
       />
 
       {/* Category Tabs */}
@@ -72,6 +74,7 @@ export const BlogGrid: React.FC<BlogGridProps> = ({ initialPosts, categories }) 
         categories={categories}
         activeCategory={activeCategory}
         onSelectCategory={(slug) => setActiveCategory(slug)}
+        allLabel={allLabel}
       />
 
       {/* Grid Display */}
@@ -94,7 +97,7 @@ export const BlogGrid: React.FC<BlogGridProps> = ({ initialPosts, categories }) 
         </motion.div>
       ) : (
         <div className="py-16 text-center text-text-muted">
-          <p>{t('empty')}</p>
+          <p>No posts found.</p>
         </div>
       )}
 

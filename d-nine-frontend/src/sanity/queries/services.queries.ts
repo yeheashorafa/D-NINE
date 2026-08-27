@@ -34,7 +34,13 @@ export const serviceBySlugQuery = groq`
     deliverables,
     processSteps,
     faqs,
-    featured
+    featured,
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      canonicalUrl
+    }
   }
 `;
 

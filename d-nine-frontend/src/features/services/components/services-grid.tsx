@@ -14,11 +14,15 @@ import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
 export interface ServicesGridProps {
   initialOfferings: ServiceOffering[];
   categories: ContentCategory[];
+  labels: {
+    all: string;
+    primary: string;
+    offerings: string;
+  };
 }
 
-export const ServicesGrid: React.FC<ServicesGridProps> = ({ initialOfferings, categories }) => {
+export function ServicesGrid({ initialOfferings, categories, labels }: ServicesGridProps) {
   const t = useTranslations('servicesPage');
-
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const filteredOfferings = useMemo(() => {
@@ -47,6 +51,7 @@ export const ServicesGrid: React.FC<ServicesGridProps> = ({ initialOfferings, ca
         categories={categories}
         activeCategory={activeCategory}
         onSelectCategory={(slug) => setActiveCategory(slug)}
+        allLabel={labels.all}
       />
 
       {/* Grid Display */}
@@ -69,7 +74,7 @@ export const ServicesGrid: React.FC<ServicesGridProps> = ({ initialOfferings, ca
         </motion.div>
       ) : (
         <div className="py-16 text-center text-text-muted">
-          <p>{t('empty')}</p>
+          <p>No services found.</p>
         </div>
       )}
 
@@ -79,4 +84,4 @@ export const ServicesGrid: React.FC<ServicesGridProps> = ({ initialOfferings, ca
       )}
     </div>
   );
-};
+}

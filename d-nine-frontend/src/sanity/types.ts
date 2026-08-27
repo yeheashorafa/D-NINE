@@ -44,6 +44,7 @@ export interface SanityServiceDoc {
   processSteps?: SanityServiceProcessStep[];
   faqs?: SanityServiceFaq[];
   featured?: boolean;
+  seo?: any;
 }
 
 export interface SanityServiceOfferingDoc {
@@ -96,6 +97,7 @@ export interface SanityProjectDoc {
   credits?: SanityLocalizedString;
   featured?: boolean;
   colorVariant?: string;
+  seo?: any;
 }
 
 export interface SanityBlogSection {
@@ -127,6 +129,7 @@ export interface SanityBlogPostDoc {
   };
   featured?: boolean;
   tags?: { ar?: string[]; en?: string[] };
+  seo?: any;
 }
 
 export interface SanityTimelineItemDoc {

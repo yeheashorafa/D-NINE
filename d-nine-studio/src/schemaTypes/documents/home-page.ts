@@ -42,13 +42,6 @@ export const homePage = defineType({
       fieldset: 'featured',
     }),
     defineField({
-      name: 'featuredPosts',
-      title: 'Featured Insights / Blog Posts',
-      type: 'array',
-      of: [defineArrayMember({ type: 'reference', to: [{ type: 'blogPost' }] })],
-      fieldset: 'featured',
-    }),
-    defineField({
       name: 'processTimeline',
       title: '3-Step Methodology Timeline',
       type: 'array',
@@ -56,10 +49,25 @@ export const homePage = defineType({
       fieldset: 'methodology',
     }),
     defineField({
-      name: 'bookACall',
-      title: 'Book a Call Section',
-      type: 'bookACallSection',
-      fieldset: 'methodology',
+      name: 'testimonials',
+      title: 'Testimonials',
+      type: 'array',
+      of: [defineArrayMember({ type: 'testimonial' })],
+      fieldset: 'featured',
+    }),
+    defineField({
+      name: 'faqs',
+      title: 'FAQs',
+      type: 'array',
+      of: [defineArrayMember({ type: 'serviceFaq' })], // assuming faq type is serviceFaq
+      fieldset: 'featured',
+    }),
+    defineField({
+      name: 'latestNews',
+      title: 'Latest News / Blog Posts',
+      type: 'array',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'blogPost' }] })],
+      fieldset: 'featured',
     }),
     defineField({
       name: 'seo',

@@ -14,10 +14,10 @@ import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
 export interface WorkGridProps {
   initialProjects: ProjectItem[];
   categories: ContentCategory[];
+  allLabel: string;
 }
 
-export const WorkGrid: React.FC<WorkGridProps> = ({ initialProjects, categories }) => {
-  const t = useTranslations('workPage');
+export function WorkGrid({ initialProjects, categories, allLabel }: WorkGridProps) {
 
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
@@ -50,6 +50,7 @@ export const WorkGrid: React.FC<WorkGridProps> = ({ initialProjects, categories 
         categories={categories}
         activeCategory={activeCategory}
         onSelectCategory={(slug) => setActiveCategory(slug)}
+        allLabel={allLabel}
       />
 
       {/* Grid Display */}
@@ -72,7 +73,7 @@ export const WorkGrid: React.FC<WorkGridProps> = ({ initialProjects, categories 
         </motion.div>
       ) : (
         <div className="py-16 text-center text-text-muted">
-          <p>{t('empty')}</p>
+          <p>No projects found.</p>
         </div>
       )}
 

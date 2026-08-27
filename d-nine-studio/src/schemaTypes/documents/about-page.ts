@@ -40,13 +40,13 @@ export const aboutPage = defineType({
     defineField({
       name: 'mission',
       title: 'Mission',
-      type: 'localizedText',
+      type: 'localizedPortableText',
       fieldset: 'content',
     }),
     defineField({
       name: 'vision',
       title: 'Vision',
-      type: 'localizedText',
+      type: 'localizedPortableText',
       fieldset: 'content',
     }),
     defineField({

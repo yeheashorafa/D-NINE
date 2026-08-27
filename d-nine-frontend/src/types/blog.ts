@@ -30,4 +30,5 @@ export interface BlogPost {
     ar: string[];
     en: string[];
   };
+  seo?: any;
 }

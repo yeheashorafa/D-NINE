@@ -126,13 +126,14 @@ export async function getBlogPosts(
   };
 }
 
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+export async function getBlogPostBySlug(slug: string, options: { stega?: boolean } = {}): Promise<BlogPost | null> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
     const data = await sanityFetch<SanityBlogPostDoc | null>({
       query: blogPostBySlugQuery,
       params: { slug },
       tags: ['blog', `blog:${slug}`],
+      stega: options.stega,
     });
     return data ? mapSanityBlogPost(data) : null;
   }

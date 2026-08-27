@@ -171,8 +171,8 @@ async function main() {
       heroTitle: { ar: 'قصة نجاح', en: 'A Success Story' },
       heroSubtitle: { ar: 'بداية الرحلة', en: 'The beginning of the journey' },
       agencyStory: { ar: [], en: [] }, // Localized portable text fallback
-      mission: { ar: 'تقديم الأفضل', en: 'Delivering the best' },
-      vision: { ar: 'الريادة عالمياً', en: 'Global leadership' },
+      mission: { ar: [], en: [] }, // Localized portable text fallback
+      vision: { ar: [], en: [] }, // Localized portable text fallback
       values: [],
       seo: {
         metaTitle: { ar: 'من نحن | دي ناين', en: 'About | D-NINE' },
@@ -184,9 +184,9 @@ async function main() {
       heroBadge: { ar: 'تواصل معنا', en: 'Contact Us' },
       heroTitle: { ar: 'نحن هنا لخدمتك', en: 'We are here to serve you' },
       heroSubtitle: { ar: 'يسعدنا تواصلك معنا', en: 'We look forward to hearing from you' },
-      contactInfoTitle: { ar: 'معلومات التواصل', en: 'Contact Info' },
-      formTitle: { ar: 'أرسل رسالة', en: 'Send a Message' },
-      formSubtitle: { ar: 'املأ النموذج', en: 'Fill out the form' },
+      description: { ar: [], en: [] },
+      contactMethods: [],
+      offices: [],
       seo: {
         metaTitle: { ar: 'تواصل معنا | دي ناين', en: 'Contact | D-NINE' },
         metaDescription: { ar: 'تواصل معنا.', en: 'Contact us.' },

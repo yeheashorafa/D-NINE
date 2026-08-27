@@ -74,7 +74,13 @@ export const projectBySlugQuery = groq`
     },
     credits,
     featured,
-    colorVariant
+    colorVariant,
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      canonicalUrl
+    }
   }
 `;
 

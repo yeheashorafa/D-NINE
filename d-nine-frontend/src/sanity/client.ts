@@ -1,10 +1,19 @@
+import 'server-only';
 import { createClient, type QueryParams } from 'next-sanity';
 import { apiVersion, dataset, projectId, studioUrl, readToken, contentSource } from './env';
 import { draftMode } from 'next/headers';
 
+// Throw if configuration is malformed and we're in sanity mode
+if (contentSource === 'sanity') {
+  if (!projectId || projectId === 'placeholder-id') throw new Error('Missing projectId');
+  if (!dataset) throw new Error('Missing dataset');
+  if (!apiVersion) throw new Error('Missing apiVersion');
+  if (!studioUrl) throw new Error('Missing studioUrl');
+}
+
 // Published client: perspective "published", stega false
 export const client = createClient({
-  projectId: projectId || 'placeholder-id',
+  projectId: projectId as string,
   dataset,
   apiVersion,
   useCdn: false,
@@ -14,15 +23,15 @@ export const client = createClient({
 
 // Draft client: perspective "previewDrafts", token required, stega true
 export const previewClient = createClient({
-  projectId: projectId || 'placeholder-id',
+  projectId: projectId as string,
   dataset,
   apiVersion,
   useCdn: false,
-  token: readToken, // Token is REQUIRED for previewDrafts
+  token: readToken,
   perspective: 'previewDrafts',
   stega: {
     enabled: true,
-    studioUrl: studioUrl || 'http://localhost:3333',
+    studioUrl: studioUrl as string,
   },
 });
 
@@ -30,7 +39,7 @@ export async function sanityFetch<T>({
   query,
   params = {},
   tags = [],
-  stega = true, // By default, let's enable stega if draft mode is active, but we can override
+  stega = true, // default to enabling stega in draft mode unless explicitly false
 }: {
   query: string;
   params?: QueryParams;
@@ -44,22 +53,28 @@ export async function sanityFetch<T>({
     // draftMode() throws when called outside a Request boundary
   }
 
-  // Fallback to null only if static and NOT draft mode
-  // The user requirement: "Published fallback re-enabled..." - but we should throw if source is sanity.
-  if (contentSource !== 'sanity' && !isDraftMode) {
-    return null as any;
+  // Handle draft requirements
+  if (isDraftMode && !readToken) {
+    throw new Error('Draft mode is enabled but SANITY_API_READ_TOKEN is missing');
+  }
+
+  // Handle static fallback requirements
+  if (contentSource !== 'sanity') {
+    if (isDraftMode) {
+      throw new Error('Cannot use draft mode when CONTENT_SOURCE is not sanity');
+    }
+    return null as any; // static fallback is allowed only when CONTENT_SOURCE=static
   }
 
   const selectedClient = isDraftMode ? previewClient : client;
-
-  // Next caching behavior: no cache in draft mode
-  const revalidate = isDraftMode ? 0 : false;
+  const revalidate = isDraftMode ? 0 : 60; // Published fallback revalidate approximately 60 seconds
 
   return selectedClient.fetch<T>(query, params, {
     stega: isDraftMode ? stega : false, // Stega only active in draft mode
     next: {
       tags,
-      revalidate, // Next.js standard cache revalidation time (false = cache indefinitely until tag revalidated)
+      revalidate,
     },
   });
 }
+

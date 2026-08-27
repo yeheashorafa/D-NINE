@@ -1,12 +1,12 @@
 import React from 'react';
 import { getLocale } from 'next-intl/server';
-import { getLegalPageData } from '@/services/content/legal.service';
+import { getTermsPage } from '@/sanity/services/page.service';
 import { PortableText } from '@portabletext/react';
 
 export async function TermsPage() {
   const locale = await getLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
-  const data = await getLegalPageData('terms');
+  const data = await getTermsPage();
 
   return (
     <main className="pt-28 sm:pt-36 pb-16 bg-background min-h-screen">

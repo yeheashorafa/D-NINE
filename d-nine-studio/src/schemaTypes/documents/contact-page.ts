@@ -1,4 +1,4 @@
-import { defineType, defineField } from 'sanity';
+import { defineType, defineField, defineArrayMember } from 'sanity';
 import { DocumentIcon } from '@sanity/icons';
 
 export const contactPage = defineType({
@@ -32,21 +32,23 @@ export const contactPage = defineType({
       fieldset: 'hero',
     }),
     defineField({
-      name: 'contactInfoTitle',
-      title: 'Contact Info Section Title',
-      type: 'localizedString',
+      name: 'description',
+      title: 'Description',
+      type: 'localizedPortableText',
       fieldset: 'content',
     }),
     defineField({
-      name: 'formTitle',
-      title: 'Form Section Title',
-      type: 'localizedString',
+      name: 'contactMethods',
+      title: 'Contact Methods',
+      type: 'array',
+      of: [defineArrayMember({ type: 'contactMethod' })],
       fieldset: 'content',
     }),
     defineField({
-      name: 'formSubtitle',
-      title: 'Form Section Subtitle',
-      type: 'localizedText',
+      name: 'offices',
+      title: 'Offices',
+      type: 'array',
+      of: [defineArrayMember({ type: 'office' })],
       fieldset: 'content',
     }),
     defineField({

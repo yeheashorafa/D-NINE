@@ -42,6 +42,7 @@ export interface ServiceItem {
     en: ServiceFAQ[];
   };
   featured: boolean;
+  seo?: any;
 }
 
 export interface ServiceOffering {

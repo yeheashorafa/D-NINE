@@ -7,11 +7,10 @@ import { Search, X } from 'lucide-react';
 export interface BlogSearchProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  placeholder: string;
 }
 
-export const BlogSearch: React.FC<BlogSearchProps> = ({ searchQuery, onSearchChange }) => {
-  const t = useTranslations('blogPage');
-
+export const BlogSearch: React.FC<BlogSearchProps> = ({ searchQuery, onSearchChange, placeholder }) => {
   return (
     <div className="relative max-w-md mx-auto mb-8">
       <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none text-slate-400">
@@ -21,7 +20,7 @@ export const BlogSearch: React.FC<BlogSearchProps> = ({ searchQuery, onSearchCha
         type="text"
         value={searchQuery}
         onChange={(e) => onSearchChange(e.target.value)}
-        placeholder={t('searchPlaceholder')}
+        placeholder={placeholder}
         className="w-full ps-11 pe-10 py-3.5 rounded-full bg-surface dark:bg-card border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan shadow-sm transition-all"
       />
       {searchQuery && (

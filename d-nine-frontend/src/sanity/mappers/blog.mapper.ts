@@ -42,5 +42,6 @@ export function mapSanityBlogPost(doc: SanityBlogPostDoc): BlogPost {
       ar: doc.tags?.ar || [],
       en: doc.tags?.en || [],
     },
+    seo: doc.seo,
   };
 }

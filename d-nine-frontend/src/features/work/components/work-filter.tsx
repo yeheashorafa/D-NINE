@@ -8,16 +8,17 @@ export interface WorkFilterProps {
   categories: ContentCategory[];
   activeCategory: string;
   onSelectCategory: (slug: string) => void;
+  allLabel: string;
 }
 
 export const WorkFilter: React.FC<WorkFilterProps> = ({
   categories,
   activeCategory,
   onSelectCategory,
+  allLabel,
 }) => {
   const locale = useLocale();
   const isArabic = locale === 'ar';
-  const t = useTranslations('workPage');
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
@@ -31,7 +32,7 @@ export const WorkFilter: React.FC<WorkFilterProps> = ({
         }`}
         aria-pressed={activeCategory === 'all'}
       >
-        {t('allFilter')}
+        {allLabel}
       </button>
 
       {categories.map((cat) => (

@@ -75,5 +75,6 @@ export function mapSanityProject(doc: SanityProjectDoc): ProjectItem {
       : undefined,
     featured: doc.featured ?? false,
     colorVariant: (doc.colorVariant as 'purple' | 'cyan' | 'amber') || 'purple',
+    seo: doc.seo,
   };
 }

@@ -105,13 +105,14 @@ export async function getProjects(
   };
 }
 
-export async function getProjectBySlug(slug: string): Promise<ProjectItem | null> {
+export async function getProjectBySlug(slug: string, options: { stega?: boolean } = {}): Promise<ProjectItem | null> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
     const data = await sanityFetch<SanityProjectDoc | null>({
       query: projectBySlugQuery,
       params: { slug },
       tags: ['projects', `project:${slug}`],
+      stega: options.stega,
     });
     return data ? mapSanityProject(data) : null;
   }

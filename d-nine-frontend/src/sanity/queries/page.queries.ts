@@ -18,15 +18,13 @@ export const homePageQuery = groq`
   *[_type == "homePage"][0] {
     _id,
     "id": _id,
-    hero {
-      slides[] {
-        category,
-        title,
-        description,
-        ctaText,
-        ctaLink,
-        "image": image.asset->url
-      }
+    heroSlides[active != false] {
+      category,
+      title,
+      description,
+      ctaText,
+      ctaLink,
+      "image": image.asset->url
     },
     creativeSnapshot {
       title,
@@ -36,9 +34,12 @@ export const homePageQuery = groq`
         label
       }
     },
-    featuredProjects { title, subtitle },
-    featuredServices { title, subtitle },
-    featuredPosts { title, subtitle },
+    featuredProjects[]-> { title, subtitle, slug },
+    featuredServices[]-> { title, subtitle, slug },
+    processTimeline,
+    testimonials,
+    faqs,
+    latestNews[]-> { title, slug, publishedAt, excerpt, "image": image.asset->url },
     seo {
       metaTitle,
       metaDescription,
@@ -83,8 +84,10 @@ export const servicesPageQuery = groq`
   *[_type == "servicesPage"][0] {
     _id,
     "id": _id,
-    title,
-    subtitle,
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    filterLabels,
     seo {
       metaTitle,
       metaDescription,
@@ -98,8 +101,10 @@ export const workPageQuery = groq`
   *[_type == "workPage"][0] {
     _id,
     "id": _id,
-    title,
-    subtitle,
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    allCategoriesLabel,
     seo {
       metaTitle,
       metaDescription,
@@ -113,8 +118,11 @@ export const blogPageQuery = groq`
   *[_type == "blogPage"][0] {
     _id,
     "id": _id,
-    title,
-    subtitle,
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    searchPlaceholder,
+    featuredPosts[]-> { title, slug, publishedAt, excerpt, "image": image.asset->url },
     seo {
       metaTitle,
       metaDescription,
@@ -128,8 +136,23 @@ export const contactPageQuery = groq`
   *[_type == "contactPage"][0] {
     _id,
     "id": _id,
-    title,
-    subtitle,
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    description,
+    contactMethods[] {
+      type,
+      title,
+      value,
+      link
+    },
+    offices[] {
+      title,
+      address,
+      phone,
+      email,
+      coordinates
+    },
     seo {
       metaTitle,
       metaDescription,

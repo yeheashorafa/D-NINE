@@ -1,18 +1,28 @@
 import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getCategories } from '@/services/content/categories.service';
-import { getContactPageData } from '@/services/content/contact.service';
-import { siteConfig } from '@/config/site.config';
+import { getContactPage } from '@/sanity/services/page.service';
 import { ContactForm } from './components/contact-form';
 import { Sparkles, Mail, Phone, MapPin } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
+import { PortableText } from '@portabletext/react';
+
+const getIconComponent = (type: string) => {
+  if (type === 'email') return Mail;
+  if (type === 'phone') return Phone;
+  if (type === 'whatsapp') return Phone;
+  return MapPin;
+};
 
 export async function ContactPage() {
   const t = await getTranslations('contactPage');
   const locale = await getLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
-  const categories = await getCategories({ stega: false });
-  const pageData = await getContactPageData();
+  
+  const [categories, pageData] = await Promise.all([
+    getCategories({ stega: false }),
+    getContactPage(),
+  ]);
 
   return (
     <main className="pt-28 sm:pt-36 pb-16 bg-background min-h-screen">
@@ -21,13 +31,13 @@ export async function ContactPage() {
         <RevealSection className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 text-brand-cyan text-xs sm:text-sm font-semibold">
             <Sparkles className="w-4 h-4" aria-hidden="true" />
-            <span>{t('badge')}</span>
+            <span>{pageData?.heroBadge?.[locale] || t('badge')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
-            {pageData.hero.title[locale]}
+            {pageData?.heroTitle?.[locale]}
           </h1>
-          <p className="text-text-muted text-base sm:text-lg">
-            {pageData.hero.subtitle[locale]}
+          <p className="text-text-muted text-base sm:text-lg whitespace-pre-wrap">
+            {pageData?.heroSubtitle?.[locale]}
           </p>
         </RevealSection>
 
@@ -39,50 +49,59 @@ export async function ContactPage() {
               <h2 className="text-xl font-bold text-foreground">
                 {isArabic ? 'معلومات التواصل المباشر' : 'Direct Contact Info'}
               </h2>
+              
+              {pageData?.description?.[locale] && (
+                <div className="text-text-muted text-sm prose prose-sm dark:prose-invert">
+                  <PortableText value={pageData.description[locale]} />
+                </div>
+              )}
 
               <div className="space-y-6 text-sm text-text-muted">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5" />
+                {pageData?.offices?.map((office: any, idx: number) => (
+                  <div key={`office-${idx}`} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-foreground">{office.title?.[locale] || office.title?.en}</h3>
+                      <p className="text-xs mt-1 whitespace-pre-wrap">
+                        {office.address?.[locale] || office.address?.en}
+                      </p>
+                      {office.phone && (
+                        <p className="text-xs mt-1" dir="ltr">{office.phone}</p>
+                      )}
+                      {office.email && (
+                        <p className="text-xs mt-1">{office.email}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-foreground">{isArabic ? 'الموقع' : 'Location'}</h3>
-                    <p className="text-xs mt-1">
-                      {pageData.contactInfo.locations[locale]?.[0] || (isArabic ? siteConfig.contact.locations.ar : siteConfig.contact.locations.en)}
-                    </p>
-                  </div>
-                </div>
+                ))}
 
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground">{isArabic ? 'البريد الإلكتروني' : 'Email'}</h3>
-                    <a
-                      href={`mailto:${pageData.contactInfo.email}`}
-                      className="text-xs text-brand-cyan hover:underline mt-1 block"
-                    >
-                      {pageData.contactInfo.email}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground">{isArabic ? 'الهاتف المباشر' : 'Phone'}</h3>
-                    <a
-                      href={`tel:${pageData.contactInfo.phone.replace(/[^0-9+]/g, '')}`}
-                      dir="ltr"
-                      className="text-xs text-brand-cyan hover:underline mt-1 block"
-                    >
-                      {pageData.contactInfo.phone}
-                    </a>
-                  </div>
-                </div>
+                {pageData?.contactMethods?.map((method: any, idx: number) => {
+                  const Icon = getIconComponent(method.type);
+                  const isLink = !!method.link;
+                  return (
+                    <div key={`method-${idx}`} className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-foreground">{method.title?.[locale] || method.title?.en}</h3>
+                        {isLink ? (
+                          <a
+                            href={method.link}
+                            className="text-xs text-brand-cyan hover:underline mt-1 block"
+                            dir={method.type === 'phone' || method.type === 'whatsapp' ? 'ltr' : 'auto'}
+                          >
+                            {method.value}
+                          </a>
+                        ) : (
+                          <p className="text-xs mt-1 block">{method.value}</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

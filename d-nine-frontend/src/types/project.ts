@@ -34,4 +34,5 @@ export interface ProjectItem {
   credits?: LocalizedText;
   featured: boolean;
   colorVariant: string;
+  seo?: any;
 }
