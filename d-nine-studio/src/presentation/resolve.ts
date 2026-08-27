@@ -7,6 +7,54 @@ export const locations = {
       { title: 'Home (English)', href: '/en' },
     ],
   }),
+  aboutPage: defineLocations({
+    locations: [
+      { title: 'About (Arabic)', href: '/ar/about' },
+      { title: 'About (English)', href: '/en/about' },
+    ],
+  }),
+  servicesPage: defineLocations({
+    locations: [
+      { title: 'Services (Arabic)', href: '/ar/services' },
+      { title: 'Services (English)', href: '/en/services' },
+    ],
+  }),
+  workPage: defineLocations({
+    locations: [
+      { title: 'Work (Arabic)', href: '/ar/work' },
+      { title: 'Work (English)', href: '/en/work' },
+    ],
+  }),
+  blogPage: defineLocations({
+    locations: [
+      { title: 'Blog (Arabic)', href: '/ar/blog' },
+      { title: 'Blog (English)', href: '/en/blog' },
+    ],
+  }),
+  contactPage: defineLocations({
+    locations: [
+      { title: 'Contact (Arabic)', href: '/ar/contact' },
+      { title: 'Contact (English)', href: '/en/contact' },
+    ],
+  }),
+  privacyPage: defineLocations({
+    locations: [
+      { title: 'Privacy (Arabic)', href: '/ar/privacy' },
+      { title: 'Privacy (English)', href: '/en/privacy' },
+    ],
+  }),
+  termsPage: defineLocations({
+    locations: [
+      { title: 'Terms (Arabic)', href: '/ar/terms' },
+      { title: 'Terms (English)', href: '/en/terms' },
+    ],
+  }),
+  siteSettings: defineLocations({
+    locations: [
+      { title: 'Global (Arabic)', href: '/ar' },
+      { title: 'Global (English)', href: '/en' },
+    ],
+  }),
   service: defineLocations({
     select: {
       slug: 'slug.current',

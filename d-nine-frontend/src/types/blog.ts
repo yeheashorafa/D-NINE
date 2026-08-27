@@ -19,8 +19,12 @@ export interface BlogPost {
   author: {
     name: LocalizedText;
     role: LocalizedText;
+    image?: string;
   };
-  sections: BlogContentSection[];
+  body: {
+    ar: any[];
+    en: any[];
+  };
   featured: boolean;
   tags: {
     ar: string[];

@@ -5,10 +5,41 @@ export const siteSettingsQuery = groq`
     _id,
     companyName,
     legalName,
+    defaultSiteUrl,
+    "lightLogo": lightLogo.asset->url,
+    "darkLogo": darkLogo.asset->url,
+    headerNav[] {
+      label,
+      href,
+      isExternal,
+      isButton
+    },
+    footerDescription,
+    footerColumns[] {
+      title,
+      links[] {
+        label,
+        href,
+        isExternal,
+        isButton
+      }
+    },
+    copyrightText,
     email,
-    phone,
+    phoneDisplay,
+    phoneHref,
+    whatsapp,
     locations,
-    socialLinks,
-    defaultSeo
+    socialLinks[] {
+      platform,
+      url
+    },
+    defaultSeo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      canonicalUrl
+    },
+    "defaultOgImage": defaultOgImage.asset->url
   }
 `;

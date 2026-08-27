@@ -15,7 +15,8 @@ export const allBlogPostsQuery = groq`
     readTimeMinutes,
     "author": {
       "name": author->name,
-      "role": author->role
+      "role": author->role,
+      "image": author->image.asset->url
     },
     body,
     featured,
@@ -38,7 +39,8 @@ export const blogPostBySlugQuery = groq`
     readTimeMinutes,
     "author": {
       "name": author->name,
-      "role": author->role
+      "role": author->role,
+      "image": author->image.asset->url
     },
     body,
     featured,
@@ -65,7 +67,8 @@ export const featuredBlogPostsQuery = groq`
     readTimeMinutes,
     "author": {
       "name": author->name,
-      "role": author->role
+      "role": author->role,
+      "image": author->image.asset->url
     },
     featured,
     tags
@@ -88,7 +91,8 @@ export const paginatedBlogPostsQuery = groq`
     readTimeMinutes,
     "author": {
       "name": author->name,
-      "role": author->role
+      "role": author->role,
+      "image": author->image.asset->url
     },
     featured,
     tags

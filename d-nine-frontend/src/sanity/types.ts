@@ -40,18 +40,9 @@ export interface SanityServiceDoc {
   shortDescription: SanityLocalizedString;
   fullDescription: SanityLocalizedString;
   benefits?: { ar?: string[]; en?: string[] };
-  deliverables?: {
-    ar?: SanityServiceDeliverable[];
-    en?: SanityServiceDeliverable[];
-  };
-  processSteps?: {
-    ar?: SanityServiceProcessStep[];
-    en?: SanityServiceProcessStep[];
-  };
-  faqs?: {
-    ar?: SanityServiceFaq[];
-    en?: SanityServiceFaq[];
-  };
+  deliverables?: SanityServiceDeliverable[];
+  processSteps?: SanityServiceProcessStep[];
+  faqs?: SanityServiceFaq[];
   featured?: boolean;
 }
 
@@ -127,9 +118,13 @@ export interface SanityBlogPostDoc {
   author?: {
     name?: SanityLocalizedString;
     role?: SanityLocalizedString;
+    image?: string;
   };
   sections?: SanityBlogSection[];
-  body?: unknown;
+  body?: {
+    ar?: any[];
+    en?: any[];
+  };
   featured?: boolean;
   tags?: { ar?: string[]; en?: string[] };
 }

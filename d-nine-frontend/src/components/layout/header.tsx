@@ -9,8 +9,13 @@ import { ThemeToggle } from './theme-toggle';
 import { getButtonClasses } from '@/components/ui/button';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SiteSettings } from '@/services/content/settings.service';
 
-export const Header: React.FC = () => {
+export interface HeaderProps {
+  settings?: SiteSettings;
+}
+
+export const Header: React.FC<HeaderProps> = ({ settings }) => {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -72,15 +77,18 @@ export const Header: React.FC = () => {
     toggleBtnRef.current?.focus();
   };
 
-
-  const navLinks = [
-    { href: '/', label: t('home') },
-    { href: '/about', label: t('about') },
-    { href: '/services', label: t('services') },
-    { href: '/work', label: t('work') },
-    { href: '/blog', label: t('blog') },
-    { href: '/contact', label: t('contact') }
-  ];
+  const locale = (pathname.split('/')[1] || 'ar') as 'ar' | 'en';
+  
+  const navLinks = settings?.headerNav && settings.headerNav.length > 0 
+    ? settings.headerNav.map(nav => ({ href: nav.href, label: nav.label[locale] || nav.label.en }))
+    : [
+        { href: '/', label: t('home') },
+        { href: '/about', label: t('about') },
+        { href: '/services', label: t('services') },
+        { href: '/work', label: t('work') },
+        { href: '/blog', label: t('blog') },
+        { href: '/contact', label: t('contact') }
+      ];
 
   return (
     <header

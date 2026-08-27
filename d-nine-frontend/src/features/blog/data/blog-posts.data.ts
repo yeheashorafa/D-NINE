@@ -1,6 +1,6 @@
 import { BlogPost } from '@/types/blog';
 
-export const BLOG_POSTS_DATA: BlogPost[] = [
+const RAW_BLOG_POSTS: any[] = [
   {
     id: 'post-01',
     slug: 'future-of-brand-identity-2025',
@@ -320,3 +320,30 @@ export const BLOG_POSTS_DATA: BlogPost[] = [
     tags: { ar: ['تحليل', 'تقارير', 'سوشيال ميديا', 'نمو'], en: ['Analytics', 'KPIs', 'Social Media', 'Growth'] },
   },
 ];
+
+export const BLOG_POSTS_DATA: BlogPost[] = RAW_BLOG_POSTS.map((post) => {
+  const { sections, ...rest } = post as any;
+  return {
+    ...rest,
+    body: {
+      ar: (sections || []).map((sec: any) => ({
+        _type: 'block',
+        _key: Math.random().toString(36).substring(7),
+        style: 'normal',
+        children: [
+          { _type: 'span', marks: ['strong'], text: sec.heading.ar + '\n' },
+          { _type: 'span', marks: [], text: sec.body.ar },
+        ],
+      })),
+      en: (sections || []).map((sec: any) => ({
+        _type: 'block',
+        _key: Math.random().toString(36).substring(7),
+        style: 'normal',
+        children: [
+          { _type: 'span', marks: ['strong'], text: sec.heading.en + '\n' },
+          { _type: 'span', marks: [], text: sec.body.en },
+        ],
+      })),
+    },
+  };
+});

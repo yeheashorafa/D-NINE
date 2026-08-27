@@ -14,15 +14,16 @@ export const homePage = defineType({
   ],
   fields: [
     defineField({
-      name: 'heroHeadline',
-      title: 'Hero Headline',
-      type: 'localizedString',
+      name: 'heroSlides',
+      title: 'Hero Slides',
+      type: 'array',
+      of: [defineArrayMember({ type: 'heroSlide' })],
       fieldset: 'hero',
     }),
     defineField({
-      name: 'heroSubtitle',
-      title: 'Hero Subtitle',
-      type: 'localizedText',
+      name: 'creativeSnapshot',
+      title: 'Creative Snapshot Section',
+      type: 'creativeSnapshot',
       fieldset: 'hero',
     }),
     defineField({
@@ -52,6 +53,12 @@ export const homePage = defineType({
       title: '3-Step Methodology Timeline',
       type: 'array',
       of: [defineArrayMember({ type: 'serviceProcessStep' })],
+      fieldset: 'methodology',
+    }),
+    defineField({
+      name: 'bookACall',
+      title: 'Book a Call Section',
+      type: 'bookACallSection',
       fieldset: 'methodology',
     }),
     defineField({

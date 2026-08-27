@@ -80,6 +80,21 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
 
         {/* Content Sections */}
         <div className="space-y-12 text-foreground">
+          {/* Metrics */}
+          {project.metrics && project.metrics.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              {project.metrics.map((metric, idx) => {
+                const label = isArabic ? metric.label.ar : metric.label.en;
+                return (
+                  <div key={idx} className="p-6 rounded-3xl bg-surface/80 dark:bg-card border border-border flex flex-col items-center justify-center text-center">
+                    <span className="text-3xl sm:text-4xl font-extrabold text-brand-cyan mb-2">{metric.value}</span>
+                    <span className="text-sm text-text-muted font-medium uppercase tracking-wider">{label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           {/* Challenge */}
           <div className="p-8 rounded-3xl bg-surface/80 dark:bg-card border border-border space-y-3">
             <h2 className="text-xl font-bold text-brand-purple dark:text-brand-purple-light">

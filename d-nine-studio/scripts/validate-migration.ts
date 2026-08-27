@@ -9,6 +9,13 @@ const TARGET_CONTENT_TYPES = [
   'author',
   'homePage',
   'siteSettings',
+  'servicesPage',
+  'workPage',
+  'blogPage',
+  'aboutPage',
+  'contactPage',
+  'privacyPage',
+  'termsPage',
 ];
 
 async function validate() {
@@ -68,8 +75,15 @@ async function validate() {
   console.log(`   - blogPost:          ${counts['blogPost'] || 0} / 12 expected`);
   console.log(`   - homePage:          ${counts['homePage'] || 0} / 1 expected (singleton)`);
   console.log(`   - siteSettings:      ${counts['siteSettings'] || 0} / 1 expected (singleton)`);
+  console.log(`   - servicesPage:      ${counts['servicesPage'] || 0} / 1 expected (singleton)`);
+  console.log(`   - workPage:          ${counts['workPage'] || 0} / 1 expected (singleton)`);
+  console.log(`   - blogPage:          ${counts['blogPage'] || 0} / 1 expected (singleton)`);
+  console.log(`   - aboutPage:         ${counts['aboutPage'] || 0} / 1 expected (singleton)`);
+  console.log(`   - contactPage:       ${counts['contactPage'] || 0} / 1 expected (singleton)`);
+  console.log(`   - privacyPage:       ${counts['privacyPage'] || 0} / 1 expected (singleton)`);
+  console.log(`   - termsPage:         ${counts['termsPage'] || 0} / 1 expected (singleton)`);
   console.log('----------------------------------------------------------------');
-  console.log(`📦 TOTAL CONTENT DOCS:  ${contentDocs.length} / 61 expected`);
+  console.log(`📦 TOTAL CONTENT DOCS:  ${contentDocs.length} / 68 expected`);
   console.log(`🖼️  TOTAL ASSET DOCS:    ${assetDocs.length} (image & file assets in dataset)`);
   console.log('----------------------------------------------------------------\n');
 
@@ -85,6 +99,13 @@ async function validate() {
     blogPost: 12,
     homePage: 1,
     siteSettings: 1,
+    servicesPage: 1,
+    workPage: 1,
+    blogPage: 1,
+    aboutPage: 1,
+    contactPage: 1,
+    privacyPage: 1,
+    termsPage: 1,
   };
 
   for (const [type, expected] of Object.entries(expectedCounts)) {
@@ -94,8 +115,8 @@ async function validate() {
     }
   }
 
-  if (contentDocs.length !== 61) {
-    validationErrors.push(`Total content documents mismatch: expected 61, got ${contentDocs.length}`);
+  if (contentDocs.length !== 68) {
+    validationErrors.push(`Total content documents mismatch: expected 68, got ${contentDocs.length}`);
   }
 
   // 2. Referential integrity check

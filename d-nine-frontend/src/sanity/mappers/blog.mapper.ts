@@ -31,17 +31,12 @@ export function mapSanityBlogPost(doc: SanityBlogPostDoc): BlogPost {
         ar: doc.author?.role?.ar || 'قسم الإنتاج',
         en: doc.author?.role?.en || 'Production Dept.',
       },
+      image: doc.author?.image,
     },
-    sections: (doc.sections || []).map((s) => ({
-      heading: {
-        ar: s.heading?.ar || '',
-        en: s.heading?.en || '',
-      },
-      body: {
-        ar: s.body?.ar || '',
-        en: s.body?.en || '',
-      },
-    })),
+    body: {
+      ar: doc.body?.ar || [],
+      en: doc.body?.en || [],
+    },
     featured: doc.featured ?? false,
     tags: {
       ar: doc.tags?.ar || [],

@@ -11,70 +11,70 @@ import {
   CogIcon,
 } from '@sanity/icons';
 
-const SINGLETON_DOCUMENT_TYPES = ['homePage', 'siteSettings'];
+const SINGLETON_DOCUMENT_TYPES = [
+  'homePage',
+  'aboutPage',
+  'servicesPage',
+  'workPage',
+  'blogPage',
+  'contactPage',
+  'privacyPage',
+  'termsPage',
+  'siteSettings'
+];
 
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title('D-NINE Content CMS')
+    .title('D-NINE CMS (لوحة التحكم)')
     .items([
-      // 1. Singletons Section
-      singletonListItem(S, 'homePage', 'Home Page (الصفحة الرئيسية)', HomeIcon),
-      singletonListItem(S, 'siteSettings', 'Site Settings & Brand (إعدادات الموقع)', CogIcon),
-      S.divider(),
-
-      // 2. Core Taxonomy & Offerings
       S.listItem()
-        .title('Categories (التصنيفات الموحدة)')
-        .icon(TagIcon)
-        .child(
-          S.documentTypeList('contentCategory')
-            .title('Content Categories')
-            .defaultOrdering([{ field: 'order', direction: 'asc' }])
-        ),
-
-      S.listItem()
-        .title('Primary Services (الخدمات الرئيسية)')
-        .icon(SparklesIcon)
-        .child(
-          S.documentTypeList('service')
-            .title('Primary Services')
-            .defaultOrdering([{ field: 'order', direction: 'asc' }])
-        ),
-
-      S.listItem()
-        .title('Service Offerings (الخدمات الفرعية)')
-        .icon(MasterDetailIcon)
-        .child(
-          S.documentTypeList('serviceOffering')
-            .title('Service Offerings')
-            .defaultOrdering([{ field: 'order', direction: 'asc' }])
-        ),
-      S.divider(),
-
-      // 3. Portfolio & Media
-      S.listItem()
-        .title('Projects / Portfolio (المشاريع والأعمال)')
-        .icon(CaseIcon)
-        .child(
-          S.documentTypeList('project')
-            .title('Projects')
-            .defaultOrdering([{ field: 'order', direction: 'asc' }])
-        ),
-
-      // 4. Insights & Blog
-      S.listItem()
-        .title('Blog Posts (المقالات والأفكار)')
+        .title('الصفحات (Pages)')
         .icon(DocumentTextIcon)
         .child(
-          S.documentTypeList('blogPost')
-            .title('Blog Posts')
-            .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
+          S.list()
+            .title('الصفحات')
+            .items([
+              singletonListItem(S, 'homePage', 'الصفحة الرئيسية', HomeIcon),
+              singletonListItem(S, 'aboutPage', 'من نحن', DocumentTextIcon),
+              singletonListItem(S, 'servicesPage', 'الخدمات', DocumentTextIcon),
+              singletonListItem(S, 'workPage', 'أعمالنا', DocumentTextIcon),
+              singletonListItem(S, 'blogPage', 'المدونة', DocumentTextIcon),
+              singletonListItem(S, 'contactPage', 'تواصل معنا', DocumentTextIcon),
+              singletonListItem(S, 'privacyPage', 'سياسة الخصوصية', DocumentTextIcon),
+              singletonListItem(S, 'termsPage', 'الشروط والأحكام', DocumentTextIcon),
+            ])
         ),
+      
+      S.divider(),
 
       S.listItem()
-        .title('Authors (فريق التحرير والكتاب)')
-        .icon(UserIcon)
-        .child(S.documentTypeList('author').title('Authors')),
+        .title('إدارة المحتوى (Content)')
+        .icon(MasterDetailIcon)
+        .child(
+          S.list()
+            .title('إدارة المحتوى')
+            .items([
+              S.documentTypeListItem('service').title('الخدمات الرئيسية (Primary Services)').icon(SparklesIcon),
+              S.documentTypeListItem('serviceOffering').title('الخدمات الفرعية (Service Offerings)').icon(MasterDetailIcon),
+              S.documentTypeListItem('project').title('المشاريع والأعمال (Projects)').icon(CaseIcon),
+              S.documentTypeListItem('blogPost').title('مقالات المدونة (Blog Posts)').icon(DocumentTextIcon),
+              S.documentTypeListItem('author').title('الكتّاب (Authors)').icon(UserIcon),
+            ])
+        ),
+
+      S.divider(),
+
+      S.listItem()
+        .title('الإعدادات (Settings)')
+        .icon(CogIcon)
+        .child(
+          S.list()
+            .title('الإعدادات')
+            .items([
+              singletonListItem(S, 'siteSettings', 'إعدادات الموقع (Site Settings)', CogIcon),
+              S.documentTypeListItem('contentCategory').title('التصنيفات (Categories)').icon(TagIcon),
+            ])
+        ),
 
       // Filter out singletons from any remaining auto-generated lists
       ...S.documentTypeListItems().filter(

@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
+import { PortableText } from '@portabletext/react';
 import { getBlogPostBySlug, getAllBlogPosts } from '@/services/content/blog.service';
 import { RelatedPosts } from './components/related-posts';
 import { Link } from '@/i18n/navigation';
@@ -70,9 +71,15 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
 
           {/* Author Badge */}
           <div className="pt-2 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-brand text-white flex items-center justify-center font-bold text-sm">
-              <User className="w-5 h-5" />
-            </div>
+            {post.author.image ? (
+              <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-brand-cyan/20">
+                <Image src={post.author.image} alt={authorName} fill className="object-cover" />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-brand text-white flex items-center justify-center font-bold text-sm">
+                <User className="w-5 h-5" />
+              </div>
+            )}
             <div>
               <p className="text-sm font-bold text-foreground">{authorName}</p>
               <p className="text-xs text-text-muted">{authorRole}</p>
@@ -92,21 +99,10 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
           />
         </div>
 
-        {/* Article Sections */}
-        <div className="space-y-8 text-foreground leading-relaxed">
-          {post.sections.map((sec, idx) => {
-            const secHeading = isArabic ? sec.heading.ar : sec.heading.en;
-            const secBody = isArabic ? sec.body.ar : sec.body.en;
-
-            return (
-              <div key={idx} className="space-y-3">
-                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-                  {secHeading}
-                </h2>
-                <p className="text-text-muted text-base leading-relaxed">{secBody}</p>
-              </div>
-            );
-          })}
+        {/* Article Body */}
+        <div className="space-y-8 text-foreground leading-relaxed prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-text-muted prose-a:text-brand-cyan">
+          <PortableText value={(isArabic ? post.body?.ar : post.body?.en) as any} />
+        </div>
 
           {/* Tags */}
           {tags.length > 0 && (
@@ -124,7 +120,6 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
 
           {/* Related Articles */}
           <RelatedPosts currentPost={post} allPosts={allPosts} />
-        </div>
       </div>
     </main>
   );

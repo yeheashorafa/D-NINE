@@ -9,13 +9,25 @@ import { RevealSection } from '@/components/motion/reveal-section';
 import { Floating3DAsset } from '@/components/motion/floating-3d-asset';
 import { Modal } from '@/components/ui/modal';
 
-export const CreativeSnapshotSection: React.FC = () => {
-  const locale = useLocale();
+export interface CreativeSnapshotSectionProps {
+  data?: {
+    title: { ar: string; en: string };
+    description: { ar: string; en: string };
+    stats: Array<{ value: string; label: { ar: string; en: string } }>;
+    videoUrl?: string;
+  };
+}
+
+export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = ({ data }) => {
+  const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
   const t = useTranslations('home.creativeSnapshot');
   const [showreelOpen, setShowreelOpen] = useState(false);
 
-  const capabilities = [
+  // We map 'stats' from CMS to capabilities, or fallback to default
+  const hasStats = data?.stats && data.stats.length > 0;
+  
+  const defaultCapabilities = [
     {
       icon: Palette,
       title: t('capabilities.design.title'),
@@ -51,17 +63,27 @@ export const CreativeSnapshotSection: React.FC = () => {
 
             {/* Heading */}
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
-              {t('heading')}
+              {data?.title?.[locale] || t('heading')}
             </h2>
 
             {/* Description */}
             <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
-              {t('description')}
+              {data?.description?.[locale] || t('description')}
             </p>
 
             {/* 3 Capabilities Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-              {capabilities.map((cap, idx) => {
+              {hasStats ? data.stats.map((stat, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-surface/80 dark:bg-surface/50 border border-border/80 dark:border-border/50 shadow-sm backdrop-blur-sm space-y-2"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-brand-purple/10 text-brand-purple dark:text-brand-purple-light flex items-center justify-center font-bold text-lg">
+                    {stat.value}
+                  </div>
+                  <h3 className="font-bold text-sm text-foreground">{stat.label[locale] || stat.label.en}</h3>
+                </div>
+              )) : defaultCapabilities.map((cap, idx) => {
                 const Icon = cap.icon;
                 return (
                   <div

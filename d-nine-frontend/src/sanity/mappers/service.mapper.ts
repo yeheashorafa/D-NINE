@@ -25,33 +25,33 @@ export function mapSanityService(doc: SanityServiceDoc): ServiceItem {
       en: doc.benefits?.en || [],
     },
     deliverables: {
-      ar: (doc.deliverables?.ar || []).map((d) => ({
+      ar: (doc.deliverables || []).map((d) => ({
         title: d.title?.ar || '',
         description: d.description?.ar || '',
       })),
-      en: (doc.deliverables?.en || []).map((d) => ({
+      en: (doc.deliverables || []).map((d) => ({
         title: d.title?.en || '',
         description: d.description?.en || '',
       })),
     },
     processSteps: {
-      ar: (doc.processSteps?.ar || []).map((p) => ({
+      ar: (doc.processSteps || []).map((p) => ({
         stepNumber: p.stepNumber,
         title: p.title?.ar || '',
         description: p.description?.ar || '',
       })),
-      en: (doc.processSteps?.en || []).map((p) => ({
+      en: (doc.processSteps || []).map((p) => ({
         stepNumber: p.stepNumber,
         title: p.title?.en || '',
         description: p.description?.en || '',
       })),
     },
     faqs: {
-      ar: (doc.faqs?.ar || []).map((f) => ({
+      ar: (doc.faqs || []).map((f) => ({
         question: f.question?.ar || '',
         answer: f.answer?.ar || '',
       })),
-      en: (doc.faqs?.en || []).map((f) => ({
+      en: (doc.faqs || []).map((f) => ({
         question: f.question?.en || '',
         answer: f.answer?.en || '',
       })),
