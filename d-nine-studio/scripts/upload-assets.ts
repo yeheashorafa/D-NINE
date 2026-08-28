@@ -75,7 +75,7 @@ export class AssetRegistry {
     return Array.from(this.pathToHash.keys());
   }
 
-  async syncWithSanity(client: SanityClient): Promise<{
+  async syncWithSanity(client: SanityClient, isDryRun: boolean = false): Promise<{
     existingInDataset: number;
     newlyUploaded: number;
     totalAssets: number;
@@ -122,19 +122,25 @@ export class AssetRegistry {
         this.pathToAssetId.set(relPath, assetId);
         this.hashToAssetId.set(sha1, assetId);
       } else {
-        try {
-          const fileBuffer = fs.readFileSync(absPath);
-          const isImage = /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(filename);
-          const uploaded = await client.assets.upload(isImage ? 'image' : 'file', fileBuffer, {
-            filename,
-          });
-          assetId = uploaded._id;
-          newlyUploaded++;
+        if (isDryRun) {
+          assetId = `image-planned-${sha1.slice(0, 10)}-800x600-jpg`;
           this.pathToAssetId.set(relPath, assetId);
           this.hashToAssetId.set(sha1, assetId);
-          sha1ToId.set(sha1, assetId);
-        } catch (err: any) {
-          errors.push(`Failed to upload asset '${relPath}': ${err?.message || err}`);
+        } else {
+          try {
+            const fileBuffer = fs.readFileSync(absPath);
+            const isImage = /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(filename);
+            const uploaded = await client.assets.upload(isImage ? 'image' : 'file', fileBuffer, {
+              filename,
+            });
+            assetId = uploaded._id;
+            newlyUploaded++;
+            this.pathToAssetId.set(relPath, assetId);
+            this.hashToAssetId.set(sha1, assetId);
+            sha1ToId.set(sha1, assetId);
+          } catch (err: any) {
+            errors.push(`Failed to upload asset '${relPath}': ${err?.message || err}`);
+          }
         }
       }
     }

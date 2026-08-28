@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTranslations } from 'next-intl';
 import { ServiceOffering } from '@/types/service';
 import { ContentCategory } from '@/types/category';
 import { ServicesFilter } from './services-filter';
@@ -22,7 +21,6 @@ export interface ServicesGridProps {
 }
 
 export function ServicesGrid({ initialOfferings, categories, labels }: ServicesGridProps) {
-  const t = useTranslations('servicesPage');
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const filteredOfferings = useMemo(() => {

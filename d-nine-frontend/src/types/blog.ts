@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { LocalizedText } from './localized';
+import { LocalizedText, SeoMetadata } from './localized';
+import type { PortableTextBlock } from '@portabletext/types';
 
 export interface BlogContentSection {
   heading: LocalizedText;
@@ -25,13 +25,13 @@ export interface BlogPost {
     active?: boolean;
   };
   body: {
-    ar: any[];
-    en: any[];
+    ar: PortableTextBlock[];
+    en: PortableTextBlock[];
   };
   featured: boolean;
   tags: {
     ar: string[];
     en: string[];
   };
-  seo?: any;
+  seo?: SeoMetadata;
 }

@@ -28,9 +28,11 @@ describe('BookACallSection', () => {
   it('renders with sanity data provided', () => {
     const data = {
       title: { en: 'Custom CMS Title' },
-      subtitle: { en: 'Custom CMS Subtitle' },
-      buttonText: { en: 'Custom CMS Button' },
-      buttonLink: 'https://example.com',
+      description: { en: 'Custom CMS Subtitle' },
+      cta: {
+        buttonText: { en: 'Custom CMS Button' },
+        buttonLink: 'https://example.com',
+      }
     };
 
     render(<BookACallSection data={data} />);

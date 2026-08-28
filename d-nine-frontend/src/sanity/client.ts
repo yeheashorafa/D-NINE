@@ -19,6 +19,7 @@ export const client = createClient({
   useCdn: false,
   perspective: 'published',
   stega: false,
+  token: readToken || undefined,
 });
 
 // Draft client: perspective "previewDrafts", token required, stega true
@@ -69,12 +70,25 @@ export async function sanityFetch<T>({
   const selectedClient = isDraftMode ? previewClient : client;
   const revalidate = isDraftMode ? 0 : 60; // Published fallback revalidate approximately 60 seconds
 
-  return selectedClient.fetch<T>(query, params, {
-    stega: isDraftMode ? stega : false, // Stega only active in draft mode
-    next: {
-      tags,
-      revalidate,
-    },
-  });
-}
+  try {
+    return await selectedClient.fetch<T>(query, params, {
+      stega: isDraftMode ? stega : false, // Stega only active in draft mode
+      next: {
+        tags,
+        revalidate,
+      },
+    });
+  } catch (error: unknown) {
+    const isNetworkError =
+      typeof error === 'object' &&
+      error !== null &&
+      'isNetworkError' in error &&
+      error.isNetworkError === true;
 
+    throw new Error(
+      isNetworkError
+        ? 'Sanity content request failed because of a network error.'
+        : 'Sanity content request failed.',
+    );
+  }
+}

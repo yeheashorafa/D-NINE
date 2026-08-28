@@ -68,17 +68,48 @@ async function main() {
   assetRegistry.registerFile('/slider/slide-03.jpg');
   assetRegistry.registerFile('/slider/slide-04.jpg');
 
-  if (!isDryRun) {
-    console.log('🔄 Syncing missing assets...');
-    await assetRegistry.syncWithSanity(client);
+  const missingFiles = assetRegistry.getMissingFiles();
+
+  if (missingFiles.length > 0) {
+    throw new Error(
+      `Missing required local assets:\n${missingFiles.join('\n')}`
+    );
   }
 
-  const makeImageObject = (relPath: string, alt: { ar: string; en: string }) => {
-    const assetId = assetRegistry.getAssetId(relPath);
-    if (!assetId) {
-      console.error(`Missing asset ID for ${relPath}`);
-      process.exit(1);
+  if (!isDryRun) {
+    console.log('🔄 Syncing missing assets...');
+
+    const syncResult = await assetRegistry.syncWithSanity(client);
+
+    if (syncResult.errors.length > 0) {
+      throw new Error(
+        `Asset synchronization failed:\n${syncResult.errors.join('\n')}`
+      );
     }
+  }
+
+  const makeImageObject = (
+    relPath: string,
+    alt: { ar: string; en: string }
+  ) => {
+    if (isDryRun) {
+      return {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          // In-memory planning reference only. Never sent to Sanity.
+          _ref: `dry-run-asset-${relPath.replace(/[^a-zA-Z0-9]/g, '-')}`,
+        },
+        alt,
+      };
+    }
+
+    const assetId = assetRegistry.getAssetId(relPath);
+
+    if (!assetId) {
+      throw new Error(`Missing Sanity asset ID for ${relPath}`);
+    }
+
     return {
       _type: 'image',
       asset: {
@@ -177,35 +208,53 @@ async function main() {
     aboutPage: {
       _type: 'aboutPage',
       heroBadge: { ar: 'من نحن', en: 'About Us' },
-      heroTitle: { ar: 'قصة نجاح', en: 'A Success Story' },
-      heroSubtitle: { ar: 'بداية الرحلة', en: 'The beginning of the journey' },
-      agencyStory: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'قصتنا الرائعة', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our amazing story', _key: '3' }], _key: '4', markDefs: [] }] },
-      mission: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'مهمتنا هي الابتكار', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our mission is innovation', _key: '3' }], _key: '4', markDefs: [] }] },
-      vision: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'رؤيتنا للمستقبل', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our vision for the future', _key: '3' }], _key: '4', markDefs: [] }] },
+      heroTitle: { ar: 'نحن دي ناين', en: 'We are D-NINE' },
+      heroSubtitle: { ar: 'نقدم لك أفضل الحلول الإبداعية', en: 'We provide you with the best creative solutions' },
+      agencyStory: {
+        ar: [{ _type: 'block', children: [{ _type: 'span', text: 'دي ناين هي وكالة إبداعية رائدة متخصصة في تقديم حلول متكاملة في التصميم والإنتاج الإعلامي. انطلقنا برؤية طموحة لتمكين العلامات التجارية من تحقيق أهدافها.', _key: '1' }], _key: '2', markDefs: [] }],
+        en: [{ _type: 'block', children: [{ _type: 'span', text: 'D-NINE is a leading creative agency specializing in comprehensive design and media production solutions. We launched with an ambitious vision to empower brands to achieve their goals.', _key: '3' }], _key: '4', markDefs: [] }]
+      },
+      mission: {
+        ar: [{ _type: 'block', children: [{ _type: 'span', text: 'مهمتنا هي صياغة قصص بصرية مبتكرة تعزز من حضور عملائنا في السوق، مع الالتزام بأعلى معايير الجودة والإبداع في كل مشروع.', _key: '1' }], _key: '2', markDefs: [] }],
+        en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our mission is to craft innovative visual stories that enhance our clients\' market presence, committing to the highest standards of quality and creativity in every project.', _key: '3' }], _key: '4', markDefs: [] }]
+      },
+      vision: {
+        ar: [{ _type: 'block', children: [{ _type: 'span', text: 'أن نكون الوكالة الخيار الأول للإبداع والإنتاج الإعلامي في منطقة الشرق الأوسط وشمال أفريقيا، من خلال تقديم أعمال استثنائية تلهم الجماهير.', _key: '1' }], _key: '2', markDefs: [] }],
+        en: [{ _type: 'block', children: [{ _type: 'span', text: 'To be the creative and media production agency of choice in the MENA region, delivering exceptional work that inspires audiences.', _key: '3' }], _key: '4', markDefs: [] }]
+      },
       values: [],
       seo: {
         metaTitle: { ar: 'من نحن | دي ناين', en: 'About | D-NINE' },
-        metaDescription: { ar: 'قصتنا.', en: 'Our story.' },
+        metaDescription: { ar: 'تعرف على قصة وكالة دي ناين.', en: 'Learn about D-NINE agency story.' },
       },
     },
     contactPage: {
       _type: 'contactPage',
       heroBadge: { ar: 'تواصل معنا', en: 'Contact Us' },
       heroTitle: { ar: 'نحن هنا لخدمتك', en: 'We are here to serve you' },
-      heroSubtitle: { ar: 'يسعدنا تواصلك معنا', en: 'We look forward to hearing from you' },
-      description: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'تواصل معنا الآن', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Contact us now', _key: '3' }], _key: '4', markDefs: [] }] },
-      contactMethods: [{ _key: 'm1', type: 'email', title: { ar: 'البريد الإلكتروني', en: 'Email' }, value: 'hello@d-nine.agency', link: 'mailto:hello@d-nine.agency' }],
-      offices: [{ _key: 'o1', title: { ar: 'المقر الرئيسي', en: 'Headquarters' }, address: { ar: 'الرياض', en: 'Riyadh' }, email: 'hq@d-nine.agency' }],
+      heroSubtitle: { ar: 'يسعدنا تواصلك معنا لبدء مشروعك القادم', en: 'We look forward to hearing from you to start your next project' },
+      description: {
+        ar: [{ _type: 'block', children: [{ _type: 'span', text: 'فريق دي ناين متاح دائماً للإجابة على استفساراتك ومناقشة تفاصيل مشروعك. لا تتردد في الاتصال بنا عبر أي من القنوات المتاحة أدناه.', _key: '1' }], _key: '2', markDefs: [] }],
+        en: [{ _type: 'block', children: [{ _type: 'span', text: 'The D-NINE team is always available to answer your inquiries and discuss your project details. Feel free to reach out through any of the channels below.', _key: '3' }], _key: '4', markDefs: [] }]
+      },
+      contactMethods: [
+        { _key: 'm1', type: 'email', title: { ar: 'البريد الإلكتروني', en: 'Email' }, value: 'hello@d-nine.agency', link: 'mailto:hello@d-nine.agency' },
+        { _key: 'm2', type: 'phone', title: { ar: 'رقم الهاتف', en: 'Phone' }, value: '+966 50 123 4567', link: 'tel:+966501234567' }
+      ],
+      offices: [{ _key: 'o1', title: { ar: 'المقر الرئيسي - الرياض', en: 'Headquarters - Riyadh' }, address: { ar: 'شارع التحلية، الرياض، المملكة العربية السعودية', en: 'Tahlia Street, Riyadh, Saudi Arabia' }, email: 'hq@d-nine.agency', phone: '+966 50 123 4567' }],
       seo: {
         metaTitle: { ar: 'تواصل معنا | دي ناين', en: 'Contact | D-NINE' },
-        metaDescription: { ar: 'تواصل معنا.', en: 'Contact us.' },
+        metaDescription: { ar: 'تواصل مع وكالة دي ناين.', en: 'Contact D-NINE agency.' },
       },
     },
     privacyPage: {
       _type: 'privacyPage',
       title: { ar: 'سياسة الخصوصية', en: 'Privacy Policy' },
       lastUpdated: '2024-01-01',
-      body: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'نص المحتوى', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Content text', _key: '3' }], _key: '4', markDefs: [] }] },
+      body: {
+        ar: [{ _type: 'block', children: [{ _type: 'span', text: 'في دي ناين، نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. توضح هذه السياسة كيف نجمع ونستخدم ونشارك معلوماتك عند استخدام خدماتنا.', _key: '1' }], _key: '2', markDefs: [] }],
+        en: [{ _type: 'block', children: [{ _type: 'span', text: 'At D-NINE, we respect your privacy and are committed to protecting your personal data. This policy explains how we collect, use, and share your information when using our services.', _key: '3' }], _key: '4', markDefs: [] }]
+      },
       seo: {
         metaTitle: { ar: 'سياسة الخصوصية | دي ناين', en: 'Privacy Policy | D-NINE' },
       },
@@ -214,7 +263,10 @@ async function main() {
       _type: 'termsPage',
       title: { ar: 'الشروط والأحكام', en: 'Terms of Service' },
       lastUpdated: '2024-01-01',
-      body: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'نص المحتوى', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Content text', _key: '3' }], _key: '4', markDefs: [] }] },
+      body: {
+        ar: [{ _type: 'block', children: [{ _type: 'span', text: 'استخدامك لموقع وخدمات دي ناين يخضع لهذه الشروط والأحكام. يرجى قراءتها بعناية قبل المضي قدماً في أي تعاون معنا.', _key: '1' }], _key: '2', markDefs: [] }],
+        en: [{ _type: 'block', children: [{ _type: 'span', text: 'Your use of D-NINE website and services is subject to these terms and conditions. Please read them carefully before proceeding with any collaboration.', _key: '3' }], _key: '4', markDefs: [] }]
+      },
       seo: {
         metaTitle: { ar: 'الشروط والأحكام | دي ناين', en: 'Terms of Service | D-NINE' },
       },
@@ -267,7 +319,7 @@ async function main() {
     } else {
       console.log(`Adding PATCH to transaction for: ${id}`);
       // Remove _type from setIfMissing to avoid patch errors
-      
+
       // Check for empty fields to force patch
       const forcePatchFields: Record<string, any> = {};
       for (const [k, v] of Object.entries(cleanedDoc)) {
@@ -286,7 +338,7 @@ async function main() {
           forcePatchFields[k] = v;
         }
       }
-      
+
       const { _type, ...fieldsToPatch } = cleanedDoc;
       if (Object.keys(forcePatchFields).length > 0) {
          transaction = transaction.patch(id, (p) => p.set(forcePatchFields).setIfMissing(fieldsToPatch));

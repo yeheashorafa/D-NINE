@@ -1,10 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getHomePage, getAboutPage } from './page.service';
 import { sanityFetch } from '../client';
 
 vi.mock('../client', () => ({
   sanityFetch: vi.fn(),
+}));
+
+const mockSanityFetch = vi.mocked(sanityFetch);
+
+vi.mock('../env', () => ({
+  contentSource: 'sanity',
 }));
 
 describe('Singleton Page Services', () => {
@@ -17,13 +22,13 @@ describe('Singleton Page Services', () => {
       _id: 'home',
       heroSlides: [{ title: { ar: 'Test', en: 'Test' } }],
     };
-    (sanityFetch as any).mockResolvedValueOnce(mockData);
+    mockSanityFetch.mockResolvedValueOnce(mockData);
 
     const result = await getHomePage();
     
     expect(sanityFetch).toHaveBeenCalledWith(expect.objectContaining({
       query: expect.any(String),
-      tags: expect.any(Array),
+      tags: ['home-page', 'homePage'],
     }));
     expect(result).toEqual(mockData);
   });
@@ -33,15 +38,21 @@ describe('Singleton Page Services', () => {
       _id: 'about',
       heroTitle: { ar: 'Test', en: 'Test' },
     };
-    (sanityFetch as any).mockResolvedValueOnce(mockData);
+    mockSanityFetch.mockResolvedValueOnce(mockData);
 
     const result = await getAboutPage({ stega: false });
     
     expect(sanityFetch).toHaveBeenCalledWith(expect.objectContaining({
       query: expect.any(String),
-      tags: expect.any(Array),
+      tags: ['about-page', 'aboutPage'],
       stega: false,
     }));
     expect(result).toEqual(mockData);
+  });
+
+  it('should throw an error for missing or malformed document in sanity mode', async () => {
+    mockSanityFetch.mockResolvedValueOnce(null);
+
+    await expect(getHomePage()).rejects.toThrow('Home page document is missing or malformed in Sanity.');
   });
 });

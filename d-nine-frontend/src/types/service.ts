@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { LocalizedText } from './localized';
+import { LocalizedText, SeoMetadata } from './localized';
 
 export interface ServiceDeliverable {
   title: string;
@@ -43,7 +42,7 @@ export interface ServiceItem {
     en: ServiceFAQ[];
   };
   featured: boolean;
-  seo?: any;
+  seo?: SeoMetadata;
 }
 
 export interface ServiceOffering {

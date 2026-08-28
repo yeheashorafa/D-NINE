@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getAllBlogPosts } from './blog.service';
 import { BLOG_POSTS_DATA } from '@/features/blog/data/blog-posts.data';
@@ -7,6 +6,8 @@ import { sanityFetch } from '@/sanity/client';
 vi.mock('@/sanity/client', () => ({
   sanityFetch: vi.fn(),
 }));
+
+const mockSanityFetch = vi.mocked(sanityFetch);
 
 const mockEnv = { contentSource: 'sanity' };
 
@@ -38,10 +39,13 @@ describe('getAllBlogPosts', () => {
         slug: 'test',
         categorySlug: 'test',
         title: { ar: 'Test', en: 'Test' },
+        excerpt: { ar: 'Test', en: 'Test' },
+        seo: { metaTitle: { ar: 'Test', en: 'Test' } },
+        tags: { ar: ['Test'], en: ['Test'] }
       }
     ];
     
-    (sanityFetch as any).mockResolvedValueOnce(mockSanityData);
+    mockSanityFetch.mockResolvedValueOnce(mockSanityData);
     
     const posts = await getAllBlogPosts();
     
@@ -56,7 +60,7 @@ describe('getAllBlogPosts', () => {
   it('should throw an error and not fallback to static data if sanityFetch fails in sanity mode', async () => {
     mockEnv.contentSource = 'sanity';
     
-    (sanityFetch as any).mockRejectedValueOnce(new Error('Sanity fetch failed'));
+    mockSanityFetch.mockRejectedValueOnce(new Error('Sanity fetch failed'));
     
     await expect(getAllBlogPosts()).rejects.toThrow('Sanity fetch failed');
   });

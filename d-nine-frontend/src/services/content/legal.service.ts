@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { contentSource, assertSanityConfig } from '@/sanity/env';
 import { sanityFetch } from '@/sanity/client';
+import type { PortableTextBlock } from '@portabletext/types';
 
 export interface LegalPageData {
   title: { ar: string; en: string };
   lastUpdated: string;
-  body: { ar: any; en: any }; // PortableText blocks
+  body: { ar: PortableTextBlock[]; en: PortableTextBlock[] };
 }
 
 const legalQuery = (type: string) => `*[_type == "${type}"][0]{
@@ -17,7 +17,7 @@ const legalQuery = (type: string) => `*[_type == "${type}"][0]{
 export async function getLegalPageData(type: 'privacy' | 'terms'): Promise<LegalPageData | null> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
-    const data = await sanityFetch<any>({
+    const data = await sanityFetch<LegalPageData>({
       query: legalQuery(type),
       tags: [type],
     });

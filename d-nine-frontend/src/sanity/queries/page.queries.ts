@@ -39,7 +39,7 @@ export const homePageQuery = groq`
     testimonials,
     faqs,
     bookACall,
-    latestNews[]-> { title, slug, publishedAt, excerpt, "image": image.asset->url },
+    latestNews[]-> { title, "slug": slug.current, publishedAt, excerpt, "image": image.asset->url, category, readTimeMinutes },
     seo {
       metaTitle,
       metaDescription,
@@ -118,7 +118,7 @@ export const blogPageQuery = groq`
     heroTitle,
     heroSubtitle,
     searchPlaceholder,
-    featuredPosts[]-> { title, slug, publishedAt, excerpt, "image": image.asset->url },
+    featuredPosts[]-> { title, "slug": slug.current, publishedAt, excerpt, "image": image.asset->url, category, readTimeMinutes },
     seo {
       metaTitle,
       metaDescription,

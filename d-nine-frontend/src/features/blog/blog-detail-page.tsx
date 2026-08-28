@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
-import { PortableText } from '@portabletext/react';
+import { CustomPortableText } from '@/sanity/components/portable-text';
 import { getBlogPostBySlug, getAllBlogPosts } from '@/services/content/blog.service';
 import { RelatedPosts } from './components/related-posts';
 import { Link } from '@/i18n/navigation';
@@ -114,7 +114,7 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
 
         {/* Article Body */}
         <div className="space-y-8 text-foreground leading-relaxed prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-text-muted prose-a:text-brand-cyan">
-          <PortableText value={(isArabic ? post.body?.ar : post.body?.en) as any} />
+          <CustomPortableText value={(isArabic ? post.body?.ar : post.body?.en) as any} />
         </div>
 
           {/* Tags */}

@@ -1,7 +1,48 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { PortableTextBlock } from '@portabletext/types';
+
 export interface SanityLocalizedString {
   ar?: string;
   en?: string;
+}
+
+export type SanityPortableText = PortableTextBlock[];
+
+export interface SanityLocalizedPortableText {
+  ar?: SanityPortableText;
+  en?: SanityPortableText;
+}
+
+export interface SanityCta {
+  buttonText?: SanityLocalizedString;
+  buttonLink?: string;
+}
+
+export interface SanityTestimonial {
+  author?: SanityLocalizedString;
+  role?: SanityLocalizedString;
+  text?: SanityLocalizedString;
+  company?: string;
+  image?: string;
+}
+
+export interface SanityContactMethod {
+  _key?: string;
+  type?: 'email' | 'phone' | 'whatsapp' | 'location';
+  title?: SanityLocalizedString;
+  value?: string;
+  link?: string;
+}
+
+export interface SanityOffice {
+  _key?: string;
+  title?: SanityLocalizedString;
+  address?: SanityLocalizedString;
+  email?: string;
+  phone?: string;
+  coordinates?: {
+    lat?: number;
+    lng?: number;
+  };
 }
 
 export interface SanityCategoryDoc {
@@ -23,6 +64,11 @@ export interface SanityServiceProcessStep {
   stepNumber: string;
   title: SanityLocalizedString;
   description: SanityLocalizedString;
+}
+
+export interface SanityFaq {
+  question: SanityLocalizedString;
+  answer: SanityLocalizedString;
 }
 
 export interface SanityServiceFaq {
@@ -126,10 +172,7 @@ export interface SanityBlogPostDoc {
     active?: boolean;
   };
   sections?: SanityBlogSection[];
-  body?: {
-    ar?: any[];
-    en?: any[];
-  };
+  body?: SanityLocalizedPortableText;
   featured?: boolean;
   tags?: { ar?: string[]; en?: string[] };
   seo?: SanitySeo;
@@ -152,15 +195,35 @@ export interface SanitySeo {
 export interface SanityHomePageDoc {
   _id: string;
   id?: string;
-  heroSlides?: any[];
-  creativeSnapshot?: any;
-  featuredProjects?: any[];
-  featuredServices?: any[];
-  processTimeline?: any[];
-  testimonials?: any[];
-  faqs?: any[];
-  bookACall?: any;
-  latestNews?: any[];
+  heroSlides?: {
+    category?: SanityLocalizedString;
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+    ctaText?: SanityLocalizedString;
+    ctaLink?: string;
+    image?: string;
+  }[];
+  creativeSnapshot?: {
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+    videoUrl?: string;
+    videoThumbnail?: string;
+    stats?: {
+      value: string;
+      label: SanityLocalizedString;
+    }[];
+  };
+  featuredProjects?: string[];
+  featuredServices?: string[];
+  processTimeline?: SanityTimelineItemDoc[];
+  testimonials?: SanityTestimonial[];
+  faqs?: SanityFaq[];
+  bookACall?: {
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+    cta?: SanityCta;
+  };
+  latestNews?: SanityBlogPostDoc[];
   seo?: SanitySeo;
 }
 
@@ -170,12 +233,16 @@ export interface SanityAboutPageDoc {
   heroBadge?: SanityLocalizedString;
   heroTitle?: SanityLocalizedString;
   heroSubtitle?: SanityLocalizedString;
-  agencyStory?: any;
-  mission?: any;
-  vision?: any;
-  values?: any[];
+  agencyStory?: SanityLocalizedPortableText;
+  mission?: SanityLocalizedPortableText;
+  vision?: SanityLocalizedPortableText;
+  values?: {
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+    icon?: string;
+  }[];
   media?: string[];
-  cta?: any;
+  cta?: SanityCta;
   seo?: SanitySeo;
 }
 
@@ -210,7 +277,7 @@ export interface SanityBlogPageDoc {
   heroTitle?: SanityLocalizedString;
   heroSubtitle?: SanityLocalizedString;
   searchPlaceholder?: SanityLocalizedString;
-  featuredPosts?: any[];
+  featuredPosts?: SanityBlogPostDoc[];
   seo?: SanitySeo;
 }
 
@@ -220,9 +287,9 @@ export interface SanityContactPageDoc {
   heroBadge?: SanityLocalizedString;
   heroTitle?: SanityLocalizedString;
   heroSubtitle?: SanityLocalizedString;
-  description?: any;
-  contactMethods?: any[];
-  offices?: any[];
+  description?: SanityLocalizedPortableText;
+  contactMethods?: SanityContactMethod[];
+  offices?: SanityOffice[];
   seo?: SanitySeo;
 }
 
@@ -231,7 +298,7 @@ export interface SanityPrivacyPageDoc {
   id?: string;
   title?: SanityLocalizedString;
   lastUpdated?: string;
-  body?: any;
+  body?: SanityLocalizedPortableText;
   seo?: SanitySeo;
 }
 
@@ -240,7 +307,7 @@ export interface SanityTermsPageDoc {
   id?: string;
   title?: SanityLocalizedString;
   lastUpdated?: string;
-  body?: any;
+  body?: SanityLocalizedPortableText;
   seo?: SanitySeo;
 }
 

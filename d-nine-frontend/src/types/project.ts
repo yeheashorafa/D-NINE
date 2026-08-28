@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { LocalizedText } from './localized';
+import { LocalizedText, SeoMetadata } from './localized';
 import { ProjectMedia } from './media';
 
 export interface ProjectMetric {
@@ -35,5 +34,5 @@ export interface ProjectItem {
   credits?: LocalizedText;
   featured: boolean;
   colorVariant: string;
-  seo?: any;
+  seo?: SeoMetadata;
 }

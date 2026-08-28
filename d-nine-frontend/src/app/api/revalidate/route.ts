@@ -73,8 +73,7 @@ export async function POST(req: NextRequest) {
 
     // Revalidate allowed tags
     for (const tag of tagsToRevalidate) {
-      // @ts-expect-error
-      revalidateTag(tag);
+      revalidateTag(tag, 'max');
     }
 
     const pathsToRevalidate: string[] = [];
@@ -103,18 +102,15 @@ export async function POST(req: NextRequest) {
     const slug = parsed.data.slug?.current;
     if (slug) {
       if (docType === 'service') {
-        // @ts-expect-error
-        revalidateTag(`service:${slug}`);
+        revalidateTag(`service:${slug}`, 'max');
         pathsToRevalidate.push(`/ar/services/${slug}`, `/en/services/${slug}`);
       }
       if (docType === 'project') {
-        // @ts-expect-error
-        revalidateTag(`project:${slug}`);
+        revalidateTag(`project:${slug}`, 'max');
         pathsToRevalidate.push(`/ar/work/${slug}`, `/en/work/${slug}`);
       }
       if (docType === 'blogPost') {
-        // @ts-expect-error
-        revalidateTag(`blog:${slug}`);
+        revalidateTag(`blog:${slug}`, 'max');
         pathsToRevalidate.push(`/ar/blog/${slug}`, `/en/blog/${slug}`);
       }
     }

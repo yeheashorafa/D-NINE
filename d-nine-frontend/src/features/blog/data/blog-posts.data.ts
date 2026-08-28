@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BlogPost } from '@/types/blog';
 
-const RAW_BLOG_POSTS: any[] = [
+const RAW_BLOG_POSTS = [
   {
     id: 'post-01',
     slug: 'future-of-brand-identity-2025',
@@ -323,11 +322,11 @@ const RAW_BLOG_POSTS: any[] = [
 ];
 
 export const BLOG_POSTS_DATA: BlogPost[] = RAW_BLOG_POSTS.map((post) => {
-  const { sections, ...rest } = post as any;
+  const { sections, ...rest } = post as { sections: { heading: { ar: string, en: string }, body: { ar: string, en: string } }[], [key: string]: unknown };
   return {
     ...rest,
     body: {
-      ar: (sections || []).map((sec: any) => ({
+      ar: (sections || []).map((sec) => ({
         _type: 'block',
         _key: Math.random().toString(36).substring(7),
         style: 'normal',
@@ -336,7 +335,7 @@ export const BLOG_POSTS_DATA: BlogPost[] = RAW_BLOG_POSTS.map((post) => {
           { _type: 'span', marks: [], text: sec.body.ar },
         ],
       })),
-      en: (sections || []).map((sec: any) => ({
+      en: (sections || []).map((sec) => ({
         _type: 'block',
         _key: Math.random().toString(36).substring(7),
         style: 'normal',
@@ -346,5 +345,5 @@ export const BLOG_POSTS_DATA: BlogPost[] = RAW_BLOG_POSTS.map((post) => {
         ],
       })),
     },
-  };
+  } as unknown as BlogPost;
 });

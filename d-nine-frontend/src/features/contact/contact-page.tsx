@@ -5,7 +5,7 @@ import { getContactPage } from '@/sanity/services/page.service';
 import { ContactForm } from './components/contact-form';
 import { Sparkles, Mail, Phone, MapPin } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
-import { PortableText } from '@portabletext/react';
+import { CustomPortableText } from '@/sanity/components/portable-text';
 
 const getIconComponent = (type: string) => {
   if (type === 'email') return Mail;
@@ -52,12 +52,12 @@ export async function ContactPage() {
               
               {pageData?.description?.[locale] && (
                 <div className="text-text-muted text-sm prose prose-sm dark:prose-invert">
-                  <PortableText value={pageData.description[locale]} />
+                  <CustomPortableText value={pageData.description[locale]} />
                 </div>
               )}
 
               <div className="space-y-6 text-sm text-text-muted">
-                {pageData?.offices?.map((office: { title?: { en?: string; ar?: string }; address?: { en?: string; ar?: string }; phone?: string; email?: string }, idx: number) => (
+                {pageData?.offices?.map((office, idx: number) => (
                   <div key={`office-${idx}`} className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0">
                       <MapPin className="w-5 h-5" />
@@ -77,8 +77,8 @@ export async function ContactPage() {
                   </div>
                 ))}
 
-                {pageData?.contactMethods?.map((method: { type: string; title?: { en?: string; ar?: string }; link?: string; value: string }, idx: number) => {
-                  const Icon = getIconComponent(method.type);
+                {pageData?.contactMethods?.map((method, idx: number) => {
+                  const Icon = getIconComponent(method.type || 'email');
                   const isLink = !!method.link;
                   return (
                     <div key={`method-${idx}`} className="flex items-start gap-4">

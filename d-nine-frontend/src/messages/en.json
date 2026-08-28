@@ -112,6 +112,18 @@
       "title": "Ready to Take Your Brand to The Next Level?",
       "subtitle": "Book a strategic session with D-NINE to discuss your project vision and visual direction.",
       "cta": "Book a Session Now"
+    },
+    "testimonials": {
+      "badge": "Testimonials",
+      "title": "What Our Clients Say"
+    },
+    "faqs": {
+      "badge": "FAQs",
+      "title": "Frequently Asked Questions"
+    },
+    "latestNews": {
+      "badge": "Insights",
+      "title": "Latest News & Articles"
     }
   },
   "about": {

@@ -4,7 +4,7 @@ import { getTranslations, getLocale } from 'next-intl/server';
 import { getAboutPage } from '@/sanity/services/page.service';
 import { Sparkles, Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
-import { PortableText } from '@portabletext/react';
+import { CustomPortableText } from '@/sanity/components/portable-text';
 
 // Helper to map string icon names to Lucide components safely
 const getIconComponent = (iconName: string) => {
@@ -72,7 +72,7 @@ export async function AboutPage() {
           </h2>
           <div className="space-y-4 text-text-muted leading-relaxed text-base sm:text-lg">
             {pageData?.agencyStory?.[locale] ? (
-              <PortableText value={pageData.agencyStory[locale]} />
+              <CustomPortableText value={pageData.agencyStory[locale]} />
             ) : (
               <>
                 <p>{t('story.p1')}</p>
@@ -90,7 +90,7 @@ export async function AboutPage() {
             </h3>
             <div className="text-text-muted leading-relaxed prose prose-sm dark:prose-invert">
               {pageData?.mission?.[locale] ? (
-                <PortableText value={pageData.mission[locale]} />
+                <CustomPortableText value={pageData.mission[locale]} />
               ) : (
                 <p>{t('missionVision.missionDesc')}</p>
               )}
@@ -103,7 +103,7 @@ export async function AboutPage() {
             </h3>
             <div className="text-text-muted leading-relaxed prose prose-sm dark:prose-invert">
               {pageData?.vision?.[locale] ? (
-                <PortableText value={pageData.vision[locale]} />
+                <CustomPortableText value={pageData.vision[locale]} />
               ) : (
                 <p>{t('missionVision.visionDesc')}</p>
               )}

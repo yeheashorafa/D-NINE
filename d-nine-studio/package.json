@@ -13,6 +13,7 @@
     "documents:validate": "sanity documents validate",
     "typecheck": "tsc --noEmit",
     "test:dry-run": "tsx scripts/test-dry-run.ts",
+    "test:preservation": "tsx scripts/test-preservation.ts",
     "content:migrate:dry": "tsx scripts/migrate-static-content.ts --dry-run",
     "content:migrate": "tsx scripts/migrate-static-content.ts --execute",
     "content:validate": "tsx scripts/validate-migration.ts",

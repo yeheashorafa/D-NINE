@@ -5,6 +5,12 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+
+  experimental: {
+    staticGenerationRetryCount: 3,
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationMinPagesPerWorker: 100,
+  },
   images: {
     qualities: [60, 75, 90, 95],
     remotePatterns: [

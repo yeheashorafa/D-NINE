@@ -22,6 +22,17 @@ import type {
   SanityTermsPageDoc,
   SanitySiteSettingsDoc
 } from '../types';
+import {
+  mapHomePage,
+  mapAboutPage,
+  mapServicesPage,
+  mapWorkPage,
+  mapBlogPage,
+  mapContactPage,
+  mapPrivacyPage,
+  mapTermsPage,
+  mapSiteSettings
+} from '../mappers/page.mapper';
 
 function enforceSanityDoc<T>(data: T | null, name: string): T {
   if (contentSource === 'sanity' && !data) {
@@ -36,7 +47,7 @@ export async function getHomePage(options: { stega?: boolean } = {}) {
     tags: ['home-page', 'homePage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Home page');
+  return enforceSanityDoc(mapHomePage(data), 'Home page');
 }
 
 export async function getAboutPage(options: { stega?: boolean } = {}) {
@@ -45,7 +56,7 @@ export async function getAboutPage(options: { stega?: boolean } = {}) {
     tags: ['about-page', 'aboutPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'About page');
+  return enforceSanityDoc(mapAboutPage(data), 'About page');
 }
 
 export async function getServicesPage(options: { stega?: boolean } = {}) {
@@ -54,7 +65,7 @@ export async function getServicesPage(options: { stega?: boolean } = {}) {
     tags: ['services-page', 'servicesPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Services page');
+  return enforceSanityDoc(mapServicesPage(data), 'Services page');
 }
 
 export async function getWorkPage(options: { stega?: boolean } = {}) {
@@ -63,7 +74,7 @@ export async function getWorkPage(options: { stega?: boolean } = {}) {
     tags: ['work-page', 'workPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Work page');
+  return enforceSanityDoc(mapWorkPage(data), 'Work page');
 }
 
 export async function getBlogPage(options: { stega?: boolean } = {}) {
@@ -72,7 +83,7 @@ export async function getBlogPage(options: { stega?: boolean } = {}) {
     tags: ['blog-page', 'blogPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Blog page');
+  return enforceSanityDoc(mapBlogPage(data), 'Blog page');
 }
 
 export async function getContactPage(options: { stega?: boolean } = {}) {
@@ -81,7 +92,7 @@ export async function getContactPage(options: { stega?: boolean } = {}) {
     tags: ['contact-page', 'contactPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Contact page');
+  return enforceSanityDoc(mapContactPage(data), 'Contact page');
 }
 
 export async function getPrivacyPage(options: { stega?: boolean } = {}) {
@@ -90,7 +101,7 @@ export async function getPrivacyPage(options: { stega?: boolean } = {}) {
     tags: ['privacy-page', 'privacyPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Privacy page');
+  return enforceSanityDoc(mapPrivacyPage(data), 'Privacy page');
 }
 
 export async function getTermsPage(options: { stega?: boolean } = {}) {
@@ -99,7 +110,7 @@ export async function getTermsPage(options: { stega?: boolean } = {}) {
     tags: ['terms-page', 'termsPage'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Terms page');
+  return enforceSanityDoc(mapTermsPage(data), 'Terms page');
 }
 
 export async function getSiteSettings(options: { stega?: boolean } = {}) {
@@ -108,5 +119,5 @@ export async function getSiteSettings(options: { stega?: boolean } = {}) {
     tags: ['site-settings', 'siteSettings'],
     stega: options.stega,
   });
-  return enforceSanityDoc(data, 'Site Settings');
+  return enforceSanityDoc(mapSiteSettings(data), 'Site Settings');
 }

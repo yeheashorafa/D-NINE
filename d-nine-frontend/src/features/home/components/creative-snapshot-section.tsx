@@ -8,14 +8,10 @@ import { Play, Sparkles, Film, Palette, Scissors, ArrowRight, ArrowLeft } from '
 import { RevealSection } from '@/components/motion/reveal-section';
 import { Floating3DAsset } from '@/components/motion/floating-3d-asset';
 import { Modal } from '@/components/ui/modal';
+import type { SanityHomePageDoc } from '@/sanity/types';
 
 export interface CreativeSnapshotSectionProps {
-  data?: {
-    title: { ar: string; en: string };
-    description: { ar: string; en: string };
-    stats: Array<{ value: string; label: { ar: string; en: string } }>;
-    videoUrl?: string;
-  };
+  data?: NonNullable<SanityHomePageDoc['creativeSnapshot']>;
 }
 
 export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = ({ data }) => {
@@ -25,8 +21,9 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
   const [showreelOpen, setShowreelOpen] = useState(false);
 
   // We map 'stats' from CMS to capabilities, or fallback to default
-  const hasStats = data?.stats && data.stats.length > 0;
-  
+  const stats = data?.stats ?? [];
+  const hasStats = stats.length > 0;
+
   const defaultCapabilities = [
     {
       icon: Palette,
@@ -73,15 +70,15 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
 
             {/* 3 Capabilities Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-              {hasStats ? data.stats.map((stat, idx) => (
+              {hasStats ? stats.map((stat, idx) => (
                 <div
                   key={idx}
                   className="p-4 rounded-2xl bg-surface/80 dark:bg-surface/50 border border-border/80 dark:border-border/50 shadow-sm backdrop-blur-sm space-y-2"
                 >
                   <div className="w-9 h-9 rounded-xl bg-brand-purple/10 text-brand-purple dark:text-brand-purple-light flex items-center justify-center font-bold text-lg">
-                    {stat.value}
+                    {stat.value ?? ''}
                   </div>
-                  <h3 className="font-bold text-sm text-foreground">{stat.label[locale] || stat.label.en}</h3>
+                  <h3 className="font-bold text-sm text-foreground">{stat.label?.[locale] ?? stat.label?.en ?? stat.label?.ar ?? ''}</h3>
                 </div>
               )) : defaultCapabilities.map((cap, idx) => {
                 const Icon = cap.icon;

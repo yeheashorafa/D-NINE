@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getServices } from './services.service';
 import { PRIMARY_SERVICES } from '@/features/services/data/services.data';
@@ -7,6 +6,8 @@ import { sanityFetch } from '@/sanity/client';
 vi.mock('@/sanity/client', () => ({
   sanityFetch: vi.fn(),
 }));
+
+const mockSanityFetch = vi.mocked(sanityFetch);
 
 const mockEnv = { contentSource: 'sanity' };
 
@@ -38,10 +39,13 @@ describe('getServices', () => {
         slug: 'test',
         categorySlug: 'test',
         title: { ar: 'Test', en: 'Test' },
+        shortDescription: { ar: 'Test', en: 'Test' },
+        fullDescription: { ar: 'Test', en: 'Test' },
+        seo: { metaTitle: { ar: 'Test', en: 'Test' } }
       }
     ];
     
-    (sanityFetch as any).mockResolvedValueOnce(mockSanityData);
+    mockSanityFetch.mockResolvedValueOnce(mockSanityData);
     
     const services = await getServices();
     
@@ -56,7 +60,7 @@ describe('getServices', () => {
   it('should throw an error and not fallback to static data if sanityFetch fails in sanity mode', async () => {
     mockEnv.contentSource = 'sanity';
     
-    (sanityFetch as any).mockRejectedValueOnce(new Error('Sanity fetch failed'));
+    mockSanityFetch.mockRejectedValueOnce(new Error('Sanity fetch failed'));
     
     await expect(getServices()).rejects.toThrow('Sanity fetch failed');
   });

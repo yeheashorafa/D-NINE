@@ -1,7 +1,7 @@
 import React from 'react';
 import { getLocale } from 'next-intl/server';
 import { getPrivacyPage } from '@/sanity/services/page.service';
-import { PortableText } from '@portabletext/react';
+import { CustomPortableText } from '@/sanity/components/portable-text';
 
 export async function PrivacyPage() {
   const locale = await getLocale() as 'ar' | 'en';
@@ -22,7 +22,7 @@ export async function PrivacyPage() {
 
         <div className="space-y-6 text-text-muted leading-relaxed text-sm sm:text-base prose dark:prose-invert max-w-none">
           {data?.body?.[locale] && data.body[locale].length > 0 ? (
-            <PortableText value={data.body[locale]} />
+            <CustomPortableText value={data.body[locale]} />
           ) : (
             <>
               <p>
