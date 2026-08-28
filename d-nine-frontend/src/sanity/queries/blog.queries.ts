@@ -16,7 +16,9 @@ export const allBlogPostsQuery = groq`
     "author": {
       "name": author->name,
       "role": author->role,
-      "image": author->image.asset->url
+      "image": author->image.asset->url,
+      "bio": author->bio,
+      "active": author->active
     },
     body,
     featured,
@@ -40,7 +42,9 @@ export const blogPostBySlugQuery = groq`
     "author": {
       "name": author->name,
       "role": author->role,
-      "image": author->image.asset->url
+      "image": author->image.asset->url,
+      "bio": author->bio,
+      "active": author->active
     },
     body,
     featured,
@@ -48,8 +52,7 @@ export const blogPostBySlugQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -74,7 +77,9 @@ export const featuredBlogPostsQuery = groq`
     "author": {
       "name": author->name,
       "role": author->role,
-      "image": author->image.asset->url
+      "image": author->image.asset->url,
+      "bio": author->bio,
+      "active": author->active
     },
     featured,
     tags
@@ -98,7 +103,9 @@ export const paginatedBlogPostsQuery = groq`
     "author": {
       "name": author->name,
       "role": author->role,
-      "image": author->image.asset->url
+      "image": author->image.asset->url,
+      "bio": author->bio,
+      "active": author->active
     },
     featured,
     tags

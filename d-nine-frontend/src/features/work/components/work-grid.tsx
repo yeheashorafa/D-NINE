@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 import { ProjectItem } from '@/types/project';
 import { ContentCategory } from '@/types/category';
 import { WorkFilter } from './work-filter';

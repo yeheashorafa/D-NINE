@@ -8,29 +8,29 @@ import { BookACallSection } from './components/book-a-call-section';
 import { getFeaturedProjects } from '@/services/content/projects.service';
 import { getServices } from '@/services/content/services.service';
 import { getCategories } from '@/services/content/categories.service';
-import { getHomePageData } from '@/services/content/home.service';
+import { getHomePage } from '@/sanity/services/page.service';
 
 export async function HomePage() {
   const [featuredProjects, services, categories, homeData] = await Promise.all([
     getFeaturedProjects(),
     getServices(),
     getCategories(),
-    getHomePageData(),
+    getHomePage(),
   ]);
 
   // If homeData exists, filter featured projects and services based on selected slugs
-  const displayProjects = homeData?.featuredProjects?.projectSlugs?.length
-    ? featuredProjects.filter(p => homeData.featuredProjects.projectSlugs.includes(p.slug))
+  const displayProjects = homeData?.featuredProjects?.length
+    ? featuredProjects.filter(p => homeData.featuredProjects?.includes(p.slug))
     : featuredProjects;
     
-  const displayServices = homeData?.featuredServices?.serviceSlugs?.length
-    ? services.filter(s => homeData.featuredServices.serviceSlugs.includes(s.slug))
+  const displayServices = homeData?.featuredServices?.length
+    ? services.filter(s => homeData.featuredServices?.includes(s.slug))
     : services;
 
   return (
     <main className="w-full overflow-hidden">
       {/* 1. Hero Slider (Approved visual design frozen) */}
-      <HeroSlider data={homeData?.hero} />
+      <HeroSlider data={{ slides: homeData?.heroSlides || [] }} />
 
       {/* 2. Creative Snapshot Section (Compact asymmetric Bento replacing oversized showreel) */}
       <CreativeSnapshotSection data={homeData?.creativeSnapshot} />
@@ -42,10 +42,10 @@ export async function HomePage() {
       <CoreServicesSection services={displayServices} />
 
       {/* 5. Agency Process */}
-      <ProcessSection />
+      <ProcessSection data={homeData?.processTimeline} />
 
       {/* 6. Consultation Banner */}
-      <BookACallSection />
+      <BookACallSection data={homeData?.bookACall} />
     </main>
   );
 }

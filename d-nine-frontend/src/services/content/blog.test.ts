@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getAllBlogPosts } from './blog.service';
 import { BLOG_POSTS_DATA } from '@/features/blog/data/blog-posts.data';

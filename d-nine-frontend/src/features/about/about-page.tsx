@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getAboutPage } from '@/sanity/services/page.service';
@@ -17,7 +18,7 @@ export async function AboutPage() {
   const t = await getTranslations('about');
   const locale = await getLocale() as 'ar' | 'en';
   const pageData = await getAboutPage();
-  const isArabic = locale === 'ar';
+  // const isArabic = locale === 'ar';
 
   const valuesFromCMS = pageData?.values && pageData.values.length > 0;
 
@@ -64,10 +65,10 @@ export async function AboutPage() {
         {/* Agency Story */}
         <RevealSection className="p-8 sm:p-12 rounded-3xl bg-surface/80 dark:bg-card border border-border space-y-6">
           <div className="inline-flex items-center gap-2 text-xs font-bold text-brand-purple uppercase tracking-wider">
-            <span>{pageData?.storyBadge?.[locale] || t('story.badge')}</span>
+            <span>{t('story.badge')}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-            {pageData?.storyTitle?.[locale] || t('story.title')}
+            {t('story.title')}
           </h2>
           <div className="space-y-4 text-text-muted leading-relaxed text-base sm:text-lg">
             {pageData?.agencyStory?.[locale] ? (
@@ -85,7 +86,7 @@ export async function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <RevealSection className="p-8 rounded-3xl bg-surface/80 dark:bg-card border border-border space-y-3">
             <h3 className="text-xl font-bold text-brand-cyan">
-              {pageData?.missionTitle?.[locale] || t('missionVision.missionTitle')}
+              {t('missionVision.missionTitle')}
             </h3>
             <div className="text-text-muted leading-relaxed prose prose-sm dark:prose-invert">
               {pageData?.mission?.[locale] ? (
@@ -98,7 +99,7 @@ export async function AboutPage() {
 
           <RevealSection className="p-8 rounded-3xl bg-surface/80 dark:bg-card border border-border space-y-3">
             <h3 className="text-xl font-bold text-brand-purple dark:text-brand-purple-light">
-              {pageData?.visionTitle?.[locale] || t('missionVision.visionTitle')}
+              {t('missionVision.visionTitle')}
             </h3>
             <div className="text-text-muted leading-relaxed prose prose-sm dark:prose-invert">
               {pageData?.vision?.[locale] ? (
@@ -114,15 +115,15 @@ export async function AboutPage() {
         <div className="space-y-8">
           <RevealSection className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-bold text-brand-cyan uppercase tracking-wider">
-              {pageData?.valuesBadge?.[locale] || t('values.badge')}
+              {t('values.badge')}
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground">
-              {pageData?.valuesTitle?.[locale] || t('values.title')}
+              {t('values.title')}
             </h2>
           </RevealSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {valuesFromCMS ? pageData.values.map((v: any, idx: number) => {
+            {valuesFromCMS ? (pageData.values || []).map((v: any, idx: number) => {
               const IconComp = getIconComponent(v.iconName);
               return (
                 <RevealSection key={idx}>

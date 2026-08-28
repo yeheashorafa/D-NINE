@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LocalizedText } from './localized';
 
 export interface BlogContentSection {
@@ -20,6 +21,8 @@ export interface BlogPost {
     name: LocalizedText;
     role: LocalizedText;
     image?: string;
+    bio?: LocalizedText;
+    active?: boolean;
   };
   body: {
     ar: any[];

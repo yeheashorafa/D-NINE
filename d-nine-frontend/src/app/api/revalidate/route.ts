@@ -1,4 +1,4 @@
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import { z } from 'zod';
@@ -22,13 +22,13 @@ export const ALLOWED_DOCUMENT_TYPES: Record<string, string[]> = {
   blogPost: ['blog'],
   author: ['blog'],
   homePage: ['home-page', 'homePage', 'agency', 'projects', 'services', 'blog'],
-  aboutPage: ['about', 'about-page'],
-  servicesPage: ['services-page'],
-  workPage: ['work-page'],
-  blogPage: ['blog-page'],
-  contactPage: ['contact-page', 'contact'],
-  privacyPage: ['privacy-page', 'privacy'],
-  termsPage: ['terms-page', 'terms'],
+  aboutPage: ['about', 'about-page', 'aboutPage'],
+  servicesPage: ['services-page', 'servicesPage'],
+  workPage: ['work-page', 'workPage'],
+  blogPage: ['blog-page', 'blogPage'],
+  contactPage: ['contact-page', 'contactPage'],
+  privacyPage: ['privacy-page', 'privacyPage'],
+  termsPage: ['terms-page', 'termsPage'],
   siteSettings: ['site-settings', 'siteSettings'],
 };
 
@@ -73,25 +73,63 @@ export async function POST(req: NextRequest) {
 
     // Revalidate allowed tags
     for (const tag of tagsToRevalidate) {
-      // @ts-expect-error - Next.js types might incorrectly expect 2 arguments
+      // @ts-expect-error
       revalidateTag(tag);
     }
 
-    // Revalidate specific slug tag if present
+    const pathsToRevalidate: string[] = [];
+
+    // Base routes to revalidate
+    const baseRoutes: Record<string, string[]> = {
+      homePage: ['/ar', '/en'],
+      aboutPage: ['/ar/about', '/en/about'],
+      servicesPage: ['/ar/services', '/en/services'],
+      workPage: ['/ar/work', '/en/work'],
+      blogPage: ['/ar/blog', '/en/blog'],
+      contactPage: ['/ar/contact', '/en/contact'],
+      privacyPage: ['/ar/privacy', '/en/privacy'],
+      termsPage: ['/ar/terms', '/en/terms'],
+      siteSettings: ['/ar', '/en', '/ar/about', '/en/about', '/ar/services', '/en/services', '/ar/work', '/en/work', '/ar/blog', '/en/blog', '/ar/contact', '/en/contact'],
+      service: ['/ar/services', '/en/services'],
+      project: ['/ar/work', '/en/work', '/ar', '/en'],
+      blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
+    };
+
+    if (baseRoutes[docType]) {
+      pathsToRevalidate.push(...baseRoutes[docType]);
+    }
+
+    // Revalidate specific slug tag and paths if present
     const slug = parsed.data.slug?.current;
     if (slug) {
-      // @ts-expect-error - Next.js types might incorrectly expect 2 arguments
-      if (docType === 'service') revalidateTag(`service:${slug}`);
-      // @ts-expect-error
-      if (docType === 'project') revalidateTag(`project:${slug}`);
-      // @ts-expect-error
-      if (docType === 'blogPost') revalidateTag(`blog:${slug}`);
+      if (docType === 'service') {
+        // @ts-expect-error
+        revalidateTag(`service:${slug}`);
+        pathsToRevalidate.push(`/ar/services/${slug}`, `/en/services/${slug}`);
+      }
+      if (docType === 'project') {
+        // @ts-expect-error
+        revalidateTag(`project:${slug}`);
+        pathsToRevalidate.push(`/ar/work/${slug}`, `/en/work/${slug}`);
+      }
+      if (docType === 'blogPost') {
+        // @ts-expect-error
+        revalidateTag(`blog:${slug}`);
+        pathsToRevalidate.push(`/ar/blog/${slug}`, `/en/blog/${slug}`);
+      }
+    }
+
+    // Deduplicate and revalidate paths
+    const uniquePaths = [...new Set(pathsToRevalidate)];
+    for (const p of uniquePaths) {
+      revalidatePath(p, 'page');
     }
 
     return NextResponse.json({
       revalidated: true,
       documentType: docType,
       tags: tagsToRevalidate,
+      paths: uniquePaths,
       now: Date.now(),
     });
   } catch (err: unknown) {

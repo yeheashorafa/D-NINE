@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 vi.mock('server-only', () => ({}));
 import { sanityFetch } from './client';
-import { createClient } from 'next-sanity';
 
 vi.mock('next/headers', () => ({
-  draftMode: vi.fn().mockResolvedValue({ isEnabled: false }),
+  draftMode: vi.fn().mockReturnValue({ isEnabled: false, enable: vi.fn(), disable: vi.fn() }),
 }));
 
 vi.mock('./env', () => ({
@@ -21,7 +20,7 @@ const mockFetch = vi.fn().mockResolvedValue('mock-data');
 vi.mock('next-sanity', () => {
   return {
     createClient: vi.fn(() => ({
-      fetch: (...args: any[]) => mockFetch(...args),
+      fetch: (...args: unknown[]) => mockFetch(...args),
     })),
   };
 });
@@ -46,7 +45,7 @@ describe('sanityFetch', () => {
 
   it('should use preview client when draft mode is enabled with stega true', async () => {
     const { draftMode } = await import('next/headers');
-    (draftMode as any).mockResolvedValueOnce({ isEnabled: true });
+    vi.mocked(draftMode).mockResolvedValueOnce({ isEnabled: true, enable: vi.fn(), disable: vi.fn() });
     
     await sanityFetch({ query: '*[]' });
     
@@ -62,7 +61,7 @@ describe('sanityFetch', () => {
 
   it('should allow stega-free metadata fetch even in draft mode', async () => {
     const { draftMode } = await import('next/headers');
-    (draftMode as any).mockResolvedValueOnce({ isEnabled: true });
+    vi.mocked(draftMode).mockResolvedValueOnce({ isEnabled: true, enable: vi.fn(), disable: vi.fn() });
     
     await sanityFetch({ query: '*[]', stega: false });
     
@@ -78,7 +77,7 @@ describe('sanityFetch', () => {
 
   it('should throw error when draft mode is enabled but token is missing', async () => {
     const { draftMode } = await import('next/headers');
-    (draftMode as any).mockResolvedValue({ isEnabled: true });
+    vi.mocked(draftMode).mockResolvedValue({ isEnabled: true, enable: vi.fn(), disable: vi.fn() });
     
     vi.mocked(await import('./env')).readToken = '';
     

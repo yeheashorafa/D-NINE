@@ -78,8 +78,7 @@ export const projectBySlugQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;

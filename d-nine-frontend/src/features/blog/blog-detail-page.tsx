@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -30,7 +31,9 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
   const categoryLabel = isArabic ? post.category.ar : post.category.en;
   const authorName = isArabic ? post.author.name.ar : post.author.name.en;
   const authorRole = isArabic ? post.author.role.ar : post.author.role.en;
-  const tags = isArabic ? post.tags.ar : post.tags.en;
+  const authorBio = isArabic ? post.author.bio?.ar : post.author.bio?.en;
+  const authorActive = post.author.active;
+  const tags = isArabic ? post.tags?.ar || [] : post.tags?.en || [];
 
   return (
     <main className="pt-28 sm:pt-36 pb-16 bg-background min-h-screen">
@@ -81,8 +84,18 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
               </div>
             )}
             <div>
-              <p className="text-sm font-bold text-foreground">{authorName}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-bold text-foreground">{authorName}</p>
+                {authorActive === false && (
+                  <span className="px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-medium border border-slate-200">
+                    {isArabic ? 'سابق' : 'Former'}
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-text-muted">{authorRole}</p>
+              {authorBio && (
+                <p className="text-xs text-text-muted mt-1 leading-relaxed max-w-sm">{authorBio}</p>
+              )}
             </div>
           </div>
         </div>
@@ -120,6 +133,26 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
 
           {/* Related Articles */}
           <RelatedPosts currentPost={post} allPosts={allPosts} />
+
+          {/* Related Services */}
+          {post.relatedServiceSlugs && post.relatedServiceSlugs.length > 0 && (
+            <div className="pt-6 border-t border-border mt-8">
+              <h3 className="text-lg font-bold text-foreground mb-4">
+                {isArabic ? 'خدمات ذات صلة' : 'Related Services'}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {post.relatedServiceSlugs.map((slug) => (
+                  <Link
+                    key={slug}
+                    href={`/services/${slug}`}
+                    className="px-4 py-2 rounded-xl bg-surface border border-border text-sm font-medium text-foreground hover:border-brand-cyan hover:text-brand-cyan transition-colors"
+                  >
+                    {isArabic ? 'عرض الخدمة' : 'View Service'} →
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
       </div>
     </main>
   );

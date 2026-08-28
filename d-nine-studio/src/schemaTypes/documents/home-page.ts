@@ -63,6 +63,12 @@ export const homePage = defineType({
       fieldset: 'featured',
     }),
     defineField({
+      name: 'bookACall',
+      title: 'Book a Call Section',
+      type: 'bookACallSection',
+      fieldset: 'featured',
+    }),
+    defineField({
       name: 'latestNews',
       title: 'Latest News / Blog Posts',
       type: 'array',

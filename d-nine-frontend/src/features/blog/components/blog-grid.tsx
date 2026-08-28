@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 import { BlogPost } from '@/types/blog';
 import { ContentCategory } from '@/types/category';
 import { BlogSearch } from './blog-search';

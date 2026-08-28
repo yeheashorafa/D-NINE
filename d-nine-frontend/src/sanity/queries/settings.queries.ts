@@ -37,8 +37,7 @@ export const siteSettingsQuery = groq`
     defaultSeo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     },
     "defaultOgImage": defaultOgImage.asset->url
   }

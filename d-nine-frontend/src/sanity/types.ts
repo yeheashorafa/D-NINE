@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface SanityLocalizedString {
   ar?: string;
   en?: string;
@@ -44,7 +45,7 @@ export interface SanityServiceDoc {
   processSteps?: SanityServiceProcessStep[];
   faqs?: SanityServiceFaq[];
   featured?: boolean;
-  seo?: any;
+  seo?: SanitySeo;
 }
 
 export interface SanityServiceOfferingDoc {
@@ -97,7 +98,7 @@ export interface SanityProjectDoc {
   credits?: SanityLocalizedString;
   featured?: boolean;
   colorVariant?: string;
-  seo?: any;
+  seo?: SanitySeo;
 }
 
 export interface SanityBlogSection {
@@ -121,6 +122,8 @@ export interface SanityBlogPostDoc {
     name?: SanityLocalizedString;
     role?: SanityLocalizedString;
     image?: string;
+    bio?: SanityLocalizedString;
+    active?: boolean;
   };
   sections?: SanityBlogSection[];
   body?: {
@@ -129,7 +132,7 @@ export interface SanityBlogPostDoc {
   };
   featured?: boolean;
   tags?: { ar?: string[]; en?: string[] };
-  seo?: any;
+  seo?: SanitySeo;
 }
 
 export interface SanityTimelineItemDoc {
@@ -137,4 +140,115 @@ export interface SanityTimelineItemDoc {
   stepNumber?: string;
   title: SanityLocalizedString;
   description: SanityLocalizedString;
+}
+
+
+export interface SanitySeo {
+  metaTitle?: SanityLocalizedString;
+  metaDescription?: SanityLocalizedString;
+  keywords?: SanityLocalizedString;
+}
+
+export interface SanityHomePageDoc {
+  _id: string;
+  id?: string;
+  heroSlides?: any[];
+  creativeSnapshot?: any;
+  featuredProjects?: any[];
+  featuredServices?: any[];
+  processTimeline?: any[];
+  testimonials?: any[];
+  faqs?: any[];
+  bookACall?: any;
+  latestNews?: any[];
+  seo?: SanitySeo;
+}
+
+export interface SanityAboutPageDoc {
+  _id: string;
+  id?: string;
+  heroBadge?: SanityLocalizedString;
+  heroTitle?: SanityLocalizedString;
+  heroSubtitle?: SanityLocalizedString;
+  agencyStory?: any;
+  mission?: any;
+  vision?: any;
+  values?: any[];
+  media?: string[];
+  cta?: any;
+  seo?: SanitySeo;
+}
+
+export interface SanityServicesPageDoc {
+  _id: string;
+  id?: string;
+  heroBadge?: SanityLocalizedString;
+  heroTitle?: SanityLocalizedString;
+  heroSubtitle?: SanityLocalizedString;
+  filterLabels?: {
+    all?: SanityLocalizedString;
+    primary?: SanityLocalizedString;
+    offerings?: SanityLocalizedString;
+  };
+  seo?: SanitySeo;
+}
+
+export interface SanityWorkPageDoc {
+  _id: string;
+  id?: string;
+  heroBadge?: SanityLocalizedString;
+  heroTitle?: SanityLocalizedString;
+  heroSubtitle?: SanityLocalizedString;
+  allCategoriesLabel?: SanityLocalizedString;
+  seo?: SanitySeo;
+}
+
+export interface SanityBlogPageDoc {
+  _id: string;
+  id?: string;
+  heroBadge?: SanityLocalizedString;
+  heroTitle?: SanityLocalizedString;
+  heroSubtitle?: SanityLocalizedString;
+  searchPlaceholder?: SanityLocalizedString;
+  featuredPosts?: any[];
+  seo?: SanitySeo;
+}
+
+export interface SanityContactPageDoc {
+  _id: string;
+  id?: string;
+  heroBadge?: SanityLocalizedString;
+  heroTitle?: SanityLocalizedString;
+  heroSubtitle?: SanityLocalizedString;
+  description?: any;
+  contactMethods?: any[];
+  offices?: any[];
+  seo?: SanitySeo;
+}
+
+export interface SanityPrivacyPageDoc {
+  _id: string;
+  id?: string;
+  title?: SanityLocalizedString;
+  lastUpdated?: string;
+  body?: any;
+  seo?: SanitySeo;
+}
+
+export interface SanityTermsPageDoc {
+  _id: string;
+  id?: string;
+  title?: SanityLocalizedString;
+  lastUpdated?: string;
+  body?: any;
+  seo?: SanitySeo;
+}
+
+export interface SanitySiteSettingsDoc {
+  _id: string;
+  id?: string;
+  companyName?: SanityLocalizedString;
+  email?: string;
+  defaultSeo?: SanitySeo;
+  defaultOgImage?: string;
 }

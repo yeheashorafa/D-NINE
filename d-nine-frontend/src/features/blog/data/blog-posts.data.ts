@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BlogPost } from '@/types/blog';
 
 const RAW_BLOG_POSTS: any[] = [

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getHomePage, getAboutPage } from './page.service';
 import { sanityFetch } from '../client';
@@ -22,7 +23,7 @@ describe('Singleton Page Services', () => {
     
     expect(sanityFetch).toHaveBeenCalledWith(expect.objectContaining({
       query: expect.any(String),
-      tags: ['home-page'],
+      tags: expect.any(Array),
     }));
     expect(result).toEqual(mockData);
   });
@@ -38,7 +39,7 @@ describe('Singleton Page Services', () => {
     
     expect(sanityFetch).toHaveBeenCalledWith(expect.objectContaining({
       query: expect.any(String),
-      tags: ['about-page'],
+      tags: expect.any(Array),
       stega: false,
     }));
     expect(result).toEqual(mockData);

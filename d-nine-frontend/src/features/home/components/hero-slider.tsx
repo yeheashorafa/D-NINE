@@ -6,14 +6,24 @@ import { useLocale } from 'next-intl';
 import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
-import { Slide } from '@/services/content/home.service';
 
 /**
  * PENDING_LICENSED_DNINE_SLIDER_EXPORTS
  * Note: The slide artwork currently contains external studio marks.
  * Prior to production deployment, slide images must be replaced with official licensed D-NINE exports.
  */
-const DEFAULT_SLIDES = [
+export interface Slide {
+  id?: string;
+  _key?: string;
+  image: string;
+  category?: { ar?: string; en?: string };
+  title?: { ar?: string; en?: string };
+  description?: { ar?: string; en?: string };
+  ctaText?: { ar?: string; en?: string };
+  ctaLink?: string;
+}
+
+const DEFAULT_SLIDES: Slide[] = [
   { id: '1', image: '/slider/slide-01.jpg', category: { ar: 'شريحة ١', en: 'Slide 1' }, title: { ar: 'عنوان ١', en: 'Title 1' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
   { id: '2', image: '/slider/slide-02.jpg', category: { ar: 'شريحة ٢', en: 'Slide 2' }, title: { ar: 'عنوان ٢', en: 'Title 2' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
   { id: '3', image: '/slider/slide-03.jpg', category: { ar: 'شريحة ٣', en: 'Slide 3' }, title: { ar: 'عنوان ٣', en: 'Title 3' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
@@ -159,7 +169,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
         onExitComplete={() => setIsAnimating(false)}
       >
         <motion.div
-          key={currentSlide.id}
+          key={currentSlide.id || currentSlide._key || String(currentIndex)}
           variants={getMaskVariant()}
           initial="initial"
           animate="animate"

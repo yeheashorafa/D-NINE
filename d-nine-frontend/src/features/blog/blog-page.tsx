@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTranslations } from 'next-intl/server';
+// import { getTranslations } from 'next-intl/server';
 import { getAllBlogPosts } from '@/services/content/blog.service';
 import { getCategories } from '@/services/content/categories.service';
 import { BlogGrid } from './components/blog-grid';

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { stegaClean } from '@sanity/client/stega';
 import { ContactPage } from '@/features/contact/contact-page';
 import { getContactPage } from '@/sanity/services/page.service';
+import { constructMetadata } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -16,17 +17,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'تواصل معنا | دي ناين' : 'Contact Us | D-NINE'));
   const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'تواصل مع فريق دي ناين' : 'Get in touch with D-NINE team'));
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: pageData?.seo?.canonicalUrl || `/${locale}/contact`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-    },
-  };
+    locale,
+    path: '/contact'
+  });
 }
 
 export default async function ContactRoute({

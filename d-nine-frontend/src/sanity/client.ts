@@ -49,7 +49,7 @@ export async function sanityFetch<T>({
   let isDraftMode = false;
   try {
     isDraftMode = (await draftMode()).isEnabled;
-  } catch (error) {
+  } catch {
     // draftMode() throws when called outside a Request boundary
   }
 
@@ -63,7 +63,7 @@ export async function sanityFetch<T>({
     if (isDraftMode) {
       throw new Error('Cannot use draft mode when CONTENT_SOURCE is not sanity');
     }
-    return null as any; // static fallback is allowed only when CONTENT_SOURCE=static
+    return null as unknown as T; // static fallback is allowed only when CONTENT_SOURCE=static
   }
 
   const selectedClient = isDraftMode ? previewClient : client;

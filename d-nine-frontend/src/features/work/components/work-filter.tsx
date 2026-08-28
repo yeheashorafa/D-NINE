@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { ContentCategory } from '@/types/category';
 
 export interface WorkFilterProps {

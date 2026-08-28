@@ -1,6 +1,6 @@
 import { groq } from 'next-sanity';
 
-const basePageFields = groq`
+export const basePageFields = groq`
   _id,
   "id": _id,
   title,
@@ -9,8 +9,7 @@ const basePageFields = groq`
   seo {
     metaTitle,
     metaDescription,
-    keywords,
-    canonicalUrl
+    keywords
   }
 `;
 
@@ -34,17 +33,17 @@ export const homePageQuery = groq`
         label
       }
     },
-    featuredProjects[]-> { title, subtitle, slug },
-    featuredServices[]-> { title, subtitle, slug },
+    "featuredProjects": featuredProjects[]->slug.current,
+    "featuredServices": featuredServices[]->slug.current,
     processTimeline,
     testimonials,
     faqs,
+    bookACall,
     latestNews[]-> { title, slug, publishedAt, excerpt, "image": image.asset->url },
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -74,8 +73,7 @@ export const aboutPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -91,8 +89,7 @@ export const servicesPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -108,8 +105,7 @@ export const workPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -126,8 +122,7 @@ export const blogPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -156,8 +151,7 @@ export const contactPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -172,8 +166,7 @@ export const privacyPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;
@@ -188,8 +181,7 @@ export const termsPageQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { stegaClean } from '@sanity/client/stega';
 import { TermsPage } from '@/features/legal/terms-page';
 import { getTermsPage } from '@/sanity/services/page.service';
+import { constructMetadata } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -16,17 +17,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'الشروط والأحكام | دي ناين' : 'Terms & Conditions | D-NINE'));
   const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'الشروط والأحكام لوكالة دي ناين.' : 'Terms & Conditions for D-NINE agency.'));
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: pageData?.seo?.canonicalUrl || `/${locale}/terms`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-    },
-  };
+    locale,
+    path: '/terms'
+  });
 }
 
 export default async function TermsRoute({

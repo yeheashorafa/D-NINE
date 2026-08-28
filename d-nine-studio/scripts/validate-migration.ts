@@ -48,6 +48,12 @@ async function validate() {
     `*[_type in $types]{
       _id,
       _type,
+      filterLabels,
+      contactMethods,
+      offices,
+      mission,
+      vision,
+      description,
       title,
       slug,
       category,
@@ -134,7 +140,7 @@ async function validate() {
   const slugsByType: Record<string, Set<string>> = {};
 
   const isLocalized = (field: any) => field && typeof field.ar === 'string' && typeof field.en === 'string';
-  const isPortableText = (field: any) => field && Array.isArray(field.ar) && Array.isArray(field.en);
+  const isPortableText = (field: any) => field && Array.isArray(field.ar) && field.ar.length > 0 && Array.isArray(field.en) && field.en.length > 0;
 
   for (const doc of contentDocs) {
     // Check Singletons
@@ -173,9 +179,19 @@ async function validate() {
     }
 
     if (doc._type === 'aboutPage') {
+      
       if (!isPortableText(doc.agencyStory)) validationErrors.push(`Missing valid Portable Text for agencyStory on ${doc._id}`);
+      if (!isPortableText(doc.mission)) validationErrors.push(`Missing valid Portable Text for mission on ${doc._id}`);
+      if (!isPortableText(doc.vision)) validationErrors.push(`Missing valid Portable Text for vision on ${doc._id}`);
+
     }
 
+    
+    if (doc._type === 'contactPage') {
+      if (!isPortableText(doc.description)) validationErrors.push(`Missing Portable Text description on ${doc._id}`);
+      if (!Array.isArray(doc.contactMethods) || doc.contactMethods.length === 0) validationErrors.push('Missing contactMethods');
+      if (!Array.isArray(doc.offices) || doc.offices.length === 0) validationErrors.push('Missing offices');
+    }
     if (['privacyPage', 'termsPage'].includes(doc._type)) {
       if (!isLocalized(doc.title)) validationErrors.push(`Missing localized title on ${doc._id}`);
       if (!isPortableText(doc.body)) validationErrors.push(`Missing valid Portable Text body on ${doc._id}`);
@@ -236,7 +252,7 @@ async function validate() {
     }
   }
 
-  if (brokenRefs === 0) {
+  if (brokenRefs === 0 && checkedAssetRefs > 0) {
     console.log('✓ Document Referential Integrity: 100% Verified (0 broken document references).');
   }
   if (brokenAssetRefs === 0) {

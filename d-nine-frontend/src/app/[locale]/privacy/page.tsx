@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { stegaClean } from '@sanity/client/stega';
 import { PrivacyPage } from '@/features/legal/privacy-page';
 import { getPrivacyPage } from '@/sanity/services/page.service';
+import { constructMetadata } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -16,17 +17,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'سياسة الخصوصية | دي ناين' : 'Privacy Policy | D-NINE'));
   const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'سياسة الخصوصية لوكالة دي ناين.' : 'Privacy Policy for D-NINE agency.'));
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: pageData?.seo?.canonicalUrl || `/${locale}/privacy`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-    },
-  };
+    locale,
+    path: '/privacy'
+  });
 }
 
 export default async function PrivacyRoute({

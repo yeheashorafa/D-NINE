@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { stegaClean } from '@sanity/client/stega';
 import { WorkPage } from '@/features/work/work-page';
 import { getWorkPage } from '@/sanity/services/page.service';
+import { constructMetadata } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -16,17 +17,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'أعمالنا | دي ناين' : 'Work | D-NINE'));
   const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'استكشف أعمال دي ناين' : 'Explore D-NINE work'));
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: pageData?.seo?.canonicalUrl || `/${locale}/work`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-    },
-  };
+    locale,
+    path: '/work'
+  });
 }
 
 export default async function WorkRoute({

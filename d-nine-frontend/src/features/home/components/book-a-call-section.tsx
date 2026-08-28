@@ -15,10 +15,15 @@ import { RevealSection } from '@/components/motion/reveal-section';
 import { ArrowUpRight } from 'lucide-react';
 import { getButtonClasses } from '@/components/ui/button';
 
-export const BookACallSection: React.FC = () => {
+export const BookACallSection: React.FC<{ data?: { title?: { ar?: string; en?: string }; description?: { ar?: string; en?: string }; cta?: { buttonText?: { ar?: string; en?: string }; buttonLink?: string } } }> = ({ data }) => {
   const locale = useLocale();
   const isArabic = locale === 'ar';
   const t = useTranslations('home.bookACall');
+
+  const title = data?.title?.[isArabic ? 'ar' : 'en'] || t('title');
+  const subtitle = data?.description?.[isArabic ? 'ar' : 'en'] || t('subtitle');
+  const ctaText = data?.cta?.buttonText?.[isArabic ? 'ar' : 'en'] || t('cta');
+  const ctaLink = data?.cta?.buttonLink || '/contact';
 
   const containerRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -217,7 +222,7 @@ export const BookACallSection: React.FC = () => {
                 }}
                 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-4xl md:text-5xl"
               >
-                {t('title')}
+                {title}
               </motion.h2>
 
               <motion.p
@@ -237,7 +242,7 @@ export const BookACallSection: React.FC = () => {
                 }}
                 className="text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg md:text-xl"
               >
-                {t('subtitle')}
+                {subtitle}
               </motion.p>
 
               <motion.div
@@ -258,7 +263,7 @@ export const BookACallSection: React.FC = () => {
                 className="pt-6"
               >
                 <Link
-                  href="/contact"
+                  href={ctaLink}
                   className={getButtonClasses({
                     variant: 'dark',
                     size: 'lg',
@@ -266,7 +271,7 @@ export const BookACallSection: React.FC = () => {
                       'gap-2 rounded-full px-9 py-4 text-base font-extrabold shadow-2xl transition-all hover:scale-105',
                   })}
                 >
-                  <span>{t('cta')}</span>
+                  <span>{ctaText}</span>
 
                   <ArrowUpRight
                     className={`h-5 w-5 ${

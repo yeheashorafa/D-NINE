@@ -59,6 +59,7 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('project').title('المشاريع والأعمال (Projects)').icon(CaseIcon),
               S.documentTypeListItem('blogPost').title('مقالات المدونة (Blog Posts)').icon(DocumentTextIcon),
               S.documentTypeListItem('author').title('الكتّاب (Authors)').icon(UserIcon),
+              S.documentTypeListItem('contentCategory').title('التصنيفات (Categories)').icon(TagIcon),
             ])
         ),
 
@@ -72,7 +73,6 @@ export const structure: StructureResolver = (S) =>
             .title('الإعدادات')
             .items([
               singletonListItem(S, 'siteSettings', 'إعدادات الموقع (Site Settings)', CogIcon),
-              S.documentTypeListItem('contentCategory').title('التصنيفات (Categories)').icon(TagIcon),
             ])
         ),
 

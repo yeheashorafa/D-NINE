@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LocalizedText } from './localized';
 
 export interface ServiceDeliverable {

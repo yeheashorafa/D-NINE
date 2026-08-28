@@ -21,6 +21,13 @@ if (!projectId || !token) {
   process.exit(1);
 }
 
+const args = process.argv.slice(2);
+const validArgs = ['--dry-run', '--execute'];
+const unknownArgs = args.filter(a => !validArgs.includes(a));
+if (unknownArgs.length > 0) {
+  console.error('Error: Unknown arguments: ' + unknownArgs.join(', '));
+  process.exit(1);
+}
 const isDryRun = process.argv.includes('--dry-run');
 const isExecute = process.argv.includes('--execute');
 
@@ -69,8 +76,8 @@ async function main() {
   const makeImageObject = (relPath: string, alt: { ar: string; en: string }) => {
     const assetId = assetRegistry.getAssetId(relPath);
     if (!assetId) {
-      if (!isDryRun) console.warn(`Missing asset ID for ${relPath}`);
-      return undefined;
+      console.error(`Missing asset ID for ${relPath}`);
+      process.exit(1);
     }
     return {
       _type: 'image',
@@ -135,9 +142,11 @@ async function main() {
       heroBadge: { ar: 'خدماتنا', en: 'Our Services' },
       heroTitle: { ar: 'نقدم لك أفضل الحلول', en: 'We provide the best solutions' },
       heroSubtitle: { ar: 'استكشف ما يمكننا تقديمه لعملك.', en: 'Explore what we can do for your business.' },
-      all: { ar: 'الكل', en: 'All' },
-      primary: { ar: 'الخدمات الأساسية', en: 'Primary Services' },
-      offerings: { ar: 'عروضنا', en: 'Our Offerings' },
+      filterLabels: {
+        all: { ar: 'الكل', en: 'All' },
+        primary: { ar: 'الخدمات الأساسية', en: 'Primary Services' },
+        offerings: { ar: 'عروضنا', en: 'Our Offerings' },
+      },
       seo: {
         metaTitle: { ar: 'خدماتنا | دي ناين', en: 'Services | D-NINE' },
         metaDescription: { ar: 'تعرف على خدمات وكالة دي ناين.', en: 'Learn about D-NINE services.' },
@@ -170,9 +179,9 @@ async function main() {
       heroBadge: { ar: 'من نحن', en: 'About Us' },
       heroTitle: { ar: 'قصة نجاح', en: 'A Success Story' },
       heroSubtitle: { ar: 'بداية الرحلة', en: 'The beginning of the journey' },
-      agencyStory: { ar: [], en: [] }, // Localized portable text fallback
-      mission: { ar: [], en: [] }, // Localized portable text fallback
-      vision: { ar: [], en: [] }, // Localized portable text fallback
+      agencyStory: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'قصتنا الرائعة', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our amazing story', _key: '3' }], _key: '4', markDefs: [] }] },
+      mission: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'مهمتنا هي الابتكار', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our mission is innovation', _key: '3' }], _key: '4', markDefs: [] }] },
+      vision: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'رؤيتنا للمستقبل', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Our vision for the future', _key: '3' }], _key: '4', markDefs: [] }] },
       values: [],
       seo: {
         metaTitle: { ar: 'من نحن | دي ناين', en: 'About | D-NINE' },
@@ -184,9 +193,9 @@ async function main() {
       heroBadge: { ar: 'تواصل معنا', en: 'Contact Us' },
       heroTitle: { ar: 'نحن هنا لخدمتك', en: 'We are here to serve you' },
       heroSubtitle: { ar: 'يسعدنا تواصلك معنا', en: 'We look forward to hearing from you' },
-      description: { ar: [], en: [] },
-      contactMethods: [],
-      offices: [],
+      description: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'تواصل معنا الآن', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Contact us now', _key: '3' }], _key: '4', markDefs: [] }] },
+      contactMethods: [{ _key: 'm1', type: 'email', title: { ar: 'البريد الإلكتروني', en: 'Email' }, value: 'hello@d-nine.agency', link: 'mailto:hello@d-nine.agency' }],
+      offices: [{ _key: 'o1', title: { ar: 'المقر الرئيسي', en: 'Headquarters' }, address: { ar: 'الرياض', en: 'Riyadh' }, email: 'hq@d-nine.agency' }],
       seo: {
         metaTitle: { ar: 'تواصل معنا | دي ناين', en: 'Contact | D-NINE' },
         metaDescription: { ar: 'تواصل معنا.', en: 'Contact us.' },
@@ -196,7 +205,7 @@ async function main() {
       _type: 'privacyPage',
       title: { ar: 'سياسة الخصوصية', en: 'Privacy Policy' },
       lastUpdated: '2024-01-01',
-      body: { ar: [], en: [] },
+      body: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'نص المحتوى', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Content text', _key: '3' }], _key: '4', markDefs: [] }] },
       seo: {
         metaTitle: { ar: 'سياسة الخصوصية | دي ناين', en: 'Privacy Policy | D-NINE' },
       },
@@ -205,7 +214,7 @@ async function main() {
       _type: 'termsPage',
       title: { ar: 'الشروط والأحكام', en: 'Terms of Service' },
       lastUpdated: '2024-01-01',
-      body: { ar: [], en: [] },
+      body: { ar: [{ _type: 'block', children: [{ _type: 'span', text: 'نص المحتوى', _key: '1' }], _key: '2', markDefs: [] }], en: [{ _type: 'block', children: [{ _type: 'span', text: 'Content text', _key: '3' }], _key: '4', markDefs: [] }] },
       seo: {
         metaTitle: { ar: 'الشروط والأحكام | دي ناين', en: 'Terms of Service | D-NINE' },
       },
@@ -231,7 +240,7 @@ async function main() {
   const ids = Object.keys(singletons);
 
   const existingDocs = await client.fetch(`*[_id in $ids] { _id, _rev, _updatedAt }`, { ids });
-  const existingDocsMap = new Map(existingDocs.map((doc: any) => [doc._id, doc]));
+  const existingDocsMap = new Map<string, any>(existingDocs.map((doc: any) => [doc._id, doc]));
 
   if (isDryRun) {
     console.log('DRY RUN: Planning mutations...');
@@ -258,8 +267,33 @@ async function main() {
     } else {
       console.log(`Adding PATCH to transaction for: ${id}`);
       // Remove _type from setIfMissing to avoid patch errors
+      
+      // Check for empty fields to force patch
+      const forcePatchFields: Record<string, any> = {};
+      for (const [k, v] of Object.entries(cleanedDoc)) {
+        if (k === '_type') continue;
+        const existingVal = existingDocsMap.get(id)?.[k];
+        if (existingVal && typeof existingVal === 'object') {
+          // If existing is empty array, or if it has { ar: [], en: [] } where length is 0
+          if (Array.isArray(existingVal) && existingVal.length === 0) {
+            forcePatchFields[k] = v;
+          } else if (!Array.isArray(existingVal) && existingVal.ar && Array.isArray(existingVal.ar) && existingVal.ar.length === 0) {
+            forcePatchFields[k] = v;
+          } else if (!Array.isArray(existingVal) && Object.keys(existingVal).length === 0) {
+             forcePatchFields[k] = v;
+          }
+        } else if (existingVal === undefined || existingVal === null || existingVal === '') {
+          forcePatchFields[k] = v;
+        }
+      }
+      
       const { _type, ...fieldsToPatch } = cleanedDoc;
-      transaction = transaction.patch(id, (p) => p.setIfMissing(fieldsToPatch));
+      if (Object.keys(forcePatchFields).length > 0) {
+         transaction = transaction.patch(id, (p) => p.set(forcePatchFields).setIfMissing(fieldsToPatch));
+      } else {
+         transaction = transaction.patch(id, (p) => p.setIfMissing(fieldsToPatch));
+      }
+
     }
   }
 

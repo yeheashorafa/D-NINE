@@ -38,8 +38,7 @@ export const serviceBySlugQuery = groq`
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      canonicalUrl
+      keywords
     }
   }
 `;

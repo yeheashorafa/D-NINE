@@ -4,6 +4,7 @@ import { getServices, getServiceBySlug } from '@/services/content/services.servi
 import { routing } from '@/i18n/routing';
 
 import { Metadata } from 'next';
+import { constructMetadata } from '@/lib/seo';
 import { stegaClean } from '@sanity/client/stega';
 
 export async function generateMetadata({
@@ -24,25 +25,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(service.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || `${service.title?.[isArabic ? 'ar' : 'en']} | D-NINE`);
   const seoDesc = stegaClean(service.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || service.shortDescription?.[isArabic ? 'ar' : 'en']);
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: service.seo?.canonicalUrl || `/${locale}/services/${slug}`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-      images: [
-        {
-          url: service.image,
-          width: 1200,
-          height: 630,
-          alt: seoTitle,
-        },
-      ],
-    },
-  };
+    locale,
+    path: `/services/${slug}`
+  });
 }
 
 export async function generateStaticParams() {

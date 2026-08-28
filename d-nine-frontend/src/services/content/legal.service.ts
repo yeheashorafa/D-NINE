@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { contentSource, assertSanityConfig } from '@/sanity/env';
 import { sanityFetch } from '@/sanity/client';
 

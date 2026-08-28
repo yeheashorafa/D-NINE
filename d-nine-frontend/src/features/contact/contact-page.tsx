@@ -57,7 +57,7 @@ export async function ContactPage() {
               )}
 
               <div className="space-y-6 text-sm text-text-muted">
-                {pageData?.offices?.map((office: any, idx: number) => (
+                {pageData?.offices?.map((office: { title?: { en?: string; ar?: string }; address?: { en?: string; ar?: string }; phone?: string; email?: string }, idx: number) => (
                   <div key={`office-${idx}`} className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0">
                       <MapPin className="w-5 h-5" />
@@ -77,7 +77,7 @@ export async function ContactPage() {
                   </div>
                 ))}
 
-                {pageData?.contactMethods?.map((method: any, idx: number) => {
+                {pageData?.contactMethods?.map((method: { type: string; title?: { en?: string; ar?: string }; link?: string; value: string }, idx: number) => {
                   const Icon = getIconComponent(method.type);
                   const isLink = !!method.link;
                   return (

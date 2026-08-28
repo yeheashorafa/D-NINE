@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { stegaClean } from '@sanity/client/stega';
 import { ServicesPage } from '@/features/services/services-page';
 import { getServicesPage } from '@/sanity/services/page.service';
+import { constructMetadata } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -16,17 +17,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'خدماتنا | دي ناين' : 'Services | D-NINE'));
   const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'استكشف خدمات دي ناين' : 'Explore D-NINE services'));
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: pageData?.seo?.canonicalUrl || `/${locale}/services`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-    },
-  };
+    locale,
+    path: '/services'
+  });
 }
 
 export default async function ServicesRoute({

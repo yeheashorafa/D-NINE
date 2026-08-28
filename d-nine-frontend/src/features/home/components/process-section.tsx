@@ -1,30 +1,35 @@
 'use client';
 
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Sparkles } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 
-export const ProcessSection: React.FC = () => {
+export const ProcessSection: React.FC<{ data?: { stepNumber?: string; title?: { ar?: string; en?: string }; description?: { ar?: string; en?: string } }[] }> = ({ data }) => {
   const t = useTranslations('home.process');
 
-  const steps = [
+  const steps = data?.length ? data : [
     {
-      step: '01',
-      title: t('steps.0.title'),
-      description: t('steps.0.description'),
+      stepNumber: '01',
+      title: { ar: t('steps.0.title'), en: t('steps.0.title') },
+      description: { ar: t('steps.0.description'), en: t('steps.0.description') },
     },
     {
-      step: '02',
-      title: t('steps.1.title'),
-      description: t('steps.1.description'),
+      stepNumber: '02',
+      title: { ar: t('steps.1.title'), en: t('steps.1.title') },
+      description: { ar: t('steps.1.description'), en: t('steps.1.description') },
     },
     {
-      step: '03',
-      title: t('steps.2.title'),
-      description: t('steps.2.description'),
+      stepNumber: '03',
+      title: { ar: t('steps.2.title'), en: t('steps.2.title') },
+      description: { ar: t('steps.2.description'), en: t('steps.2.description') },
     },
   ];
+
+  const locale = useLocale();
+  const isArabic = locale === 'ar';
+
+
 
   return (
     <section className="py-16 sm:py-24 relative bg-slate-50 dark:bg-slate-950/40 transition-colors duration-300">
@@ -46,13 +51,13 @@ export const ProcessSection: React.FC = () => {
               <div className="p-8 rounded-3xl bg-surface/80 dark:bg-surface/50 border border-border/80 shadow-sm relative h-full flex flex-col justify-between space-y-6">
                 <div className="flex items-center justify-between">
                   <span className="text-4xl sm:text-5xl font-black text-brand-cyan/30 dark:text-brand-cyan/20">
-                    {item.step}
+                    {item.stepNumber || `0${idx + 1}`}
                   </span>
                   <div className="w-3 h-3 rounded-full bg-brand-cyan" />
                 </div>
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-foreground">{item.title}</h3>
-                  <p className="text-sm text-text-muted leading-relaxed">{item.description}</p>
+                  <h3 className="text-xl font-bold text-foreground">{item.title?.[isArabic ? 'ar' : 'en']}</h3>
+                  <p className="text-sm text-text-muted leading-relaxed">{item.description?.[isArabic ? 'ar' : 'en']}</p>
                 </div>
               </div>
             </RevealSection>

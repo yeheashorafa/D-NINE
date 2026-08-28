@@ -33,6 +33,8 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
   const strategy = isArabic ? project.strategy.ar : project.strategy.en;
   const solution = isArabic ? project.solution.ar : project.solution.en;
   const deliverables = isArabic ? project.deliverables.ar : project.deliverables.en;
+  const clientName = project.clientName ? (isArabic ? project.clientName.ar : project.clientName.en) : null;
+  const credits = project.credits ? (isArabic ? project.credits.ar : project.credits.en) : null;
 
   return (
     <main className="pt-28 sm:pt-36 pb-16 bg-background min-h-screen">
@@ -55,6 +57,12 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
               {categoryLabel}
             </span>
             <span className="text-xs text-text-muted font-mono">{project.year}</span>
+            {clientName && (
+              <>
+                <span className="text-xs text-text-muted font-mono px-2">•</span>
+                <span className="text-xs text-text-muted font-mono">{clientName}</span>
+              </>
+            )}
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
@@ -139,6 +147,16 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
 
           {/* Media Gallery */}
           <ProjectGallery media={project.media} />
+
+          {/* Credits */}
+          {credits && (
+            <div className="p-8 rounded-3xl bg-surface/80 dark:bg-card border border-border space-y-3">
+              <h2 className="text-xl font-bold text-foreground">
+                {isArabic ? 'الحقوق / فريق العمل' : 'Credits / Team'}
+              </h2>
+              <p className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">{credits}</p>
+            </div>
+          )}
 
           {/* Related Projects */}
           <RelatedProjects currentProject={project} allProjects={allProjects} />

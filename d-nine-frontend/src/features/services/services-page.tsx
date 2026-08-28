@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTranslations } from 'next-intl/server';
+// import { getTranslations } from 'next-intl/server';
 import { getAllServiceOfferings } from '@/services/content/services.service';
 import { getCategories } from '@/services/content/categories.service';
 import { ServicesGrid } from './components/services-grid';

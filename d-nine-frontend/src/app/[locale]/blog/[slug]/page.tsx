@@ -4,6 +4,7 @@ import { getAllBlogPosts, getBlogPostBySlug } from '@/services/content/blog.serv
 import { routing } from '@/i18n/routing';
 
 import { Metadata } from 'next';
+import { constructMetadata } from '@/lib/seo';
 import { stegaClean } from '@sanity/client/stega';
 
 export async function generateMetadata({
@@ -24,25 +25,12 @@ export async function generateMetadata({
   const seoTitle = stegaClean(post.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || `${post.title?.[isArabic ? 'ar' : 'en']} | D-NINE`);
   const seoDesc = stegaClean(post.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || post.excerpt?.[isArabic ? 'ar' : 'en']);
 
-  return {
+  return constructMetadata({
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: post.seo?.canonicalUrl || `/${locale}/blog/${slug}`,
-    },
-    openGraph: {
-      title: seoTitle,
-      description: seoDesc,
-      images: [
-        {
-          url: post.image,
-          width: 1200,
-          height: 630,
-          alt: seoTitle,
-        },
-      ],
-    },
-  };
+    locale,
+    path: `/blog/${slug}`
+  });
 }
 
 export async function generateStaticParams() {

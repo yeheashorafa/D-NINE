@@ -32,6 +32,11 @@ export function mapSanityBlogPost(doc: SanityBlogPostDoc): BlogPost {
         en: doc.author?.role?.en || 'Production Dept.',
       },
       image: doc.author?.image,
+      bio: {
+        ar: doc.author?.bio?.ar || '',
+        en: doc.author?.bio?.en || '',
+      },
+      active: doc.author?.active ?? true,
     },
     body: {
       ar: doc.body?.ar || [],

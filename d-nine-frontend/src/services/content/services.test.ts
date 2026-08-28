@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getServices } from './services.service';
 import { PRIMARY_SERVICES } from '@/features/services/data/services.data';
