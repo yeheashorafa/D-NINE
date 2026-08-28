@@ -16,10 +16,13 @@ import { creativeSnapshot } from './objects/creative-snapshot';
 import { bookACallSection } from './objects/book-a-call-section';
 import { navLink } from './objects/nav-link';
 import { footerColumn } from './objects/footer-column';
-import { testimonial } from './objects/testimonial';
 import { contactMethod } from './objects/contact-method';
 import { office } from './objects/office';
+import { testimonialsSection } from './objects/testimonialsSection';
+import { teamSection } from './objects/teamSection';
 
+import { testimonial } from './documents/testimonial';
+import { teamMember } from './documents/teamMember';
 import { contentCategory } from './documents/content-category';
 import { service } from './documents/service';
 import { serviceOffering } from './documents/service-offering';
@@ -55,11 +58,14 @@ export const schemaTypes = [
   bookACallSection,
   navLink,
   footerColumn,
-  testimonial,
   contactMethod,
   office,
+  testimonialsSection,
+  teamSection,
 
   // Document Types
+  testimonial,
+  teamMember,
   contentCategory,
   service,
   serviceOffering,

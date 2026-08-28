@@ -17,12 +17,47 @@ export interface SanityCta {
   buttonLink?: string;
 }
 
-export interface SanityTestimonial {
-  author?: SanityLocalizedString;
-  role?: SanityLocalizedString;
-  text?: SanityLocalizedString;
-  company?: string;
+export interface SanityTestimonialDoc {
+  _id: string;
+  id?: string;
+  personName: SanityLocalizedString;
+  role: SanityLocalizedString;
+  company: SanityLocalizedString;
+  quote: SanityLocalizedString;
   image?: string;
+  rating?: number;
+  featured?: boolean;
+}
+
+export interface SanityTeamMemberDoc {
+  _id: string;
+  id?: string;
+  name: SanityLocalizedString;
+  role: SanityLocalizedString;
+  bio?: SanityLocalizedPortableText;
+  image?: string;
+  socialLinks?: { platform: string; url: string }[];
+  featured?: boolean;
+}
+
+export interface SanityTestimonialsSection {
+  enabled?: boolean;
+  badge?: SanityLocalizedString;
+  title?: SanityLocalizedString;
+  subtitle?: SanityLocalizedString;
+  selectedTestimonials?: SanityTestimonialDoc[];
+  maxItems?: number;
+}
+
+export interface SanityTeamSection {
+  enabled?: boolean;
+  badge?: SanityLocalizedString;
+  title?: SanityLocalizedString;
+  subtitle?: SanityLocalizedString;
+  selectedTeamMembers?: SanityTeamMemberDoc[];
+  maxItems?: number;
+  ctaLabel?: SanityLocalizedString;
+  ctaPath?: string;
 }
 
 export interface SanityContactMethod {
@@ -216,7 +251,8 @@ export interface SanityHomePageDoc {
   featuredProjects?: string[];
   featuredServices?: string[];
   processTimeline?: SanityTimelineItemDoc[];
-  testimonials?: SanityTestimonial[];
+  testimonials?: SanityTestimonialsSection;
+  teamPreview?: SanityTeamSection;
   faqs?: SanityFaq[];
   bookACall?: {
     title?: SanityLocalizedString;
@@ -243,6 +279,8 @@ export interface SanityAboutPageDoc {
   }[];
   media?: string[];
   cta?: SanityCta;
+  team?: SanityTeamSection;
+  testimonials?: SanityTestimonialsSection;
   seo?: SanitySeo;
 }
 
@@ -257,6 +295,7 @@ export interface SanityServicesPageDoc {
     primary?: SanityLocalizedString;
     offerings?: SanityLocalizedString;
   };
+  testimonials?: SanityTestimonialsSection;
   seo?: SanitySeo;
 }
 

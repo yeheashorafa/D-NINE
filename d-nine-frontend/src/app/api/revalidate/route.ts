@@ -19,6 +19,8 @@ export const ALLOWED_DOCUMENT_TYPES: Record<string, string[]> = {
   service: ['services'],
   serviceOffering: ['service-offerings', 'services'],
   project: ['projects'],
+  testimonial: ['testimonials'],
+  teamMember: ['team-members'],
   blogPost: ['blog'],
   author: ['blog'],
   homePage: ['home-page', 'homePage', 'agency', 'projects', 'services', 'blog'],
@@ -91,6 +93,8 @@ export async function POST(req: NextRequest) {
       siteSettings: ['/ar', '/en', '/ar/about', '/en/about', '/ar/services', '/en/services', '/ar/work', '/en/work', '/ar/blog', '/en/blog', '/ar/contact', '/en/contact'],
       service: ['/ar/services', '/en/services'],
       project: ['/ar/work', '/en/work', '/ar', '/en'],
+      testimonial: ['/ar', '/en', '/ar/about', '/en/about', '/ar/services', '/en/services'],
+      teamMember: ['/ar', '/en', '/ar/about', '/en/about'],
       blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
     };
 
@@ -108,6 +112,12 @@ export async function POST(req: NextRequest) {
       if (docType === 'project') {
         revalidateTag(`project:${slug}`, 'max');
         pathsToRevalidate.push(`/ar/work/${slug}`, `/en/work/${slug}`);
+      }
+      if (docType === 'testimonial') {
+        revalidateTag(`testimonial:${slug}`, 'max');
+        // Actually Testimonials may relate to service or project.
+        // We revalidated the base routes above. For related slugs, it's safer to clear tags.
+        // We don't have the slug of related service/project in the webhook payload by default.
       }
       if (docType === 'blogPost') {
         revalidateTag(`blog:${slug}`, 'max');

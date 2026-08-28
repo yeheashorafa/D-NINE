@@ -50,9 +50,14 @@ export const homePage = defineType({
     }),
     defineField({
       name: 'testimonials',
-      title: 'Testimonials',
-      type: 'array',
-      of: [defineArrayMember({ type: 'testimonial' })],
+      title: 'Testimonials Section',
+      type: 'testimonialsSection',
+      fieldset: 'featured',
+    }),
+    defineField({
+      name: 'teamPreview',
+      title: 'Team Preview Section',
+      type: 'teamSection',
       fieldset: 'featured',
     }),
     defineField({

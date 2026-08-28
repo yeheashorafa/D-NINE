@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "sanity dev",
     "start": "sanity start",
-    "build": "sanity build dist",
+    "build": "sanity build dist --no-auto-updates",
     "deploy": "sanity deploy",
     "schema:extract": "sanity schema extract --enforce-required-fields",
     "typegen": "sanity typegen generate",

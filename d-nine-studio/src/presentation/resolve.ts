@@ -109,6 +109,45 @@ export const locations = {
       ],
     }),
   }),
+  testimonial: defineLocations({
+    select: {
+      title: 'personName.en',
+      serviceSlug: 'relatedService.slug.current',
+      projectSlug: 'relatedProject.slug.current',
+    },
+    resolve: (doc) => {
+      const locs = [
+        { title: 'Home (AR)', href: '/ar' },
+        { title: 'Home (EN)', href: '/en' },
+        { title: 'About (AR)', href: '/ar/about' },
+        { title: 'About (EN)', href: '/en/about' },
+        { title: 'Services (AR)', href: '/ar/services' },
+        { title: 'Services (EN)', href: '/en/services' },
+      ];
+      if (doc?.serviceSlug) {
+        locs.push({ title: 'Related Service (AR)', href: `/ar/services/${doc.serviceSlug}` });
+        locs.push({ title: 'Related Service (EN)', href: `/en/services/${doc.serviceSlug}` });
+      }
+      if (doc?.projectSlug) {
+        locs.push({ title: 'Related Project (AR)', href: `/ar/work/${doc.projectSlug}` });
+        locs.push({ title: 'Related Project (EN)', href: `/en/work/${doc.projectSlug}` });
+      }
+      return { locations: locs };
+    },
+  }),
+  teamMember: defineLocations({
+    select: {
+      title: 'name.en',
+    },
+    resolve: () => ({
+      locations: [
+        { title: 'Home (AR)', href: '/ar' },
+        { title: 'Home (EN)', href: '/en' },
+        { title: 'About (AR)', href: '/ar/about' },
+        { title: 'About (EN)', href: '/en/about' },
+      ],
+    }),
+  }),
 };
 
 export const mainDocuments: DocumentResolver[] = [

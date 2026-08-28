@@ -4,6 +4,7 @@ import { getAllServiceOfferings } from '@/services/content/services.service';
 import { getCategories } from '@/services/content/categories.service';
 import { ServicesGrid } from './components/services-grid';
 import { Sparkles } from 'lucide-react';
+import { TestimonialsSection } from '../home/components/testimonials-section';
 
 import { getServicesPage } from '@/sanity/services/page.service';
 import { getLocale } from 'next-intl/server';
@@ -57,6 +58,9 @@ export async function ServicesPage() {
           categories={categories} 
           labels={filterLabels}
         />
+
+        {/* Testimonials Section */}
+        <TestimonialsSection data={pageData?.testimonials} />
       </div>
     </main>
   );

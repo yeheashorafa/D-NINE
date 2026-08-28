@@ -1,5 +1,28 @@
 import { groq } from 'next-sanity';
 
+export const testimonialFields = groq`
+  _id,
+  "id": _id,
+  personName,
+  role,
+  company,
+  quote,
+  "image": image.asset->url,
+  rating,
+  featured
+`;
+
+export const teamMemberFields = groq`
+  _id,
+  "id": _id,
+  name,
+  role,
+  bio,
+  "image": image.asset->url,
+  socialLinks,
+  featured
+`;
+
 export const basePageFields = groq`
   _id,
   "id": _id,
@@ -36,7 +59,28 @@ export const homePageQuery = groq`
     "featuredProjects": featuredProjects[]->slug.current,
     "featuredServices": featuredServices[]->slug.current,
     processTimeline,
-    testimonials,
+    testimonials {
+      enabled,
+      badge,
+      title,
+      subtitle,
+      maxItems,
+      selectedTestimonials[]-> {
+        ${testimonialFields}
+      }
+    },
+    teamPreview {
+      enabled,
+      badge,
+      title,
+      subtitle,
+      maxItems,
+      ctaLabel,
+      ctaPath,
+      selectedTeamMembers[]-> {
+        ${teamMemberFields}
+      }
+    },
     faqs,
     bookACall,
     latestNews[]-> { title, "slug": slug.current, publishedAt, excerpt, "image": image.asset->url, category, readTimeMinutes },
@@ -70,6 +114,28 @@ export const aboutPageQuery = groq`
       buttonText,
       buttonLink
     },
+    team {
+      enabled,
+      badge,
+      title,
+      subtitle,
+      maxItems,
+      ctaLabel,
+      ctaPath,
+      selectedTeamMembers[]-> {
+        ${teamMemberFields}
+      }
+    },
+    testimonials {
+      enabled,
+      badge,
+      title,
+      subtitle,
+      maxItems,
+      selectedTestimonials[]-> {
+        ${testimonialFields}
+      }
+    },
     seo {
       metaTitle,
       metaDescription,
@@ -86,6 +152,16 @@ export const servicesPageQuery = groq`
     heroTitle,
     heroSubtitle,
     filterLabels,
+    testimonials {
+      enabled,
+      badge,
+      title,
+      subtitle,
+      maxItems,
+      selectedTestimonials[]-> {
+        ${testimonialFields}
+      }
+    },
     seo {
       metaTitle,
       metaDescription,

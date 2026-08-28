@@ -41,6 +41,11 @@ export const servicesPage = defineType({
       ],
     }),
     defineField({
+      name: 'testimonials',
+      title: 'Testimonials Section',
+      type: 'testimonialsSection',
+    }),
+    defineField({
       name: 'seo',
       title: 'SEO Settings',
       type: 'seo',

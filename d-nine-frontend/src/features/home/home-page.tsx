@@ -5,6 +5,7 @@ import { FeaturedWorkSection } from './components/featured-work-section';
 import { CoreServicesSection } from './components/core-services-section';
 import { ProcessSection } from './components/process-section';
 import { TestimonialsSection } from './components/testimonials-section';
+import { TeamSection } from './components/team-section';
 import { FaqsSection } from './components/faqs-section';
 import { LatestNewsSection } from './components/latest-news-section';
 import { BookACallSection } from './components/book-a-call-section';
@@ -52,6 +53,9 @@ export async function HomePage() {
 
       {/* 5. Agency Process */}
       <ProcessSection data={homeData?.processTimeline} />
+
+      {/* 5.5 Team Preview */}
+      <TeamSection data={homeData?.teamPreview} />
 
       {/* 6. Testimonials */}
       <TestimonialsSection data={homeData?.testimonials} />

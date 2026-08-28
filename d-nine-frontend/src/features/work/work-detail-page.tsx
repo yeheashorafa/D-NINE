@@ -3,10 +3,12 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getProjectBySlug, getAllProjects } from '@/services/content/projects.service';
+import { getTestimonialsForProject } from '@/services/content/testimonials.service';
 import { ProjectGallery } from './components/project-gallery';
 import { RelatedProjects } from './components/related-projects';
 import { Link } from '@/i18n/navigation';
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { TestimonialsSection } from '../home/components/testimonials-section';
 
 export interface WorkDetailPageProps {
   slug: string;
@@ -17,9 +19,10 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
   const locale = await getLocale();
   const isArabic = locale === 'ar';
 
-  const [project, allProjects] = await Promise.all([
+  const [project, allProjects, testimonials] = await Promise.all([
     getProjectBySlug(slug),
     getAllProjects(),
+    getTestimonialsForProject(slug),
   ]);
 
   if (!project) {
@@ -160,6 +163,17 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
 
           {/* Related Projects */}
           <RelatedProjects currentProject={project} allProjects={allProjects} />
+
+          {/* Related Testimonials */}
+          {testimonials.length > 0 && (
+            <TestimonialsSection
+              data={{
+                enabled: true,
+                title: { ar: 'ماذا يقول عملاؤنا', en: 'What Our Clients Say' },
+                selectedTestimonials: testimonials,
+              }}
+            />
+          )}
         </div>
       </div>
     </main>

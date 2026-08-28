@@ -9,6 +9,8 @@ import {
   UserIcon,
   HomeIcon,
   CogIcon,
+  StarIcon,
+  UsersIcon,
 } from '@sanity/icons';
 
 const SINGLETON_DOCUMENT_TYPES = [
@@ -57,6 +59,8 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('service').title('الخدمات الرئيسية (Primary Services)').icon(SparklesIcon),
               S.documentTypeListItem('serviceOffering').title('الخدمات الفرعية (Service Offerings)').icon(MasterDetailIcon),
               S.documentTypeListItem('project').title('المشاريع والأعمال (Projects)').icon(CaseIcon),
+              S.documentTypeListItem('testimonial').title('آراء العملاء (Testimonials)').icon(StarIcon),
+              S.documentTypeListItem('teamMember').title('أعضاء الفريق (Team Members)').icon(UsersIcon),
               S.documentTypeListItem('blogPost').title('مقالات المدونة (Blog Posts)').icon(DocumentTextIcon),
               S.documentTypeListItem('author').title('الكتّاب (Authors)').icon(UserIcon),
               S.documentTypeListItem('contentCategory').title('التصنيفات (Categories)').icon(TagIcon),
@@ -79,6 +83,6 @@ export const structure: StructureResolver = (S) =>
       // Filter out singletons from any remaining auto-generated lists
       ...S.documentTypeListItems().filter(
         (listItem) => !SINGLETON_DOCUMENT_TYPES.includes(listItem.getId() || '') &&
-          !['contentCategory', 'service', 'serviceOffering', 'project', 'blogPost', 'author'].includes(listItem.getId() || '')
+          !['contentCategory', 'service', 'serviceOffering', 'project', 'blogPost', 'author', 'testimonial', 'teamMember'].includes(listItem.getId() || '')
       ),
     ]);

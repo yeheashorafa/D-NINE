@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
 import type { SanityDocumentStub } from '@sanity/client';
 import { AssetRegistry } from './upload-assets.js';
+import { buildGranularSetIfMissing } from './utils/migration-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -291,17 +292,26 @@ async function main() {
 
   const ids = Object.keys(singletons);
 
-  const existingDocs = await client.fetch(`*[_id in $ids] { _id, _rev, _updatedAt }`, { ids });
+  // Fetch full documents to compare fields
+  const existingDocs = await client.fetch(`*[_id in $ids]`, { ids });
   const existingDocsMap = new Map<string, any>(existingDocs.map((doc: any) => [doc._id, doc]));
+
+  // Helper imported from ./utils/migration-utils.js
 
   if (isDryRun) {
     console.log('DRY RUN: Planning mutations...');
-    console.table(existingDocs);
     for (const [id, doc] of Object.entries(singletons)) {
+      const cleanedDoc = clean(doc);
       if (!existingDocsMap.has(id)) {
         console.log(`- Would CREATE document: ${id}`);
       } else {
-        console.log(`- Would PATCH document: ${id} with setIfMissing`);
+        const existing = existingDocsMap.get(id);
+        const granularPaths = buildGranularSetIfMissing(cleanedDoc, existing);
+        if (Object.keys(granularPaths).length > 0) {
+          console.log(`- Would PATCH document: ${id} with setIfMissing:`, Object.keys(granularPaths));
+        } else {
+          console.log(`- No changes needed for document: ${id}`);
+        }
       }
     }
     console.log('DRY RUN complete. Zero mutations performed.');
@@ -310,43 +320,28 @@ async function main() {
 
   // Execute Mode
   let transaction = client.transaction();
+  let hasMutations = false;
 
   for (const [id, doc] of Object.entries(singletons)) {
     const cleanedDoc = clean(doc);
     if (!existingDocsMap.has(id)) {
       console.log(`Adding CREATE to transaction for: ${id}`);
       transaction = transaction.createIfNotExists({ _id: id, ...cleanedDoc });
+      hasMutations = true;
     } else {
-      console.log(`Adding PATCH to transaction for: ${id}`);
-      // Remove _type from setIfMissing to avoid patch errors
-
-      // Check for empty fields to force patch
-      const forcePatchFields: Record<string, any> = {};
-      for (const [k, v] of Object.entries(cleanedDoc)) {
-        if (k === '_type') continue;
-        const existingVal = existingDocsMap.get(id)?.[k];
-        if (existingVal && typeof existingVal === 'object') {
-          // If existing is empty array, or if it has { ar: [], en: [] } where length is 0
-          if (Array.isArray(existingVal) && existingVal.length === 0) {
-            forcePatchFields[k] = v;
-          } else if (!Array.isArray(existingVal) && existingVal.ar && Array.isArray(existingVal.ar) && existingVal.ar.length === 0) {
-            forcePatchFields[k] = v;
-          } else if (!Array.isArray(existingVal) && Object.keys(existingVal).length === 0) {
-             forcePatchFields[k] = v;
-          }
-        } else if (existingVal === undefined || existingVal === null || existingVal === '') {
-          forcePatchFields[k] = v;
-        }
+      const existing = existingDocsMap.get(id);
+      const granularPaths = buildGranularSetIfMissing(cleanedDoc, existing);
+      if (Object.keys(granularPaths).length > 0) {
+        console.log(`Adding PATCH to transaction for: ${id}`, Object.keys(granularPaths));
+        transaction = transaction.patch(id, (p) => p.setIfMissing(granularPaths));
+        hasMutations = true;
       }
-
-      const { _type, ...fieldsToPatch } = cleanedDoc;
-      if (Object.keys(forcePatchFields).length > 0) {
-         transaction = transaction.patch(id, (p) => p.set(forcePatchFields).setIfMissing(fieldsToPatch));
-      } else {
-         transaction = transaction.patch(id, (p) => p.setIfMissing(fieldsToPatch));
-      }
-
     }
+  }
+
+  if (!hasMutations) {
+    console.log('No mutations needed. All documents are up to date.');
+    return;
   }
 
   try {

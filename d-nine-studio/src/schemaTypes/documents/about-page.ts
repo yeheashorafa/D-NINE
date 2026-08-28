@@ -80,6 +80,18 @@ export const aboutPage = defineType({
       fieldset: 'content',
     }),
     defineField({
+      name: 'team',
+      title: 'Our Team Section',
+      type: 'teamSection',
+      fieldset: 'content',
+    }),
+    defineField({
+      name: 'testimonials',
+      title: 'Testimonials Section',
+      type: 'testimonialsSection',
+      fieldset: 'content',
+    }),
+    defineField({
       name: 'seo',
       title: 'SEO Settings',
       type: 'seo',

@@ -4,10 +4,12 @@ import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getServiceBySlug } from '@/services/content/services.service';
 import { getAllProjects } from '@/services/content/projects.service';
+import { getTestimonialsForService } from '@/services/content/testimonials.service';
 import { RelatedServiceProjects } from './components/related-service-projects';
 import { Link } from '@/i18n/navigation';
 import { ArrowLeft, ArrowRight, CheckCircle2, HelpCircle } from 'lucide-react';
 import { Accordion } from '@/components/ui/accordion';
+import { TestimonialsSection } from '../home/components/testimonials-section';
 
 export interface ServiceDetailPageProps {
   slug: string;
@@ -18,9 +20,10 @@ export async function ServiceDetailPage({ slug }: ServiceDetailPageProps) {
   const locale = await getLocale();
   const isArabic = locale === 'ar';
 
-  const [service, allProjects] = await Promise.all([
+  const [service, allProjects, testimonials] = await Promise.all([
     getServiceBySlug(slug),
     getAllProjects(),
+    getTestimonialsForService(slug),
   ]);
 
   if (!service) {
@@ -157,6 +160,17 @@ export async function ServiceDetailPage({ slug }: ServiceDetailPageProps) {
             serviceCategorySlug={service.categorySlug}
             projects={allProjects}
           />
+
+          {/* Related Testimonials */}
+          {testimonials.length > 0 && (
+            <TestimonialsSection
+              data={{
+                enabled: true,
+                title: { ar: 'ماذا يقول عملاؤنا', en: 'What Our Clients Say' },
+                selectedTestimonials: testimonials,
+              }}
+            />
+          )}
         </div>
       </div>
     </main>

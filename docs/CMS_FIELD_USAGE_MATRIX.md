@@ -36,11 +36,16 @@
 | featuredProjects | Active | `src/features/home/components/work-section.tsx` | Featured portfolio |
 | featuredServices | Active | `src/features/home/components/services-section.tsx` | Service highlights |
 | processTimeline | Active | `src/features/home/components/process-section.tsx` | Step-by-step process |
-| testimonials | Pending UI | `src/features/home/components/testimonials-section.tsx`| Query mapped, waiting for component |
+| testimonials | Active | `src/features/home/components/testimonials-section.tsx`| Fetched through mapper |
 | faqs | Pending UI | `src/features/home/components/faq-section.tsx` | Query mapped, waiting for component |
 | latestNews | Pending UI | `src/features/home/components/blog-section.tsx` | Query mapped, waiting for component |
 | bookACall | Active | `src/features/home/components/book-a-call-section.tsx`| CTA section |
 | seo | Active | `src/app/[locale]/page.tsx` | Mapped via `constructMetadata` |
+| teamPreview | Active | `src/features/home/components/team-section.tsx` | Displays team preview on home page |
+| **testimonial** | | | |
+| personName, role, company, quote, rating | Active | `src/components/ui/testimonials-section.tsx` | Testimonials content |
+| **teamMember** | | | |
+| name, role, bio, socialLinks, image | Active | `src/components/ui/team-section.tsx` | Team members profiles |
 | **project** | | | |
 | deliverables | Active | \`src/features/work/work-detail-page.tsx\` | List |
 | clientName, credits | Active | \`src/features/work/work-detail-page.tsx\` | Subheader / Footer |

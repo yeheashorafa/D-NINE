@@ -5,6 +5,8 @@ const TARGET_CONTENT_TYPES = [
   'service',
   'serviceOffering',
   'project',
+  'testimonial',
+  'teamMember',
   'blogPost',
   'author',
   'homePage',
@@ -43,9 +45,9 @@ async function validate() {
 
   console.log(`📡 Querying Dataset: [${dataset}] with useCdn: false...\n`);
 
-  // Fetch all target content documents with deep fields
+  // Fetch all target content documents with deep fields (published only)
   const contentDocs: Array<{ _id: string; _type: string; [key: string]: any }> = await client.fetch(
-    `*[_type in $types]{
+    `*[_type in $types && !(_id in path("drafts.**"))]{
       _id,
       _type,
       filterLabels,
@@ -77,7 +79,11 @@ async function validate() {
       heroSlides,
       email,
       phoneDisplay,
-      name
+      name,
+      personName,
+      role,
+      company,
+      quote
     }`,
     { types: TARGET_CONTENT_TYPES }
   );
@@ -111,12 +117,17 @@ async function validate() {
     termsPage: 1,
   };
 
+  const dynamicTypes = ['testimonial', 'teamMember'];
+
   for (const [type, expected] of Object.entries(expectedCounts)) {
     const actual = counts[type] || 0;
     console.log(`   - ${type.padEnd(18)}: ${String(actual).padStart(2)} / ${expected} expected${SINGLETON_TYPES.includes(type) ? ' (singleton)' : ''}`);
   }
+  for (const type of dynamicTypes) {
+    console.log(`   - ${type.padEnd(18)}: ${String(counts[type] || 0).padStart(2)} (dynamic)`);
+  }
   console.log('----------------------------------------------------------------');
-  console.log(`📦 TOTAL CONTENT DOCS:  ${contentDocs.length} / 68 expected`);
+  console.log(`📦 TOTAL CONTENT DOCS:  ${contentDocs.length}`);
   console.log(`🖼️  TOTAL ASSET DOCS:    ${assetDocs.length} (image & file assets in dataset)`);
   console.log('----------------------------------------------------------------\n');
 
@@ -127,10 +138,6 @@ async function validate() {
     if (actual !== expected) {
       validationErrors.push(`Mismatch for _type '${type}': expected ${expected}, got ${actual}`);
     }
-  }
-
-  if (contentDocs.length !== 68) {
-    validationErrors.push(`Total content documents mismatch: expected 68, got ${contentDocs.length}`);
   }
 
   const allDocIds = new Set(contentDocs.map((d) => d._id));
@@ -160,7 +167,7 @@ async function validate() {
     }
 
     // Bilingual Titles (for non-singletons)
-    if (!SINGLETON_TYPES.includes(doc._type) && doc._type !== 'contentCategory' && doc._type !== 'author') {
+    if (!SINGLETON_TYPES.includes(doc._type) && doc._type !== 'contentCategory' && doc._type !== 'author' && doc._type !== 'testimonial' && doc._type !== 'teamMember') {
       if (!isLocalized(doc.title)) {
         validationErrors.push(`Missing or invalid bilingual title in doc [${doc._id}] (${doc._type})`);
       }
@@ -172,6 +179,18 @@ async function validate() {
       }
     }
 
+    if (doc._type === 'testimonial') {
+      if (!isLocalized(doc.personName) || !isLocalized(doc.role) || !isLocalized(doc.company) || !isLocalized(doc.quote)) {
+        validationErrors.push(`Missing or invalid bilingual fields (personName, role, company, quote) in doc [${doc._id}] (${doc._type})`);
+      }
+    }
+
+    if (doc._type === 'teamMember') {
+      if (!isLocalized(doc.name) || !isLocalized(doc.role)) {
+        validationErrors.push(`Missing or invalid bilingual fields (name, role) in doc [${doc._id}] (${doc._type})`);
+      }
+    }
+
     // Specific Singleton Checks
     if (['servicesPage', 'workPage', 'blogPage', 'contactPage', 'aboutPage'].includes(doc._type)) {
       if (!isLocalized(doc.heroTitle)) validationErrors.push(`Missing localized heroTitle on ${doc._id}`);
@@ -179,14 +198,14 @@ async function validate() {
     }
 
     if (doc._type === 'aboutPage') {
-      
+
       if (!isPortableText(doc.agencyStory)) validationErrors.push(`Missing valid Portable Text for agencyStory on ${doc._id}`);
       if (!isPortableText(doc.mission)) validationErrors.push(`Missing valid Portable Text for mission on ${doc._id}`);
       if (!isPortableText(doc.vision)) validationErrors.push(`Missing valid Portable Text for vision on ${doc._id}`);
 
     }
 
-    
+
     if (doc._type === 'contactPage') {
       if (!isPortableText(doc.description)) validationErrors.push(`Missing Portable Text description on ${doc._id}`);
       if (!Array.isArray(doc.contactMethods) || doc.contactMethods.length === 0) validationErrors.push('Missing contactMethods');
