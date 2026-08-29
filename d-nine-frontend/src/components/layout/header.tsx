@@ -9,7 +9,7 @@ import { ThemeToggle } from './theme-toggle';
 import { getButtonClasses } from '@/components/ui/button';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SiteSettings } from '@/services/content/settings.service';
+import type { SiteSettings } from '@/services/content/settings.service';
 
 export interface HeaderProps {
   settings?: SiteSettings;
