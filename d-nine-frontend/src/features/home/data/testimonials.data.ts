@@ -96,5 +96,5 @@ export const STATIC_TESTIMONIALS: TestimonialItem[] = [
     },
     rating: 5,
     featured: false,
-  },
+  }
 ];
