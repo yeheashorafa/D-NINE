@@ -9,7 +9,8 @@ export function mapTestimonialsSection(section?: SanityTestimonialsSection) {
   const maxItems = section.maxItems || 6;
   const rawTestimonials = section.selectedTestimonials || [];
   const validTestimonials = rawTestimonials
-    .filter((t): t is NonNullable<typeof t> => !!t)
+    .filter((t): t is NonNullable<typeof t> => !!t && t.active !== false)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
     .slice(0, maxItems)
     .map(mapSanityTestimonial);
 
@@ -28,7 +29,8 @@ export function mapTeamSection(section?: SanityTeamSection) {
   const maxItems = section.maxItems || 8;
   const rawMembers = section.selectedTeamMembers || [];
   const validMembers = rawMembers
-    .filter((m): m is NonNullable<typeof m> => !!m)
+    .filter((m): m is NonNullable<typeof m> => !!m && m.active !== false)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
     .slice(0, maxItems)
     .map(mapSanityTeamMember);
 

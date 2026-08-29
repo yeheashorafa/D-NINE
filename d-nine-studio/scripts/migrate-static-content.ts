@@ -8,11 +8,14 @@ import { SERVICE_OFFERINGS } from './data/service-offerings.data.js';
 import { PROJECTS_DATA } from './data/projects.data.js';
 import { BLOG_POSTS_DATA } from './data/blog-posts.data.js';
 import { PROCESS_TIMELINE_STEPS } from './data/agency.data.js';
+import { STATIC_TEAM_MEMBERS } from '../../d-nine-frontend/src/features/home/data/team.data.js';
+import { STATIC_TESTIMONIALS } from '../../d-nine-frontend/src/features/home/data/testimonials.data.js';
 import { AssetRegistry } from './upload-assets.js';
 import {
   validateBilingualField,
   convertBlogSectionsToPortableText,
 } from './migration-utils.js';
+import { resolveDeterministicId } from './utils/migration-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -118,6 +121,8 @@ const TARGET_CONTENT_TYPES = [
   'author',
   'homePage',
   'siteSettings',
+  'teamMember',
+  'testimonial',
 ];
 
 export async function runMigration(isDryRun: boolean = true) {
@@ -521,6 +526,47 @@ export async function runMigration(isDryRun: boolean = true) {
     });
   }
 
+  // Team Members
+  const teamDocs: any[] = [];
+  for (const member of STATIC_TEAM_MEMBERS) {
+    const docId = resolveDeterministicId('team', member.id, member.name.en);
+    checkDuplicateId(docId, 'teamMember');
+
+    teamDocs.push({
+      _id: docId,
+      _type: 'teamMember',
+      name: member.name,
+      role: member.role,
+      bio: member.bio,
+      image: member.image ? makeImageObject(member.image) : undefined,
+      socialLinks: member.socialLinks,
+      featured: member.featured,
+      active: true,
+      order: STATIC_TEAM_MEMBERS.indexOf(member) + 1,
+    });
+  }
+
+  // Testimonials
+  const testimonialDocs: any[] = [];
+  for (const t of STATIC_TESTIMONIALS) {
+    const docId = resolveDeterministicId('testimonial', t.id, t.personName.en);
+    checkDuplicateId(docId, 'testimonial');
+
+    testimonialDocs.push({
+      _id: docId,
+      _type: 'testimonial',
+      personName: t.personName,
+      role: t.role,
+      company: t.company,
+      quote: t.quote,
+      image: t.image ? makeImageObject(t.image) : undefined,
+      rating: t.rating || 5,
+      featured: t.featured,
+      active: true,
+      order: STATIC_TESTIMONIALS.indexOf(t) + 1,
+    });
+  }
+
   // 7. Singletons (2)
   const homePageDoc = {
     _id: 'homePage',
@@ -550,8 +596,50 @@ export async function runMigration(isDryRun: boolean = true) {
       title: step.title,
       description: step.description,
     })),
+    teamPreview: {
+      enabled: teamDocs.length > 0,
+      title: { ar: 'فريق العمل', en: 'Our Team' },
+      selectedTeamMembers: teamDocs.map(t => ({ _key: `team_${t._id}`, _type: 'reference', _ref: t._id })),
+      maxItems: 8,
+    },
+    testimonials: {
+      enabled: testimonialDocs.length > 0,
+      title: { ar: 'اراء العملاء', en: 'Testimonials' },
+      selectedTestimonials: testimonialDocs.map(t => ({ _key: `test_${t._id}`, _type: 'reference', _ref: t._id })),
+      maxItems: 6,
+    },
   };
   checkDuplicateId('homePage', 'homePage');
+
+  const aboutPageDoc = {
+    _id: 'aboutPage',
+    _type: 'aboutPage',
+    team: {
+      enabled: teamDocs.length > 0,
+      title: { ar: 'فريق العمل', en: 'Our Team' },
+      selectedTeamMembers: teamDocs.map(t => ({ _key: `team_${t._id}`, _type: 'reference', _ref: t._id })),
+      maxItems: 8,
+    },
+    testimonials: {
+      enabled: testimonialDocs.length > 0,
+      title: { ar: 'اراء العملاء', en: 'Testimonials' },
+      selectedTestimonials: testimonialDocs.map(t => ({ _key: `test_${t._id}`, _type: 'reference', _ref: t._id })),
+      maxItems: 6,
+    },
+  };
+  checkDuplicateId('aboutPage', 'aboutPage');
+
+  const servicesPageDoc = {
+    _id: 'servicesPage',
+    _type: 'servicesPage',
+    testimonials: {
+      enabled: testimonialDocs.length > 0,
+      title: { ar: 'اراء العملاء', en: 'Testimonials' },
+      selectedTestimonials: testimonialDocs.map(t => ({ _key: `test_${t._id}`, _type: 'reference', _ref: t._id })),
+      maxItems: 6,
+    },
+  };
+  checkDuplicateId('servicesPage', 'servicesPage');
 
   const siteSettingsDoc = {
     _id: 'siteSettings',
@@ -600,7 +688,11 @@ export async function runMigration(isDryRun: boolean = true) {
     ...offeringDocs,
     ...projectDocs,
     ...blogDocs,
+    ...teamDocs,
+    ...testimonialDocs,
     homePageDoc,
+    aboutPageDoc,
+    servicesPageDoc,
     siteSettingsDoc,
   ];
 
@@ -691,7 +783,9 @@ export async function runMigration(isDryRun: boolean = true) {
       { name: 'Service Offerings', docs: offeringDocs },
       { name: 'Projects', docs: projectDocs },
       { name: 'Blog Posts', docs: blogDocs },
-      { name: 'Singletons (homePage, siteSettings)', docs: [homePageDoc, siteSettingsDoc] },
+      { name: 'Team Members', docs: teamDocs },
+      { name: 'Testimonials', docs: testimonialDocs },
+      { name: 'Singletons', docs: [homePageDoc, aboutPageDoc, servicesPageDoc, siteSettingsDoc] },
     ];
 
     for (const batch of batches) {
@@ -700,6 +794,32 @@ export async function runMigration(isDryRun: boolean = true) {
         const isExisting = existingSet.has(doc._id);
         if (isExisting) {
           reusedCount++;
+          // Safe patch for singletons to ensure sections are linked without overwriting editor content
+          if (doc._type === 'homePage') {
+            try {
+              await client.patch(doc._id)
+                .setIfMissing({ teamPreview: doc.teamPreview, testimonials: doc.testimonials })
+                .commit();
+            } catch (err: any) {
+              console.error(`⚠️ Failed to patch existing singleton '${doc._id}':`, err?.message || err);
+            }
+          } else if (doc._type === 'aboutPage') {
+            try {
+              await client.patch(doc._id)
+                .setIfMissing({ team: doc.team, testimonials: doc.testimonials })
+                .commit();
+            } catch (err: any) {
+              console.error(`⚠️ Failed to patch existing singleton '${doc._id}':`, err?.message || err);
+            }
+          } else if (doc._type === 'servicesPage') {
+            try {
+              await client.patch(doc._id)
+                .setIfMissing({ testimonials: doc.testimonials })
+                .commit();
+            } catch (err: any) {
+              console.error(`⚠️ Failed to patch existing singleton '${doc._id}':`, err?.message || err);
+            }
+          }
         } else {
           try {
             await client.createIfNotExists(doc);

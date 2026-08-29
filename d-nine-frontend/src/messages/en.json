@@ -117,6 +117,10 @@
       "badge": "Testimonials",
       "title": "What Our Clients Say"
     },
+    "team": {
+      "badge": "Our Team",
+      "title": "Meet The Experts"
+    },
     "faqs": {
       "badge": "FAQs",
       "title": "Frequently Asked Questions"

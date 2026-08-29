@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
       siteSettings: ['/ar', '/en', '/ar/about', '/en/about', '/ar/services', '/en/services', '/ar/work', '/en/work', '/ar/blog', '/en/blog', '/ar/contact', '/en/contact'],
       service: ['/ar/services', '/en/services'],
       project: ['/ar/work', '/en/work', '/ar', '/en'],
-      testimonial: ['/ar', '/en', '/ar/about', '/en/about', '/ar/services', '/en/services'],
+      testimonial: ['/ar', '/en', '/ar/about', '/en/about', '/ar/services', '/en/services', '/ar/services/[slug]', '/en/services/[slug]', '/ar/work/[slug]', '/en/work/[slug]'],
       teamMember: ['/ar', '/en', '/ar/about', '/en/about'],
       blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
     };

@@ -55,10 +55,10 @@ export async function HomePage() {
       <ProcessSection data={homeData?.processTimeline} />
 
       {/* 5.5 Team Preview */}
-      <TeamSection data={homeData?.teamPreview} />
+      <TeamSection data={homeData?.teamSection} />
 
       {/* 6. Testimonials */}
-      <TestimonialsSection data={homeData?.testimonials} />
+      <TestimonialsSection data={homeData?.testimonialsSection} />
 
       {/* 7. FAQs */}
       <FaqsSection data={homeData?.faqs} />

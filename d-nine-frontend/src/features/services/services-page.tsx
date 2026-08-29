@@ -60,7 +60,7 @@ export async function ServicesPage() {
         />
 
         {/* Testimonials Section */}
-        <TestimonialsSection data={pageData?.testimonials} />
+        <TestimonialsSection data={pageData?.testimonialsSection} />
       </div>
     </main>
   );

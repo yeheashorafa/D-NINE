@@ -16,8 +16,8 @@ export function mapHomePage(doc: SanityHomePageDoc | null) {
   if (!doc) return null;
   return {
     ...doc,
-    testimonials: mapTestimonialsSection(doc.testimonials),
-    teamPreview: mapTeamSection(doc.teamPreview),
+    testimonialsSection: mapTestimonialsSection(doc.testimonials),
+    teamSection: mapTeamSection(doc.teamPreview),
   };
 }
 
@@ -25,8 +25,8 @@ export function mapAboutPage(doc: SanityAboutPageDoc | null) {
   if (!doc) return null;
   return {
     ...doc,
-    team: mapTeamSection(doc.team),
-    testimonials: mapTestimonialsSection(doc.testimonials),
+    teamSection: mapTeamSection(doc.team),
+    testimonialsSection: mapTestimonialsSection(doc.testimonials),
   };
 }
 
@@ -34,7 +34,7 @@ export function mapServicesPage(doc: SanityServicesPageDoc | null) {
   if (!doc) return null;
   return {
     ...doc,
-    testimonials: mapTestimonialsSection(doc.testimonials),
+    testimonialsSection: mapTestimonialsSection(doc.testimonials),
   };
 }
 

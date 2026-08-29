@@ -4,7 +4,9 @@ import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
 import type { SanityDocumentStub } from '@sanity/client';
 import { AssetRegistry } from './upload-assets.js';
-import { buildGranularSetIfMissing } from './utils/migration-utils.js';
+import { buildGranularSetIfMissing, resolveDeterministicId } from './utils/migration-utils.js';
+import { STATIC_TEAM_MEMBERS } from '../../d-nine-frontend/src/features/home/data/team.data.js';
+import { STATIC_TESTIMONIALS } from '../../d-nine-frontend/src/features/home/data/testimonials.data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -168,6 +170,16 @@ async function main() {
     },
   ];
 
+  const teamRefs = STATIC_TEAM_MEMBERS.map(m => {
+    const docId = resolveDeterministicId('team', m.id, m.name.en);
+    return { _key: `team_${docId}`, _type: 'reference', _ref: docId };
+  });
+
+  const testimonialRefs = STATIC_TESTIMONIALS.map(t => {
+    const docId = resolveDeterministicId('testimonial', t.id, t.personName.en);
+    return { _key: `test_${docId}`, _type: 'reference', _ref: docId };
+  });
+
   const singletons: Record<string, SanityDocumentStub> = {
     servicesPage: {
       _type: 'servicesPage',
@@ -182,6 +194,12 @@ async function main() {
       seo: {
         metaTitle: { ar: 'خدماتنا | دي ناين', en: 'Services | D-NINE' },
         metaDescription: { ar: 'تعرف على خدمات وكالة دي ناين.', en: 'Learn about D-NINE services.' },
+      },
+      testimonials: {
+        enabled: testimonialRefs.length > 0,
+        title: { ar: 'اراء العملاء', en: 'Testimonials' },
+        selectedTestimonials: testimonialRefs,
+        maxItems: 6,
       },
     },
     workPage: {
@@ -227,6 +245,18 @@ async function main() {
       seo: {
         metaTitle: { ar: 'من نحن | دي ناين', en: 'About | D-NINE' },
         metaDescription: { ar: 'تعرف على قصة وكالة دي ناين.', en: 'Learn about D-NINE agency story.' },
+      },
+      team: {
+        enabled: teamRefs.length > 0,
+        title: { ar: 'فريق العمل', en: 'Our Team' },
+        selectedTeamMembers: teamRefs,
+        maxItems: 8,
+      },
+      testimonials: {
+        enabled: testimonialRefs.length > 0,
+        title: { ar: 'اراء العملاء', en: 'Testimonials' },
+        selectedTestimonials: testimonialRefs,
+        maxItems: 6,
       },
     },
     contactPage: {
@@ -283,6 +313,18 @@ async function main() {
     homePage: {
       _type: 'homePage',
       heroSlides,
+      teamPreview: {
+        enabled: teamRefs.length > 0,
+        title: { ar: 'فريق العمل', en: 'Our Team' },
+        selectedTeamMembers: teamRefs,
+        maxItems: 8,
+      },
+      testimonials: {
+        enabled: testimonialRefs.length > 0,
+        title: { ar: 'اراء العملاء', en: 'Testimonials' },
+        selectedTestimonials: testimonialRefs,
+        maxItems: 6,
+      },
       seo: {
         metaTitle: { ar: 'الرئيسية | دي ناين', en: 'Home | D-NINE' },
         metaDescription: { ar: 'وكالة دي ناين للإنتاج الإعلامي', en: 'D-NINE Creative Agency' },

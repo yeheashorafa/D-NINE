@@ -1,4 +1,4 @@
-import type { SanityLocalizedString } from '@/sanity/types';
+import type { SanityLocalizedString } from '../sanity/types';
 
 export interface TestimonialItem {
   id: string;

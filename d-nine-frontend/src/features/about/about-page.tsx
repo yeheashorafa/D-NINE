@@ -156,10 +156,10 @@ export async function AboutPage() {
         </div>
 
         {/* Team Section */}
-        <TeamSection data={pageData?.team} />
+        <TeamSection data={pageData?.teamSection} />
 
         {/* Testimonials Section */}
-        <TestimonialsSection data={pageData?.testimonials} />
+        <TestimonialsSection data={pageData?.testimonialsSection} />
       </div>
     </main>
   );

@@ -27,6 +27,10 @@ export interface SanityTestimonialDoc {
   image?: string;
   rating?: number;
   featured?: boolean;
+  active?: boolean;
+  order?: number;
+  relatedService?: { _id: string; slug?: string };
+  relatedProject?: { _id: string; slug?: string };
 }
 
 export interface SanityTeamMemberDoc {
@@ -38,6 +42,8 @@ export interface SanityTeamMemberDoc {
   image?: string;
   socialLinks?: { platform: string; url: string }[];
   featured?: boolean;
+  active?: boolean;
+  order?: number;
 }
 
 export interface SanityTestimonialsSection {

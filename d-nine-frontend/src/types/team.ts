@@ -1,5 +1,5 @@
-import type { SanityLocalizedString } from '@/sanity/types';
-import type { SanityLocalizedPortableText } from '@/sanity/types';
+import type { SanityLocalizedString } from '../sanity/types';
+import type { SanityLocalizedPortableText } from '../sanity/types';
 
 export interface TeamMemberItem {
   id: string;

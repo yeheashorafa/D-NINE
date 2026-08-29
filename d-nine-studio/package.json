@@ -18,7 +18,8 @@
     "content:migrate": "tsx scripts/migrate-static-content.ts --execute",
     "content:validate": "tsx scripts/validate-migration.ts",
     "content:complete:dry": "tsx scripts/migrate-cms-completion.ts --dry-run",
-    "content:complete": "tsx scripts/migrate-cms-completion.ts --execute"
+    "content:complete": "tsx scripts/migrate-cms-completion.ts --execute",
+    "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {
     "@sanity/icons": "^3.7.0",

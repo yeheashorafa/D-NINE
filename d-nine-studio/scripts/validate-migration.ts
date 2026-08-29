@@ -83,7 +83,10 @@ async function validate() {
       personName,
       role,
       company,
-      quote
+      quote,
+      teamPreview,
+      team,
+      testimonials
     }`,
     { types: TARGET_CONTENT_TYPES }
   );
@@ -98,7 +101,8 @@ async function validate() {
     counts[doc._type] = (counts[doc._type] || 0) + 1;
   }
 
-  console.log('📊 LIVE DOCUMENT COUNTS:');
+  const allPublishedDocs = await client.fetch<any[]>(`*[!(_id in path('drafts.**')) && !(_type match 'sanity.*')]`);
+
   const expectedCounts: Record<string, number> = {
     contentCategory: 7,
     author: 1,
@@ -119,6 +123,9 @@ async function validate() {
 
   const dynamicTypes = ['testimonial', 'teamMember'];
 
+  const untrackedDocs = allPublishedDocs.filter(d => !TARGET_CONTENT_TYPES.includes(d._type));
+
+  console.log('📊 LIVE DOCUMENT COUNTS:');
   for (const [type, expected] of Object.entries(expectedCounts)) {
     const actual = counts[type] || 0;
     console.log(`   - ${type.padEnd(18)}: ${String(actual).padStart(2)} / ${expected} expected${SINGLETON_TYPES.includes(type) ? ' (singleton)' : ''}`);
@@ -127,8 +134,13 @@ async function validate() {
     console.log(`   - ${type.padEnd(18)}: ${String(counts[type] || 0).padStart(2)} (dynamic)`);
   }
   console.log('----------------------------------------------------------------');
-  console.log(`📦 TOTAL CONTENT DOCS:  ${contentDocs.length}`);
-  console.log(`🖼️  TOTAL ASSET DOCS:    ${assetDocs.length} (image & file assets in dataset)`);
+  console.log(`📦 TRACKED CMS DOC TOTAL:          ${contentDocs.length}`);
+  console.log(`🌍 COMPLETE PUBLISHED DATASET:     ${allPublishedDocs.length}`);
+  console.log(`❓ UNEXPECTED/UNTRACKED DOCS:      ${untrackedDocs.length}`);
+  if (untrackedDocs.length > 0) {
+    console.log(`   -> Unexpected IDs: ${untrackedDocs.map(d => d._id).join(', ')}`);
+  }
+  console.log(`🖼️  TOTAL ASSET DOCS:               ${assetDocs.length} (image & file assets in dataset)`);
   console.log('----------------------------------------------------------------\n');
 
   const validationErrors: string[] = [];
@@ -269,6 +281,32 @@ async function validate() {
         if (m?.poster?.asset?._ref) checkAssetRef(m.poster.asset._ref, 'media.poster');
       });
     }
+
+    const validateSection = (section: any, sectionName: string) => {
+      if (section && section.enabled !== false) {
+        let refs: any[] = [];
+        if (section.selectedTeamMembers) refs = section.selectedTeamMembers;
+        if (section.selectedTestimonials) refs = section.selectedTestimonials;
+        if (refs.length === 0) {
+          validationErrors.push(`Enabled section '${sectionName}' on ${doc._id} has zero references`);
+        } else {
+          refs.forEach((ref: any, idx: number) => {
+             checkRef(ref, `${sectionName}[${idx}]`);
+          });
+        }
+      }
+    };
+
+    if (doc.teamPreview) validateSection(doc.teamPreview, 'teamPreview');
+    if (doc.team) validateSection(doc.team, 'team');
+    if (doc.testimonials) validateSection(doc.testimonials, 'testimonials');
+  }
+
+  if (!counts['teamMember'] || counts['teamMember'] === 0) {
+    validationErrors.push("No published team members exist");
+  }
+  if (!counts['testimonial'] || counts['testimonial'] === 0) {
+    validationErrors.push("No published testimonials exist");
   }
 
   if (brokenRefs === 0 && checkedAssetRefs > 0) {

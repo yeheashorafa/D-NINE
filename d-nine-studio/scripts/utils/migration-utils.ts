@@ -18,3 +18,29 @@ export function buildGranularSetIfMissing(source: any, existing: any, basePath =
   }
   return paths;
 }
+
+export function resolveDeterministicId(
+  prefix: string,
+  explicitId: string | undefined,
+  englishLabel: string | undefined,
+): string {
+  const existingId = explicitId?.trim();
+
+  if (existingId) {
+    return existingId;
+  }
+
+  const slug = englishLabel
+    ?.trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  if (!slug) {
+    throw new Error(
+      `Cannot create ${prefix} document ID: explicit ID and English label are missing.`,
+    );
+  }
+
+  return `${prefix}-${slug}`;
+}

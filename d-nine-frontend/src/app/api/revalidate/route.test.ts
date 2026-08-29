@@ -117,4 +117,50 @@ expect(revalidateTag).toHaveBeenCalledWith(
 );    expect(revalidatePath).toHaveBeenCalledWith('/ar/services/test-service', 'page');
     expect(revalidatePath).toHaveBeenCalledWith('/en/services/test-service', 'page');
   });
+
+  it('should revalidate teamMember tags and paths', async () => {
+    mockParseBody.mockResolvedValueOnce({
+      isValidSignature: true,
+      body: { _type: 'teamMember' },
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/revalidate', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+    expect(revalidateTag).toHaveBeenCalledWith('team-members', 'max');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/about', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/about', 'page');
+  });
+
+  it('should revalidate testimonial tags and paths', async () => {
+    mockParseBody.mockResolvedValueOnce({
+      isValidSignature: true,
+      body: { _type: 'testimonial' },
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/revalidate', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+    expect(revalidateTag).toHaveBeenCalledWith('testimonials', 'max');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/about', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/about', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/services', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/services', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/services/[slug]', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/services/[slug]', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/work/[slug]', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/work/[slug]', 'page');
+  });
 });

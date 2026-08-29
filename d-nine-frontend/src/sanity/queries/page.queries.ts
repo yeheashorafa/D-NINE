@@ -9,7 +9,11 @@ export const testimonialFields = groq`
   quote,
   "image": image.asset->url,
   rating,
-  featured
+  featured,
+  active,
+  order,
+  relatedService->{_id, "slug": slug.current},
+  relatedProject->{_id, "slug": slug.current}
 `;
 
 export const teamMemberFields = groq`
@@ -20,7 +24,9 @@ export const teamMemberFields = groq`
   bio,
   "image": image.asset->url,
   socialLinks,
-  featured
+  featured,
+  active,
+  order
 `;
 
 export const basePageFields = groq`

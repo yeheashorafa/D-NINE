@@ -1,5 +1,5 @@
-import { TeamMemberItem } from '@/types/team';
-import type { SanityLocalizedPortableText } from '@/sanity/types';
+import type { TeamMemberItem } from '../../../types/team';
+import type { SanityLocalizedPortableText } from '../../../sanity/types';
 
 export const STATIC_TEAM_MEMBERS: TeamMemberItem[] = [
   {

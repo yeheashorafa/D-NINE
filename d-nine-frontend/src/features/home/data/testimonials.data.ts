@@ -1,4 +1,4 @@
-import { TestimonialItem } from '@/types/testimonial';
+import type { TestimonialItem } from '../../../types/testimonial';
 
 export const STATIC_TESTIMONIALS: TestimonialItem[] = [
   {
