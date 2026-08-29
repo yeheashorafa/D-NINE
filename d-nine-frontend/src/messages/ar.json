@@ -29,7 +29,12 @@
     "pauseVideo": "إيقاف الفيديو",
     "conceptProject": "مشروع تجريبي",
     "readMore": "اقرأ المزيد",
-    "exploreMore": "استكشف المزيد"
+    "exploreMore": "استكشف المزيد",
+    "carousel": {
+      "prev": "الشريحة السابقة",
+      "next": "الشريحة التالية",
+      "pagination": "الانتقال إلى الشريحة"
+    }
   },
   "footer": {
     "allRightsReserved": "جميع الحقوق محفوظة © دي ناين — للإنتاج الإعلامي والتصميم",

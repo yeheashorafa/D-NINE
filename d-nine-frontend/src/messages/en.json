@@ -29,7 +29,12 @@
     "pauseVideo": "Pause Video",
     "conceptProject": "Concept Project",
     "readMore": "Read More",
-    "exploreMore": "Explore More"
+    "exploreMore": "Explore More",
+    "carousel": {
+      "prev": "Previous slide",
+      "next": "Next slide",
+      "pagination": "Go to slide"
+    }
   },
   "footer": {
     "allRightsReserved": "All Rights Reserved © D-NINE — Media Production & Design",
