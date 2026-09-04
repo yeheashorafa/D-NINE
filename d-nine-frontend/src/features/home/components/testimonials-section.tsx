@@ -8,11 +8,13 @@ import { Card } from '@/components/ui/card';
 import { TestimonialItem } from '@/types/testimonial';
 import { Star } from 'lucide-react';
 import Image from 'next/image';
+import { useReducedMotion } from 'motion/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, A11y, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, A11y, Autoplay, Keyboard } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/keyboard';
 
 interface TestimonialsSectionProps {
   data?: {
@@ -22,27 +24,28 @@ interface TestimonialsSectionProps {
     subtitle?: { ar?: string; en?: string };
     selectedTestimonials?: TestimonialItem[];
     maxItems?: number;
+    maxCount?: number;
   };
 }
 
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }) => {
+  const swiperRef = React.useRef<import('swiper').Swiper | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   const t = useTranslations('home.testimonials');
   const tCommon = useTranslations('common');
-  const locale = useLocale();
+  const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
 
   if (data?.enabled === false) return null;
   const allItems = data?.selectedTestimonials || [];
-  if (allItems.length === 0) return null;
-
-  const max = data?.maxItems || allItems.length;
+  const max = data?.maxCount || data?.maxItems || allItems.length;
   const items = allItems.slice(0, max);
   if (items.length === 0) return null;
 
   const isSingle = items.length === 1;
 
   return (
-    <section className="py-16 sm:py-24 relative bg-slate-50 dark:bg-slate-950/40 transition-colors duration-300 overflow-hidden">
+    <section id="testimonials" className="py-16 sm:py-24 relative bg-slate-50 dark:bg-slate-950/40 transition-colors duration-300 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <RevealSection className="text-center max-w-3xl mx-auto space-y-4 mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-magenta/10 text-brand-magenta text-xs sm:text-sm font-semibold">
@@ -59,9 +62,14 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
           )}
         </RevealSection>
 
-        <RevealSection>
+        <div
+          className="relative group"
+          onFocusCapture={() => swiperRef.current?.autoplay?.pause()}
+          onBlurCapture={() => swiperRef.current?.autoplay?.resume()}
+        >
           <Swiper
-            modules={[Navigation, Pagination, A11y, Autoplay]}
+            onSwiper={(s) => (swiperRef.current = s)}
+            modules={[Navigation, Pagination, A11y, Autoplay, Keyboard]}
             spaceBetween={24}
             slidesPerView={1}
             breakpoints={{
@@ -70,15 +78,17 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
             }}
             navigation={!isSingle}
             pagination={!isSingle ? { clickable: true } : false}
-            autoplay={!isSingle ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
+            autoplay={!isSingle && !prefersReducedMotion ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
+            speed={prefersReducedMotion ? 0 : 300}
             loop={!isSingle && items.length > 3}
+            keyboard={{ enabled: true, onlyInViewport: true }}
             dir={isArabic ? 'rtl' : 'ltr'}
             watchOverflow={true}
-            className="!pb-16"
+            className="!pb-16 motion-reduce:transition-none"
             a11y={{
               prevSlideMessage: tCommon('carousel.prev'),
               nextSlideMessage: tCommon('carousel.next'),
-              paginationBulletMessage: tCommon('carousel.pagination'),
+              paginationBulletMessage: tCommon('carousel.pagination') + ' {{index}}',
             }}
           >
             {items.map((item, idx) => (
@@ -102,7 +112,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
                   <div className="flex items-center gap-4">
                     {item.image && (
                       <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
-                        <Image src={item.image} alt={item.personName?.[isArabic ? 'ar' : 'en'] || ''} fill className="object-cover" sizes="48px" />
+                        <Image src={item.image} alt={item.imageAlt?.[isArabic ? 'ar' : 'en'] || item.personName?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'صورة العميل' : 'Client photo')} fill className="object-cover" sizes="48px" />
                       </div>
                     )}
                     <div>
@@ -118,7 +128,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
               </SwiperSlide>
             ))}
           </Swiper>
-        </RevealSection>
+        </div>
       </div>
     </section>
   );

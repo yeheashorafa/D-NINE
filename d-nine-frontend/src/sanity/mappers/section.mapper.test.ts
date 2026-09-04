@@ -38,20 +38,20 @@ describe('section.mapper', () => {
       expect(mapTestimonialsSection({ enabled: true })).toBeUndefined();
     });
 
-    it('should filter inactive/null items and respect manual ordering', () => {
+    it('should filter inactive/null items and preserve reference-array order (ignoring document order)', () => {
       const section: SanityTestimonialsSection = {
         enabled: true,
         selectedTestimonials: [
-          { ...mockTestimonial, order: 2 },
+          { ...mockTestimonial, _id: 't3', order: 99 },
           null as unknown as SanityTestimonialDoc, // Simulate missing reference
           { ...mockTestimonial, _id: 't2', active: false }, // Simulate inactive
-          { ...mockTestimonial, _id: 't3', order: 1 }
+          { ...mockTestimonial, _id: 't1', order: 1 }
         ]
       };
       const result = mapTestimonialsSection(section);
       expect(result?.selectedTestimonials).toHaveLength(2);
-      expect(result?.selectedTestimonials?.[0].id).toBe('t3'); // Order 1
-      expect(result?.selectedTestimonials?.[1].id).toBe('t1'); // Order 2
+      expect(result?.selectedTestimonials?.[0].id).toBe('t3'); // First valid item
+      expect(result?.selectedTestimonials?.[1].id).toBe('t1'); // Second valid item
     });
 
     it('should respect maxItems', () => {
@@ -88,20 +88,20 @@ describe('section.mapper', () => {
       expect(mapTeamSection({ enabled: true })).toBeUndefined();
     });
 
-    it('should filter invalid/inactive items and respect manual ordering', () => {
+    it('should filter invalid/inactive items and preserve reference-array order (ignoring document order)', () => {
       const section: SanityTeamSection = {
         enabled: true,
         selectedTeamMembers: [
-          { ...mockMember, order: 2 },
+          { ...mockMember, _id: 'm3', order: 99 },
           undefined as unknown as SanityTeamMemberDoc,
           { ...mockMember, _id: 'm2', active: false },
-          { ...mockMember, _id: 'm3', order: 1 }
+          { ...mockMember, _id: 'm1', order: 1 }
         ]
       };
       const result = mapTeamSection(section);
       expect(result?.selectedTeamMembers).toHaveLength(2);
-      expect(result?.selectedTeamMembers?.[0].id).toBe('m3'); // Order 1
-      expect(result?.selectedTeamMembers?.[1].id).toBe('m1'); // Order 2
+      expect(result?.selectedTeamMembers?.[0].id).toBe('m3'); // First valid item
+      expect(result?.selectedTeamMembers?.[1].id).toBe('m1'); // Second valid item
     });
 
     it('should respect maxItems', () => {

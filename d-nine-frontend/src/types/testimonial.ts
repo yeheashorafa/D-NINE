@@ -7,6 +7,7 @@ export interface TestimonialItem {
   company: SanityLocalizedString;
   quote: SanityLocalizedString;
   image?: string;
+  imageAlt?: SanityLocalizedString;
   rating?: number;
   featured?: boolean;
 }

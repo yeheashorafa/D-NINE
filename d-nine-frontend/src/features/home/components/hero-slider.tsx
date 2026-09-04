@@ -47,6 +47,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -76,14 +77,14 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
 
   // Auto-play timer
   React.useEffect(() => {
-    if (!isPlaying || prefersReducedMotion) return;
+    if (!isPlaying || prefersReducedMotion || isPaused) return;
     timerRef.current = setInterval(() => {
       handleNext();
     }, 6000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPlaying, prefersReducedMotion, handleNext]);
+  }, [isPlaying, prefersReducedMotion, isPaused, handleNext]);
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -145,6 +146,10 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
       className="relative w-full h-[100svh] overflow-hidden bg-[#0b031d] text-white select-none focus:outline-none"
       tabIndex={0}
       onKeyDown={handleKeyDown}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
       aria-roledescription="carousel"
       aria-label={isArabic ? 'معرض الأعمال والمشاريع البارزة' : 'Featured Work & Agency Showcase'}
     >
@@ -285,7 +290,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
         {/* Counter & Animated Progress Indicator */}
         <div className="flex items-center gap-4">
           <span className="text-xs sm:text-sm font-bold tracking-widest text-slate-300">
-            0{currentIndex + 1} / 0{slides.length}
+            {new Intl.NumberFormat(isArabic ? 'ar-EG' : 'en-US', { minimumIntegerDigits: 2 }).format(currentIndex + 1)} / {new Intl.NumberFormat(isArabic ? 'ar-EG' : 'en-US', { minimumIntegerDigits: 2 }).format(slides.length)}
           </span>
 
           <div className="flex items-center gap-2">

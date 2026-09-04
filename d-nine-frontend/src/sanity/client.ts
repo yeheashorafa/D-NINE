@@ -1,5 +1,5 @@
 import 'server-only';
-import { createClient, type QueryParams } from 'next-sanity';
+import { createClient, type QueryParams, type SanityClient } from 'next-sanity';
 import { apiVersion, dataset, projectId, studioUrl, readToken, contentSource } from './env';
 import { draftMode } from 'next/headers';
 
@@ -12,7 +12,7 @@ if (contentSource === 'sanity') {
 }
 
 // Published client: perspective "published", stega false
-export const client = createClient({
+export const client = (contentSource === 'sanity' ? createClient({
   projectId: projectId as string,
   dataset,
   apiVersion,
@@ -20,10 +20,10 @@ export const client = createClient({
   perspective: 'published',
   stega: false,
   token: readToken || undefined,
-});
+}) : { withConfig: () => ({}) }) as unknown as SanityClient;
 
 // Draft client: perspective "previewDrafts", token required, stega true
-export const previewClient = createClient({
+export const previewClient = (contentSource === 'sanity' ? createClient({
   projectId: projectId as string,
   dataset,
   apiVersion,
@@ -34,7 +34,7 @@ export const previewClient = createClient({
     enabled: true,
     studioUrl: studioUrl as string,
   },
-});
+}) : { withConfig: () => ({}) }) as unknown as SanityClient;
 
 export async function sanityFetch<T>({
   query,

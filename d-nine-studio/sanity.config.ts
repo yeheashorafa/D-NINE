@@ -8,7 +8,13 @@ import { locations, mainDocuments } from './src/presentation/resolve';
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'placeholder-id';
 const dataset = process.env.SANITY_STUDIO_DATASET || 'development';
-const previewUrl = process.env.SANITY_STUDIO_PREVIEW_URL || 'http://localhost:3000';
+const previewUrl = process.env.SANITY_STUDIO_PRESENTATION_URL || '';
+
+if (process.env.NODE_ENV === 'production' && !previewUrl) {
+  throw new Error('SANITY_STUDIO_PRESENTATION_URL must be set in production');
+}
+
+const fallbackPreviewUrl = previewUrl || 'http://localhost:3000';
 
 const singletonTypes = new Set([
   'homePage',
@@ -37,7 +43,7 @@ export default defineConfig({
         mainDocuments,
       },
       previewUrl: {
-        origin: previewUrl,
+        origin: fallbackPreviewUrl,
         previewMode: {
           enable: '/api/draft-mode/enable',
         },

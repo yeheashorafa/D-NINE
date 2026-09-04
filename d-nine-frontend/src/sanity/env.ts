@@ -23,9 +23,9 @@ const envVars = envSchema.parse({
   NODE_ENV: process.env.NODE_ENV,
 });
 
-if (envVars.CONTENT_SOURCE === 'sanity' || envVars.NODE_ENV === 'production') {
+if (envVars.CONTENT_SOURCE === 'sanity') {
   if (!envVars.NEXT_PUBLIC_SANITY_STUDIO_URL) {
-    throw new Error('NEXT_PUBLIC_SANITY_STUDIO_URL must be set when CONTENT_SOURCE=sanity or NODE_ENV=production');
+    throw new Error('NEXT_PUBLIC_SANITY_STUDIO_URL must be set when CONTENT_SOURCE=sanity');
   }
 }
 

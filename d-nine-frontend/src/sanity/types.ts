@@ -25,6 +25,7 @@ export interface SanityTestimonialDoc {
   company: SanityLocalizedString;
   quote: SanityLocalizedString;
   image?: string;
+  imageAlt?: SanityLocalizedString;
   rating?: number;
   featured?: boolean;
   active?: boolean;
@@ -40,6 +41,7 @@ export interface SanityTeamMemberDoc {
   role: SanityLocalizedString;
   bio?: SanityLocalizedPortableText;
   image?: string;
+  imageAlt?: SanityLocalizedString;
   socialLinks?: { platform: string; url: string }[];
   featured?: boolean;
   active?: boolean;

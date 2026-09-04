@@ -11,7 +11,6 @@ export async function getTeamMembers(): Promise<TeamMemberItem[]> {
     const data = await sanityFetch<SanityTeamMemberDoc[]>({
       query: activeTeamMembersQuery,
       tags: ['team-members'],
-      stega: false,
     });
     return (data || []).map(mapSanityTeamMember);
   }
@@ -26,6 +25,7 @@ export function mapSanityTeamMember(doc: SanityTeamMemberDoc): TeamMemberItem {
     role: doc.role || { ar: '', en: '' },
     bio: doc.bio,
     image: doc.image,
+    imageAlt: doc.imageAlt,
     socialLinks: doc.socialLinks || [],
     featured: doc.featured,
   };

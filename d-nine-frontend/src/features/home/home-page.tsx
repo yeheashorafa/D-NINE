@@ -13,13 +13,17 @@ import { getFeaturedProjects } from '@/services/content/projects.service';
 import { getServices } from '@/services/content/services.service';
 import { getCategories } from '@/services/content/categories.service';
 import { getHomePage } from '@/sanity/services/page.service';
+import { getTeamMembers } from '@/services/content/team.service';
+import { getTestimonials } from '@/services/content/testimonials.service';
 
 export async function HomePage() {
-  const [featuredProjects, services, categories, homeData] = await Promise.all([
+  const [featuredProjects, services, categories, homeData, allTeamMembers, allTestimonials] = await Promise.all([
     getFeaturedProjects(),
     getServices(),
     getCategories(),
     getHomePage(),
+    getTeamMembers(),
+    getTestimonials(),
   ]);
 
   // If homeData exists, filter featured projects and services based on selected slugs
@@ -55,10 +59,24 @@ export async function HomePage() {
       <ProcessSection data={homeData?.processTimeline} />
 
       {/* 5.5 Team Preview */}
-      <TeamSection data={homeData?.teamSection} />
+      <TeamSection data={{
+        ...homeData?.teamSection,
+        enabled: homeData?.teamSection?.enabled !== false,
+        selectedTeamMembers: homeData?.teamSection?.selectedTeamMembers?.length
+          ? homeData.teamSection.selectedTeamMembers
+          : allTeamMembers,
+        ctaLabel: homeData?.teamSection?.ctaLabel || { en: 'Meet the Team', ar: 'تعرف على الفريق' },
+        ctaPath: homeData?.teamSection?.ctaPath || '/about',
+      }} />
 
       {/* 6. Testimonials */}
-      <TestimonialsSection data={homeData?.testimonialsSection} />
+      <TestimonialsSection data={{
+        ...homeData?.testimonialsSection,
+        enabled: homeData?.testimonialsSection?.enabled !== false,
+        selectedTestimonials: homeData?.testimonialsSection?.selectedTestimonials?.length
+          ? homeData.testimonialsSection.selectedTestimonials
+          : allTestimonials,
+      }} />
 
       {/* 7. FAQs */}
       <FaqsSection data={homeData?.faqs} />

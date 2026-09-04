@@ -11,6 +11,9 @@ export const STATIC_TEAM_MEMBERS: TeamMemberItem[] = [
       en: [{ _type: 'block', children: [{ _type: 'span', text: 'Over 10 years of experience leading creative teams.' }] }],
     } as unknown as SanityLocalizedPortableText,
     featured: true,
+    socialLinks: [
+      { platform: 'LinkedIn', url: 'https://linkedin.com/' }
+    ]
   },
   {
     id: 'tm2',
@@ -21,6 +24,9 @@ export const STATIC_TEAM_MEMBERS: TeamMemberItem[] = [
       en: [{ _type: 'block', children: [{ _type: 'span', text: 'Expert in project management and on-time delivery.' }] }],
     } as unknown as SanityLocalizedPortableText,
     featured: true,
+    socialLinks: [
+      { platform: 'Twitter', url: 'https://twitter.com/' }
+    ]
   },
     {
     id: 'tm3',

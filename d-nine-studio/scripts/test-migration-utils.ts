@@ -1,32 +1,84 @@
-import { test } from 'node:test';
+import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveDeterministicId } from './utils/migration-utils.js';
+import { resolveDeterministicId, buildGranularSetIfMissing } from './utils/migration-utils.js';
 
-test('resolveDeterministicId - Explicit ID is preserved', () => {
-  const result = resolveDeterministicId('team', 'existing-id', 'John Doe');
-  assert.equal(result, 'existing-id');
-});
+describe('migration-utils', () => {
+  describe('resolveDeterministicId', () => {
+    test('preserves explicit IDs', () => {
+      const id = resolveDeterministicId('service', 'explicit-id-123', 'English Label');
+      assert.strictEqual(id, 'explicit-id-123');
+    });
 
-test('resolveDeterministicId - English label creates a deterministic normalized ID', () => {
-  const result = resolveDeterministicId('team', undefined, 'Jane Doe');
-  assert.equal(result, 'team-jane-doe');
-});
+    test('generates deterministic IDs from English labels', () => {
+      const id = resolveDeterministicId('service', undefined, '  Graphic Design!  ');
+      assert.strictEqual(id, 'service-graphic-design');
+    });
 
-test('resolveDeterministicId - Spaces and special characters are normalized', () => {
-  const result = resolveDeterministicId('team', undefined, 'Dr. John O\'Connor Jr. - CEO');
-  assert.equal(result, 'team-dr-john-o-connor-jr-ceo');
-});
+    test('throws for invalid/empty inputs', () => {
+      assert.throws(() => resolveDeterministicId('service', undefined, undefined), /explicit ID and English label are missing/);
+      assert.throws(() => resolveDeterministicId('service', '   ', '   '), /explicit ID and English label are missing/);
+      assert.throws(() => resolveDeterministicId('service', undefined, '!!!'), /explicit ID and English label are missing/);
+    });
+  });
 
-test('resolveDeterministicId - Missing ID and missing English label throws', () => {
-  assert.throws(
-    () => resolveDeterministicId('team', undefined, undefined),
-    { message: /Cannot create team document ID: explicit ID and English label are missing./ }
-  );
-});
+  describe('buildGranularSetIfMissing', () => {
+    test('builds set for nested missing values', () => {
+      const source = {
+        seo: { metaTitle: { ar: 'SEO Title' } },
+        title: 'New Title'
+      };
+      const existing = {
+        seo: {}
+      } as Record<string, unknown>;
 
-test('resolveDeterministicId - Whitespace-only values throw', () => {
-  assert.throws(
-    () => resolveDeterministicId('team', '   ', '   '),
-    { message: /Cannot create team document ID: explicit ID and English label are missing./ }
-  );
+      const setOps = buildGranularSetIfMissing(source, existing);
+
+      assert.deepStrictEqual(setOps, {
+        'seo.metaTitle': { ar: 'SEO Title' },
+        'title': 'New Title'
+      });
+    });
+
+    test('preserves existing nested values', () => {
+      const source = {
+        seo: { metaTitle: { ar: 'SEO Title' } }
+      };
+      const existing = {
+        seo: { metaTitle: { ar: 'Existing Arabic' } }
+      } as Record<string, unknown>;
+
+      const setOps = buildGranularSetIfMissing(source, existing);
+      assert.deepStrictEqual(setOps, {});
+    });
+
+    test('handles arrays and Sanity _key behavior', () => {
+      const source = {
+        blocks: [{ _key: '1', text: 'hello' }],
+        _type: 'should-ignore',
+        _id: 'should-ignore',
+        _key: 'should-ignore',
+        validData: 'ok'
+      };
+      const existing = {
+        blocks: []
+      } as Record<string, unknown>;
+
+      const setOps = buildGranularSetIfMissing(source, existing);
+      assert.deepStrictEqual(setOps, {
+        validData: 'ok'
+      });
+    });
+
+    test('does not mutate input objects', () => {
+      const source = { seo: { title: 'A' } };
+      const existing = { seo: {} } as Record<string, unknown>;
+      const sourceClone = JSON.parse(JSON.stringify(source));
+      const existingClone = JSON.parse(JSON.stringify(existing));
+
+      buildGranularSetIfMissing(source, existing);
+
+      assert.deepStrictEqual(source, sourceClone);
+      assert.deepStrictEqual(existing, existingClone);
+    });
+  });
 });

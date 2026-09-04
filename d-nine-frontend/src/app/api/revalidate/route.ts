@@ -139,8 +139,9 @@ export async function POST(req: NextRequest) {
       now: Date.now(),
     });
   } catch (err: unknown) {
+    console.error('Webhook error:', err);
     return NextResponse.json(
-      { message: (err as Error).message || 'Error revalidating tags' },
+      { message: 'Internal server error processing webhook' },
       { status: 500 }
     );
   }

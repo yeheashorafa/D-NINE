@@ -7,6 +7,7 @@ export interface TeamMemberItem {
   role: SanityLocalizedString;
   bio?: SanityLocalizedPortableText;
   image?: string;
+  imageAlt?: SanityLocalizedString;
   socialLinks?: { platform: string; url: string }[];
   featured?: boolean;
 }

@@ -19,6 +19,8 @@ node_modules/
 .env.*
 **/.env
 **/.env.*
+**/.env.local
+**/.env.*.local
 
 # Keep environment templates
 !.env.example
@@ -49,6 +51,7 @@ next-env.d.ts
 coverage/
 test-results/
 playwright-report/
+playwright/.cache/
 
 # Local databases
 *.sqlite

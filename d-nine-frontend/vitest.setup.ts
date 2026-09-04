@@ -27,7 +27,10 @@ vi.mock('swiper/modules', () => ({
   Pagination: {},
   A11y: {},
   Autoplay: {},
+  Keyboard: {},
 }));
+
+vi.mock('server-only', () => ({}));
 
 vi.mock('next/navigation', () => ({
   useRouter() { return { push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }; },

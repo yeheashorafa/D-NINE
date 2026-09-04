@@ -11,11 +11,7 @@ import { PROCESS_TIMELINE_STEPS } from './data/agency.data.js';
 import { STATIC_TEAM_MEMBERS } from '../../d-nine-frontend/src/features/home/data/team.data.js';
 import { STATIC_TESTIMONIALS } from '../../d-nine-frontend/src/features/home/data/testimonials.data.js';
 import { AssetRegistry } from './upload-assets.js';
-import {
-  validateBilingualField,
-  convertBlogSectionsToPortableText,
-} from './migration-utils.js';
-import { resolveDeterministicId } from './utils/migration-utils.js';
+import { buildGranularSetIfMissing, resolveDeterministicId, convertTextToPortableText, convertBlogSectionsToPortableText, validateBilingualField } from './utils/migration-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

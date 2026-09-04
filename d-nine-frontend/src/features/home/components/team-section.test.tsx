@@ -87,4 +87,32 @@ describe('TeamSection', () => {
     // Swiper dir should be rtl
     expect(screen.getByTestId('swiper-mock')).toHaveAttribute('dir', 'rtl');
   });
+
+  it('renders all supported social link types correctly', () => {
+    const membersWithSocials = [
+      {
+        id: '1',
+        name: { ar: 'أحمد', en: 'Ahmed' },
+        role: { ar: 'مطور', en: 'Developer' },
+        bio: undefined,
+        image: undefined,
+        socialLinks: [
+          { platform: 'Twitter', url: 'https://twitter.com' },
+          { platform: 'LinkedIn', url: 'https://linkedin.com' },
+          { platform: 'GitHub', url: 'https://github.com' },
+          { platform: 'Instagram', url: 'https://instagram.com' },
+          { platform: 'Website', url: 'https://example.com' },
+        ]
+      }
+    ];
+
+    renderWithIntl(<TeamSection data={{ selectedTeamMembers: membersWithSocials, title: { ar: 'الفريق', en: 'Team' }, subtitle: { ar: 'فرعي', en: 'Sub' } }} />);
+
+    // Test that aria-labels indicate the target platforms
+    expect(screen.getByLabelText('Social link to Twitter')).toBeInTheDocument();
+    expect(screen.getByLabelText('Social link to LinkedIn')).toBeInTheDocument();
+    expect(screen.getByLabelText('Social link to GitHub')).toBeInTheDocument();
+    expect(screen.getByLabelText('Social link to Instagram')).toBeInTheDocument();
+    expect(screen.getByLabelText('Social link to Website')).toBeInTheDocument();
+  });
 });

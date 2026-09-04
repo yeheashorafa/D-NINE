@@ -2,7 +2,10 @@ import { createClient } from '@sanity/client';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
-import type { SanityDocumentStub } from '@sanity/client';
+import type {
+  SanityClient,
+  SanityDocumentStub,
+} from '@sanity/client';
 import { AssetRegistry } from './upload-assets.js';
 import { buildGranularSetIfMissing, resolveDeterministicId } from './utils/migration-utils.js';
 import { STATIC_TEAM_MEMBERS } from '../../d-nine-frontend/src/features/home/data/team.data.js';
@@ -25,19 +28,8 @@ if (!projectId || !token) {
 }
 
 const args = process.argv.slice(2);
-const validArgs = ['--dry-run', '--execute'];
-const unknownArgs = args.filter(a => !validArgs.includes(a));
-if (unknownArgs.length > 0) {
-  console.error('Error: Unknown arguments: ' + unknownArgs.join(', '));
-  process.exit(1);
-}
 const isDryRun = process.argv.includes('--dry-run');
 const isExecute = process.argv.includes('--execute');
-
-if ((isDryRun && isExecute) || (!isDryRun && !isExecute)) {
-  console.error('Error: Exactly one of --dry-run or --execute must be specified.');
-  process.exit(1);
-}
 
 const client = createClient({
   projectId,
@@ -48,7 +40,7 @@ const client = createClient({
 });
 
 // Helper to omit undefined values
-function clean(obj: any): any {
+function clean(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj.map(clean).filter((v) => v !== undefined);
   }
@@ -62,8 +54,23 @@ function clean(obj: any): any {
   return obj;
 }
 
-async function main() {
-  console.log(`Starting migration to seed CMS with required singletons... [Mode: ${isDryRun ? 'DRY RUN' : 'EXECUTE'}]`);
+function cleanRecord(obj: Record<string, unknown>): Record<string, unknown> {
+  const result = clean(obj);
+  if (result !== null && typeof result === 'object' && !Array.isArray(result)) {
+    return result as Record<string, unknown>;
+  }
+  return {};
+}
+
+export async function runMigration(
+  clientOverride?: SanityClient,
+  isDryRunOverride?: boolean
+) {
+  const activeClient: SanityClient = clientOverride ?? client;
+  const dryRun = isDryRunOverride !== undefined ? isDryRunOverride : isDryRun;
+  const isExecuteMode = isDryRunOverride !== undefined ? !isDryRunOverride : isExecute;
+
+  console.log(`Starting migration to seed CMS with required singletons... [Mode: ${dryRun ? 'DRY RUN' : 'EXECUTE'}]`);
 
   const assetRegistry = new AssetRegistry(FRONTEND_PUBLIC_DIR);
   assetRegistry.registerFile('/slider/slide-01.jpg');
@@ -79,10 +86,10 @@ async function main() {
     );
   }
 
-  if (!isDryRun) {
+  if (!dryRun) {
     console.log('🔄 Syncing missing assets...');
 
-    const syncResult = await assetRegistry.syncWithSanity(client);
+    const syncResult = await assetRegistry.syncWithSanity(activeClient);
 
     if (syncResult.errors.length > 0) {
       throw new Error(
@@ -95,7 +102,7 @@ async function main() {
     relPath: string,
     alt: { ar: string; en: string }
   ) => {
-    if (isDryRun) {
+    if (dryRun) {
       return {
         _type: 'image',
         asset: {
@@ -170,14 +177,38 @@ async function main() {
     },
   ];
 
-  const teamRefs = STATIC_TEAM_MEMBERS.map(m => {
+  const teamDocs = STATIC_TEAM_MEMBERS.map(m => {
     const docId = resolveDeterministicId('team', m.id, m.name.en);
-    return { _key: `team_${docId}`, _type: 'reference', _ref: docId };
+    return {
+      _id: docId,
+      _type: 'teamMember',
+      name: m.name,
+      role: m.role,
+      bio: m.bio,
+      featured: m.featured,
+    };
   });
 
-  const testimonialRefs = STATIC_TESTIMONIALS.map(t => {
+  const teamRefs = teamDocs.map(doc => {
+    return { _key: `team_${doc._id}`, _type: 'reference', _ref: doc._id };
+  });
+
+  const testimonialDocs = STATIC_TESTIMONIALS.map(t => {
     const docId = resolveDeterministicId('testimonial', t.id, t.personName.en);
-    return { _key: `test_${docId}`, _type: 'reference', _ref: docId };
+    return {
+      _id: docId,
+      _type: 'testimonial',
+      personName: t.personName,
+      role: t.role,
+      company: t.company,
+      quote: t.quote,
+      rating: t.rating,
+      featured: t.featured,
+    };
+  });
+
+  const testimonialRefs = testimonialDocs.map(doc => {
+    return { _key: `test_${doc._id}`, _type: 'reference', _ref: doc._id };
   });
 
   const singletons: Record<string, SanityDocumentStub> = {
@@ -332,50 +363,65 @@ async function main() {
     }
   };
 
+  for (const doc of teamDocs) {
+    singletons[doc._id] = doc as SanityDocumentStub;
+  }
+  for (const doc of testimonialDocs) {
+    singletons[doc._id] = doc as SanityDocumentStub;
+  }
+
   const ids = Object.keys(singletons);
 
   // Fetch full documents to compare fields
-  const existingDocs = await client.fetch(`*[_id in $ids]`, { ids });
-  const existingDocsMap = new Map<string, any>(existingDocs.map((doc: any) => [doc._id, doc]));
+  const existingDocs = await activeClient.fetch<SanityDocumentStub[]>(
+    `*[_id in $ids]`,
+    { ids },
+  );
+  const existingDocsMap = new Map<string, SanityDocumentStub>(existingDocs.map((doc: SanityDocumentStub) => [doc._id || '', doc]));
 
   // Helper imported from ./utils/migration-utils.js
 
-  if (isDryRun) {
+  if (dryRun) {
     console.log('DRY RUN: Planning mutations...');
+    const plannedOps = [];
     for (const [id, doc] of Object.entries(singletons)) {
-      const cleanedDoc = clean(doc);
+      const cleanedDoc = cleanRecord(doc as Record<string, unknown>);
       if (!existingDocsMap.has(id)) {
         console.log(`- Would CREATE document: ${id}`);
+        plannedOps.push({ type: 'createIfNotExists', document: { _id: id, _type: doc._type, ...cleanedDoc } as unknown as SanityDocumentStub & { _id: string } });
       } else {
         const existing = existingDocsMap.get(id);
         const granularPaths = buildGranularSetIfMissing(cleanedDoc, existing);
         if (Object.keys(granularPaths).length > 0) {
           console.log(`- Would PATCH document: ${id} with setIfMissing:`, Object.keys(granularPaths));
+          plannedOps.push({ type: 'patch', id, setIfMissing: granularPaths });
         } else {
           console.log(`- No changes needed for document: ${id}`);
         }
       }
     }
     console.log('DRY RUN complete. Zero mutations performed.');
-    return;
+    return plannedOps;
   }
 
   // Execute Mode
-  let transaction = client.transaction();
+  let transaction = activeClient.transaction();
   let hasMutations = false;
 
   for (const [id, doc] of Object.entries(singletons)) {
-    const cleanedDoc = clean(doc);
+    const cleanedDoc = cleanRecord(doc as Record<string, unknown>);
     if (!existingDocsMap.has(id)) {
       console.log(`Adding CREATE to transaction for: ${id}`);
-      transaction = transaction.createIfNotExists({ _id: id, ...cleanedDoc });
+      transaction = transaction.createIfNotExists({ _id: id, _type: doc._type, ...cleanedDoc } as unknown as SanityDocumentStub & { _id: string });
       hasMutations = true;
     } else {
       const existing = existingDocsMap.get(id);
       const granularPaths = buildGranularSetIfMissing(cleanedDoc, existing);
       if (Object.keys(granularPaths).length > 0) {
         console.log(`Adding PATCH to transaction for: ${id}`, Object.keys(granularPaths));
-        transaction = transaction.patch(id, (p) => p.setIfMissing(granularPaths));
+        transaction = transaction.patch(id, (patch) =>
+          patch.setIfMissing(granularPaths)
+        );
         hasMutations = true;
       }
     }
@@ -383,7 +429,7 @@ async function main() {
 
   if (!hasMutations) {
     console.log('No mutations needed. All documents are up to date.');
-    return;
+    return [];
   }
 
   try {
@@ -391,11 +437,23 @@ async function main() {
     console.log('All patches committed successfully.');
   } catch (error) {
     console.error('Mutation transaction failed:', error);
-    process.exit(1);
+    throw error;
   }
 }
 
-main().catch((err) => {
-  console.error('Unhandled script error:', err);
-  process.exit(1);
-});
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const validArgs = ['--dry-run', '--execute'];
+  const unknownArgs = args.filter(a => !validArgs.includes(a));
+  if (unknownArgs.length > 0) {
+    console.error('Error: Unknown arguments: ' + unknownArgs.join(', '));
+    process.exit(1);
+  }
+  if ((isDryRun && isExecute) || (!isDryRun && !isExecute)) {
+    console.error('Error: Exactly one of --dry-run or --execute must be specified.');
+    process.exit(1);
+  }
+  runMigration().catch((err) => {
+    console.error('Unhandled script error:', err);
+    process.exit(1);
+  });
+}
