@@ -7,6 +7,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_SANITY_DATASET: z.string().default('development'),
   NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().optional(),
   NEXT_PUBLIC_SANITY_STUDIO_URL: z.string().optional(),
+  NEXT_PUBLIC_SITE_URL: z.string().optional(),
   SANITY_API_READ_TOKEN: z.string().optional(),
   SANITY_REVALIDATE_SECRET: z.string().optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -18,14 +19,15 @@ const envVars = envSchema.parse({
   NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
   NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   NEXT_PUBLIC_SANITY_STUDIO_URL: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   SANITY_API_READ_TOKEN: process.env.SANITY_API_READ_TOKEN,
   SANITY_REVALIDATE_SECRET: process.env.SANITY_REVALIDATE_SECRET,
   NODE_ENV: process.env.NODE_ENV,
 });
 
 if (envVars.CONTENT_SOURCE === 'sanity') {
-  if (!envVars.NEXT_PUBLIC_SANITY_STUDIO_URL) {
-    throw new Error('NEXT_PUBLIC_SANITY_STUDIO_URL must be set when CONTENT_SOURCE=sanity');
+  if (envVars.NODE_ENV === 'production' && !envVars.NEXT_PUBLIC_SITE_URL && !envVars.NEXT_PUBLIC_SANITY_STUDIO_URL) {
+    throw new Error('NEXT_PUBLIC_SITE_URL or NEXT_PUBLIC_SANITY_STUDIO_URL must be set when CONTENT_SOURCE=sanity in production');
   }
 }
 
@@ -36,7 +38,10 @@ if (envVars.NODE_ENV === 'production' && !process.env.CONTENT_SOURCE) {
 export const apiVersion = envVars.NEXT_PUBLIC_SANITY_API_VERSION;
 export const dataset = envVars.NEXT_PUBLIC_SANITY_DATASET;
 export const projectId = envVars.NEXT_PUBLIC_SANITY_PROJECT_ID || '';
-export const studioUrl = envVars.NEXT_PUBLIC_SANITY_STUDIO_URL || 'http://localhost:3333';
+
+const defaultSiteUrl = envVars.NEXT_PUBLIC_SITE_URL ? envVars.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '') : 'http://localhost:3000';
+export const studioUrl = envVars.NEXT_PUBLIC_SANITY_STUDIO_URL || `${defaultSiteUrl}/dashboard`;
+
 export const readToken = envVars.SANITY_API_READ_TOKEN || '';
 export const revalidateSecret = envVars.SANITY_REVALIDATE_SECRET || '';
 export const contentSource = envVars.CONTENT_SOURCE;

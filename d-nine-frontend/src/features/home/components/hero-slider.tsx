@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 import { Link } from '@/i18n/navigation';
 
 /**
@@ -256,25 +257,13 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
       <div className="absolute bottom-6 sm:bottom-10 left-0 right-0 z-30 flex items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Navigation Arrow Controls */}
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={isArabic ? handleNext : handlePrev}
-            disabled={isAnimating}
-            className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan disabled:opacity-50"
-            aria-label={isArabic ? 'الشريحة السابقة' : 'Previous slide'}
-          >
-            {isArabic ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-          </button>
-
-          <button
-            type="button"
-            onClick={isArabic ? handlePrev : handleNext}
-            disabled={isAnimating}
-            className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan disabled:opacity-50"
-            aria-label={isArabic ? 'الشريحة التالية' : 'Next slide'}
-          >
-            {isArabic ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-          </button>
+          <CarouselNavigation 
+            variant="hero" 
+            onPrev={handlePrev} 
+            onNext={handleNext} 
+            prevDisabled={isAnimating} 
+            nextDisabled={isAnimating} 
+          />
 
           {/* Autoplay Pause / Resume Toggle */}
           <button

@@ -21,6 +21,7 @@
     "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {
+    "@d-nine/sanity-config": "*",
     "@sanity/icons": "^3.7.0",
     "@sanity/vision": "^4.22.0",
     "react": "^19.0.0",

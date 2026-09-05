@@ -20,6 +20,16 @@ vi.mock('swiper/react', () => ({
   SwiperSlide: (props: { className?: string; children?: React.ReactNode }) => {
     return React.createElement('div', { 'data-testid': 'swiper-slide-mock', className: props.className }, props.children);
   },
+  useSwiper: () => ({
+    isBeginning: true,
+    isEnd: false,
+    isLocked: false,
+    params: { loop: false },
+    slideNext: vi.fn(),
+    slidePrev: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
+  }),
 }));
 
 vi.mock('swiper/modules', () => ({

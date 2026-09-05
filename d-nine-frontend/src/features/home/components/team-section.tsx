@@ -9,6 +9,7 @@ import { TeamMemberItem } from '@/types/team';
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { CustomPortableText } from '@/sanity/components/portable-text';
+import { SwiperCarouselNavigation } from '@/components/ui/carousel-navigation';
 import { useReducedMotion } from 'motion/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y, Autoplay, Keyboard } from 'swiper/modules';
@@ -93,7 +94,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ data }) => {
                 1024: { slidesPerView: 3 },
                 1280: { slidesPerView: Math.min(items.length, 4) }
               }}
-              navigation={!isSingle}
+              navigation={false}
               pagination={!isSingle ? { clickable: true } : false}
               autoplay={!isSingle && !prefersReducedMotion ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
               speed={prefersReducedMotion ? 0 : 300}
@@ -152,6 +153,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ data }) => {
                   </Card>
                 </SwiperSlide>
               ))}
+              <SwiperCarouselNavigation hidden={isSingle} className="absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between z-10 pointer-events-none px-2 sm:px-4 md:-mx-4 lg:-mx-6 w-[calc(100%+16px)] sm:w-[calc(100%+32px)] md:w-[calc(100%+32px)] lg:w-[calc(100%+48px)] -ml-2 sm:-ml-4 md:ml-0 lg:ml-0" />
             </Swiper>
           </div>
         </RevealSection>
