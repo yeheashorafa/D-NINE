@@ -4,7 +4,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
-import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 import { Link } from '@/i18n/navigation';
 

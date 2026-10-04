@@ -20,10 +20,6 @@ if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
   console.warn('Warning: NEXT_PUBLIC_SANITY_PROJECT_ID is not set in environment variables.');
 }
 
-const previewUrl = process.env.NODE_ENV === 'production' 
-  ? siteUrl.replace(/\/$/, '') + '/dashboard' 
-  : 'http://localhost:3000/dashboard';
-
 export default defineConfig({
   basePath: '/dashboard',
   name: 'default',
@@ -31,6 +27,7 @@ export default defineConfig({
 
   projectId,
   dataset,
+  apiVersion,
 
   plugins: [
     structureTool({ structure }),
