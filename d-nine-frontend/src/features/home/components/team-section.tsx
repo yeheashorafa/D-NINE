@@ -12,10 +12,9 @@ import { CustomPortableText } from '@/sanity/components/portable-text';
 import { SwiperCarouselNavigation } from '@/components/ui/carousel-navigation';
 import { useReducedMotion } from 'motion/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, A11y, Autoplay, Keyboard } from 'swiper/modules';
+import { Pagination, A11y, Autoplay, Keyboard } from 'swiper/modules';
 import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaBehance, FaDribbble } from 'react-icons/fa';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/keyboard';
 
@@ -85,7 +84,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ data }) => {
           >
             <Swiper
               onSwiper={(s) => (swiperRef.current = s)}
-              modules={[Navigation, Pagination, A11y, Autoplay, Keyboard]}
+              modules={[Pagination, A11y, Autoplay, Keyboard]}
               spaceBetween={24}
               slidesPerView={1}
               watchSlidesProgress={true}

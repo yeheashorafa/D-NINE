@@ -16,7 +16,7 @@
     "build:frontend": "npm run build --workspace=d-nine-frontend",
     "build:backend": "npm run build --workspace=d-nine-backend",
     "build:studio": "npm run build --workspace=d-nine-studio",
-    "build:hostinger": "npm run build --workspace=@d-nine/contracts && npm run build --workspace=d-nine-frontend",
+    "build:hostinger": "npm run build --workspace=@d-nine/contracts && npm run build:hostinger --workspace=d-nine-frontend",
     "start:hostinger": "npm run start --workspace=d-nine-frontend",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",

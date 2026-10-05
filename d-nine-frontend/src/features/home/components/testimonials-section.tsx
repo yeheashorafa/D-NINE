@@ -11,9 +11,8 @@ import Image from 'next/image';
 import { SwiperCarouselNavigation } from '@/components/ui/carousel-navigation';
 import { useReducedMotion } from 'motion/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, A11y, Autoplay, Keyboard } from 'swiper/modules';
+import { Pagination, A11y, Autoplay, Keyboard } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/keyboard';
 
@@ -70,7 +69,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
         >
           <Swiper
             onSwiper={(s) => (swiperRef.current = s)}
-            modules={[Navigation, Pagination, A11y, Autoplay, Keyboard]}
+            modules={[Pagination, A11y, Autoplay, Keyboard]}
             spaceBetween={24}
             slidesPerView={1}
             breakpoints={{

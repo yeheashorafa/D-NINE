@@ -14,7 +14,7 @@ const webhookPayloadSchema = z.object({
     .nullable(),
 });
 
-export const ALLOWED_DOCUMENT_TYPES: Record<string, string[]> = {
+const ALLOWED_DOCUMENT_TYPES: Record<string, string[]> = {
   contentCategory: ['categories'],
   service: ['services'],
   serviceOffering: ['service-offerings', 'services'],
