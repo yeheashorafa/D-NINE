@@ -78,8 +78,27 @@ function copyDirectoryRecursively(source, destination) {
   }
 }
 
+const BOOTSTRAP_SERVER_JS = `'use strict';
+
+const path = require('node:path');
+const fs = require('node:fs');
+
+const nestedAppDir = path.resolve(__dirname, 'd-nine-frontend');
+const nestedServerJs = path.join(nestedAppDir, 'server.js');
+
+if (!fs.existsSync(nestedServerJs)) {
+  console.error(
+    '[Hostinger Bootstrap Error] Missing nested server.js at: ' + nestedServerJs
+  );
+  process.exit(1);
+}
+
+process.chdir(nestedAppDir);
+require(nestedServerJs);
+`;
+
 try {
-  // 1. Prepare standalone runtime assets in frontend standalone output
+  // 1. Ensure assets exist inside native nested app directory
   if (fs.existsSync(frontendPublicDir)) {
     const targetPublic = path.join(frontendStandaloneAppDir, 'public');
     copyDirectoryRecursively(frontendPublicDir, targetPublic);
@@ -90,14 +109,18 @@ try {
     copyDirectoryRecursively(frontendStaticDir, targetStatic);
   }
 
-  // 2. Prepare root .next directory
+  // 2. Create small root standalone bootstrap entry at .next/standalone/server.js
+  const frontendStandaloneBootstrapJs = path.join(frontendStandaloneDir, 'server.js');
+  fs.writeFileSync(frontendStandaloneBootstrapJs, BOOTSTRAP_SERVER_JS, 'utf8');
+
+  // 3. Copy completed frontend .next directory to monorepo root .next
   if (fs.existsSync(rootNextDir)) {
     fs.rmSync(rootNextDir, { recursive: true, force: true });
   }
 
   copyDirectoryRecursively(frontendNextDir, rootNextDir);
 
-  // 3. Verify root output
+  // 4. Verify root output
   if (!fs.existsSync(rootBuildIdFile)) {
     console.error(
       `Error: Root build verification failed. ${rootBuildIdFile} does not exist after copying.`
@@ -112,19 +135,32 @@ try {
     process.exit(1);
   }
 
-  const rootServerJs = findStandaloneServerJs(rootStandaloneDir);
-  if (!rootServerJs) {
-    console.error('Error: Could not locate server.js in root .next/standalone after copying.');
+  const rootNestedServerJs = path.join(rootStandaloneDir, 'd-nine-frontend', 'server.js');
+  const rootBootstrapServerJs = path.join(rootStandaloneDir, 'server.js');
+
+  if (!fs.existsSync(rootNestedServerJs)) {
+    console.error(
+      `Error: Root nested server.js verification failed. Missing at ${rootNestedServerJs}.`
+    );
     process.exit(1);
   }
 
-  const relativeServerJs = path.relative(monorepoRoot, rootServerJs).replace(/\\/g, '/');
+  if (!fs.existsSync(rootBootstrapServerJs)) {
+    console.error(
+      `Error: Root bootstrap server.js verification failed. Missing at ${rootBootstrapServerJs}.`
+    );
+    process.exit(1);
+  }
+
+  const relativeNestedServerJs = path.relative(monorepoRoot, rootNestedServerJs).replace(/\\/g, '/');
+  const relativeBootstrapServerJs = path.relative(monorepoRoot, rootBootstrapServerJs).replace(/\\/g, '/');
 
   console.log(`- BUILD_ID found: ${path.relative(monorepoRoot, rootBuildIdFile).replace(/\\/g, '/')}`);
   console.log(`- standalone directory found: ${path.relative(monorepoRoot, rootStandaloneDir).replace(/\\/g, '/')}`);
-  console.log(`- exact relative path of generated server.js: ${relativeServerJs}`);
-  console.log('- public assets prepared');
-  console.log('- static assets prepared');
+  console.log(`- exact relative path of native server.js: ${relativeNestedServerJs}`);
+  console.log(`- exact relative path of bootstrap server.js: ${relativeBootstrapServerJs}`);
+  console.log('- public assets prepared in nested standalone app');
+  console.log('- static assets prepared in nested standalone app');
   console.log('- root .next copy prepared');
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
