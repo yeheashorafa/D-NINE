@@ -18,12 +18,14 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run build && npm run start',
+    command: 'npm run build && npm run start -- -H 127.0.0.1 -p 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: false,
     timeout: 120 * 1000,
     env: {
-      CONTENT_SOURCE: 'static'
+      CONTENT_SOURCE: 'static',
+      HOSTNAME: '127.0.0.1',
+      PORT: '3000'
     }
   },
 });

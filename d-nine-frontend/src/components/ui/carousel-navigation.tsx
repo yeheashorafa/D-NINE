@@ -73,6 +73,7 @@ export const CarouselNavigation: React.FC<CarouselNavigationProps> = ({
         disabled={prevDisabled}
         aria-label={defaultPrevLabel}
         className={cn(
+          "swiper-button-prev",
           buttonBaseClass,
           variant === 'hero' ? heroVariantClass : defaultVariantClass,
           prevDisabled && disabledClass
@@ -87,6 +88,7 @@ export const CarouselNavigation: React.FC<CarouselNavigationProps> = ({
         disabled={nextDisabled}
         aria-label={defaultNextLabel}
         className={cn(
+          "swiper-button-next",
           buttonBaseClass,
           variant === 'hero' ? heroVariantClass : defaultVariantClass,
           nextDisabled && disabledClass

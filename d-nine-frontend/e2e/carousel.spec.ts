@@ -29,9 +29,11 @@ test.describe('Carousels', () => {
   });
 
   test('RTL/LTR works correctly across viewports', async ({ page }) => {
-    // Desktop AR
+    // Desktop AR (RTL)
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto('/ar');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+
     let teamSwiper = page.locator('#team .swiper').first();
     await teamSwiper.scrollIntoViewIfNeeded();
     await expect(teamSwiper).toHaveClass(/swiper-initialized/);
@@ -45,14 +47,30 @@ test.describe('Carousels', () => {
     let activeSlides = teamSwiper.locator('.swiper-slide-visible');
     expect(await activeSlides.count()).toBeGreaterThanOrEqual(3);
 
-    // Navigation usable
+    // Navigation usable and semantically advances slide
     const nextButton = page.locator('#team .swiper-button-next').first();
+    const prevButton = page.locator('#team .swiper-button-prev').first();
     await expect(nextButton).toBeVisible();
     await expect(nextButton).toBeEnabled();
+    await expect(prevButton).toBeVisible();
+    await expect(prevButton).toBeEnabled();
 
-    // Mobile EN
+    const arInitialIndex = await teamSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
+    await nextButton.click();
+    await page.waitForTimeout(400);
+    const arAfterNextIndex = await teamSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
+    expect(arAfterNextIndex).not.toBe(arInitialIndex);
+
+    await prevButton.click();
+    await page.waitForTimeout(400);
+    const arAfterPrevIndex = await teamSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
+    expect(arAfterPrevIndex).not.toBe(arAfterNextIndex);
+
+    // Mobile EN (LTR)
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/en');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+
     teamSwiper = page.locator('#team .swiper').first();
     await teamSwiper.scrollIntoViewIfNeeded();
     await expect(teamSwiper).toHaveClass(/swiper-initialized/);
@@ -65,9 +83,11 @@ test.describe('Carousels', () => {
     // Mobile should show 1 visible slide
     expect(await activeSlides.count()).toBe(1);
 
-    // Tablet EN
+    // Tablet EN (LTR)
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/en');
+    await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
+
     teamSwiper = page.locator('#team .swiper').first();
     await teamSwiper.scrollIntoViewIfNeeded();
     await expect(teamSwiper).toHaveClass(/swiper-initialized/);
@@ -117,29 +137,30 @@ test.describe('Carousels', () => {
     await testimonialsSwiper.scrollIntoViewIfNeeded();
     await expect(testimonialsSwiper).toHaveClass(/swiper-initialized/);
     
-    const initialSlideIndex = await testimonialsSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
+    // 1. Prove autoplay is running before focus
+    const startSlideIndex = await testimonialsSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
+    await page.waitForTimeout(5500);
+    const beforeFocusSlideIndex = await testimonialsSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
+    expect(beforeFocusSlideIndex).not.toBe(startSlideIndex);
 
-    // Focus inside the container (e.g. the next button) to trigger focus
+    // 2. Focus inside the container (the next button) to trigger focus capture pause
     const nextButton = testimonialsSwiper.locator('.swiper-button-next');
     await nextButton.focus();
     
-    // Wait longer than the autoplay delay
+    // 3. Wait longer than the autoplay delay (5000ms) to prove slide remains unchanged
     await page.waitForTimeout(5500);
-    
-    // Assert slide remains unchanged
     const focusedSlideIndex = await testimonialsSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
-    expect(focusedSlideIndex).toBe(initialSlideIndex);
+    expect(focusedSlideIndex).toBe(beforeFocusSlideIndex);
 
-    // Move focus outside to body
+    // 4. Move focus outside to body to resume autoplay
     await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
     await page.locator('body').focus();
     await page.mouse.move(0, 0); // ensure no hover
 
-    // Wait longer than autoplay delay to verify it resumes
-    await page.waitForTimeout(6500);
-
+    // 5. Wait longer than autoplay delay to verify it resumes
+    await page.waitForTimeout(6000);
     const resumedSlideIndex = await testimonialsSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
-    expect(resumedSlideIndex).not.toBe(initialSlideIndex);
+    expect(resumedSlideIndex).not.toBe(focusedSlideIndex);
   });
 
   test('Reduced motion disables Team and Testimonials autoplay and transitions', async ({ page }) => {
