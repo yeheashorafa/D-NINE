@@ -32,7 +32,8 @@
       "next": "$next",
       "react": "$react",
       "react-dom": "$react-dom"
-    }
+    },
+    "proxy-addr": "2.0.8"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",

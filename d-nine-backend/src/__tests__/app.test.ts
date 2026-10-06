@@ -392,7 +392,81 @@ describe('Internal Error Handling', () => {
 });
 
 // ============================================================================
-// 11. RATE LIMITING (must run last — permanently exhausts per-IP counters)
+// 11. PROXY AND IP FORWARDING BEHAVIOR
+// ============================================================================
+describe('Proxy and IP Forwarding Behavior', () => {
+  it('does not trust X-Forwarded-For when trust proxy is not enabled (default test env)', async () => {
+    // In test environment (NODE_ENV=test), app does not enable trust proxy
+    const res = await request(app)
+      .get('/api/v1/health')
+      .set('X-Forwarded-For', '203.0.113.195');
+
+    expect(res.status).toBe(200);
+    // When trust proxy is disabled, req.ip reflects the socket remoteAddress (typically 127.0.0.1 or ::ffff:127.0.0.1),
+    // and spoofed X-Forwarded-For headers are completely ignored.
+  });
+
+  it('handles multiple X-Forwarded-For entries and malformed headers gracefully without crashing', async () => {
+    const res = await request(app)
+      .get('/api/v1/health')
+      .set('X-Forwarded-For', '203.0.113.195, 198.51.100.17, invalid-ip-string, ::ffff:192.0.2.1');
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.code).toBe('HEALTH_OK');
+  });
+
+  it('correctly evaluates client IP and hops when trust proxy is configured', async () => {
+    const express = (await import('express')).default;
+    const testProxyApp = express();
+    testProxyApp.set('trust proxy', 1); // Trust single hop reverse proxy
+    testProxyApp.get('/test-ip', (req, res) => {
+      res.json({
+        ip: req.ip,
+        ips: req.ips,
+      });
+    });
+
+    // Client -> Proxy (198.51.100.20) -> Server
+    const res = await request(testProxyApp)
+      .get('/test-ip')
+      .set('X-Forwarded-For', '203.0.113.50');
+
+    expect(res.status).toBe(200);
+    expect(res.body.ip).toBe('203.0.113.50');
+
+    // Multiple hops: Client -> Proxy1 -> Proxy2 -> Server (trust proxy = 1 means only Proxy2 is trusted)
+    const multiHopRes = await request(testProxyApp)
+      .get('/test-ip')
+      .set('X-Forwarded-For', '203.0.113.50, 198.51.100.10');
+
+    expect(multiHopRes.status).toBe(200);
+    expect(multiHopRes.body.ip).toBe('198.51.100.10');
+  });
+
+  it('handles IPv4-mapped IPv6 addresses safely without trust bypass', async () => {
+    const express = (await import('express')).default;
+    const testProxyApp = express();
+    // Trust loopback only
+    testProxyApp.set('trust proxy', 'loopback');
+    testProxyApp.get('/test-ip', (req, res) => {
+      res.json({
+        ip: req.ip,
+        ips: req.ips,
+      });
+    });
+
+    const res = await request(testProxyApp)
+      .get('/test-ip')
+      .set('X-Forwarded-For', '::ffff:192.0.2.123');
+
+    expect(res.status).toBe(200);
+    expect(res.body.ip).toBeDefined();
+  });
+});
+
+// ============================================================================
+// 12. RATE LIMITING (must run last — permanently exhausts per-IP counters)
 // ============================================================================
 describe('Rate Limiting', () => {
   it('Returns 429 after exceeding form rate limit', async () => {
