@@ -17,6 +17,8 @@ export interface Slide {
   _key?: string;
   image: string;
   imageAlt?: { ar?: string; en?: string };
+  mobileImage?: string;
+  mobileImageAlt?: { ar?: string; en?: string };
   category?: { ar?: string; en?: string };
   title?: { ar?: string; en?: string };
   description?: { ar?: string; en?: string };
@@ -182,33 +184,45 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
           exit="exit"
           className="absolute inset-0 w-full h-full"
         >
-          {/* Dual-Layer Responsive Art-Directed Image Container */}
-          {/* Layer 1: Blurred/Dimmed Background for Mobile & Ultra-Wide fill */}
-          <div className="absolute inset-0 w-full h-full overflow-hidden opacity-40 blur-xl scale-110">
+          {/* Full-Bleed Primary Slide Artwork (Edge-to-Edge Full Viewport Coverage) */}
+          {currentSlide.mobileImage ? (
+            <>
+              {/* Mobile Artwork (< 768px) */}
+              <div className="md:hidden absolute inset-0 w-full h-full">
+                <Image
+                  src={currentSlide.mobileImage}
+                  alt={currentSlide.mobileImageAlt?.[locale] || currentSlide.mobileImageAlt?.en || currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
+                  fill
+                  priority={currentIndex === 0}
+                  quality={95}
+                  sizes="100vw"
+                  className="pointer-events-none object-cover object-center"
+                />
+              </div>
+              {/* Desktop Artwork (>= 768px) */}
+              <div className="hidden md:block absolute inset-0 w-full h-full">
+                <Image
+                  src={currentSlide.image}
+                  alt={currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
+                  fill
+                  priority={currentIndex === 0}
+                  quality={95}
+                  sizes="100vw"
+                  className="pointer-events-none object-cover object-center"
+                />
+              </div>
+            </>
+          ) : (
             <Image
               src={currentSlide.image}
-              alt=""
+              alt={currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
               fill
               priority={currentIndex === 0}
+              quality={95}
               sizes="100vw"
-              className="pointer-events-none object-cover"
+              className="pointer-events-none object-cover object-center"
             />
-          </div>
-
-          {/* Layer 2: Sharp Responsive Artwork Foreground (Full Designer Artwork Containment) */}
-          <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 md:p-12 z-10">
-            <div className="relative w-full h-full max-w-7xl flex items-center justify-center">
-              <Image
-                src={currentSlide.image}
-                alt={currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
-                fill
-                priority={currentIndex === 0}
-                quality={95}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 95vw, 1600px"
-                className="pointer-events-none drop-shadow-2xl object-contain object-center"
-              />
-            </div>
-          </div>
+          )}
 
           {/* Color Wash Accent Overlay during Slide Transition */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-purple/20 via-transparent to-brand-cyan/20 pointer-events-none z-10" />

@@ -8,27 +8,40 @@ test.describe('Carousels', () => {
       const heroSection = page.locator('section[aria-roledescription="carousel"]');
       await expect(heroSection).toBeVisible();
 
-      // Verify no marketing titles or CTA text overlays rendered on hero
+      // Assert hero width equals viewport width and has no left/right gap
+      const viewportSize = page.viewportSize();
+      const heroBox = await heroSection.boundingBox();
+      expect(heroBox).toBeTruthy();
+      if (viewportSize && heroBox) {
+        expect(Math.round(heroBox.width)).toBe(viewportSize.width);
+        expect(Math.round(heroBox.x)).toBe(0);
+      }
+
+      // Assert no marketing titles, description or CTA overlays rendered on hero
       const titles = heroSection.locator('h2');
       await expect(titles).toHaveCount(0);
+      const paragraphs = heroSection.locator('p');
+      await expect(paragraphs).toHaveCount(0);
+      const ctas = heroSection.locator('a[href="/services"], a[href="/work"], a[href^="http"]');
+      await expect(ctas).toHaveCount(0);
 
-      // Verify foreground slide image is rendered with object-fit: contain, natural aspect ratio, and localized alt
-      const slideImage = heroSection.locator('img').last();
+      // Assert only one visible slide artwork layer exists
+      const visibleImages = heroSection.locator('img:visible');
+      await expect(visibleImages).toHaveCount(1);
+
+      // Assert the image CSS object-fit is cover
+      const slideImage = visibleImages.first();
       await expect(slideImage).toBeVisible();
-      await expect(slideImage).toHaveCSS('object-fit', 'contain');
+      await expect(slideImage).toHaveCSS('object-fit', 'cover');
+
+      // Assert no object-contain primary image exists
+      const containImages = heroSection.locator('img[class*="object-contain"], img[style*="contain"]');
+      await expect(containImages).toHaveCount(0);
+
+      // Assert non-empty localized alt text
       const altText = await slideImage.getAttribute('alt');
       expect(altText).toBeTruthy();
       expect(altText?.length).toBeGreaterThan(0);
-
-      // Verify slide image fits within the hero viewport and does not create horizontal overflow
-      const heroBox = await heroSection.boundingBox();
-      const imageBox = await slideImage.boundingBox();
-      expect(heroBox).toBeTruthy();
-      expect(imageBox).toBeTruthy();
-      if (heroBox && imageBox) {
-        expect(imageBox.width).toBeLessThanOrEqual(heroBox.width + 1);
-        expect(imageBox.height).toBeLessThanOrEqual(heroBox.height + 1);
-      }
 
       // Assert no horizontal scroll on page
       const hasNoHorizontalScroll = await page.evaluate(
@@ -36,11 +49,13 @@ test.describe('Carousels', () => {
       );
       expect(hasNoHorizontalScroll).toBe(true);
 
-      // Verify navigation and pause controls exist and are accessible
+      // Verify navigation remains usable
       const nextBtn = heroSection.locator('.swiper-button-next');
       const prevBtn = heroSection.locator('.swiper-button-prev');
       await expect(nextBtn).toBeVisible();
+      await expect(nextBtn).toBeEnabled();
       await expect(prevBtn).toBeVisible();
+      await expect(prevBtn).toBeEnabled();
 
       const pauseToggle = heroSection.getByRole('button', { name: /Pause slideshow|Play slideshow|إيقاف التبديل التلقائي|تشغيل التبديل التلقائي/i });
       await expect(pauseToggle).toBeVisible();
