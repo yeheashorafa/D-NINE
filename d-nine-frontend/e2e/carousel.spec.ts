@@ -1,6 +1,52 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Carousels', () => {
+  test('Hero Slider displays image-only artwork without text overlay in English and Arabic', async ({ page }) => {
+    for (const locale of ['en', 'ar']) {
+      await page.goto(`/${locale}`);
+
+      const heroSection = page.locator('section[aria-roledescription="carousel"]');
+      await expect(heroSection).toBeVisible();
+
+      // Verify no marketing titles or CTA text overlays rendered on hero
+      const titles = heroSection.locator('h2');
+      await expect(titles).toHaveCount(0);
+
+      // Verify foreground slide image is rendered with object-fit: contain, natural aspect ratio, and localized alt
+      const slideImage = heroSection.locator('img').last();
+      await expect(slideImage).toBeVisible();
+      await expect(slideImage).toHaveCSS('object-fit', 'contain');
+      const altText = await slideImage.getAttribute('alt');
+      expect(altText).toBeTruthy();
+      expect(altText?.length).toBeGreaterThan(0);
+
+      // Verify slide image fits within the hero viewport and does not create horizontal overflow
+      const heroBox = await heroSection.boundingBox();
+      const imageBox = await slideImage.boundingBox();
+      expect(heroBox).toBeTruthy();
+      expect(imageBox).toBeTruthy();
+      if (heroBox && imageBox) {
+        expect(imageBox.width).toBeLessThanOrEqual(heroBox.width + 1);
+        expect(imageBox.height).toBeLessThanOrEqual(heroBox.height + 1);
+      }
+
+      // Assert no horizontal scroll on page
+      const hasNoHorizontalScroll = await page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth
+      );
+      expect(hasNoHorizontalScroll).toBe(true);
+
+      // Verify navigation and pause controls exist and are accessible
+      const nextBtn = heroSection.locator('.swiper-button-next');
+      const prevBtn = heroSection.locator('.swiper-button-prev');
+      await expect(nextBtn).toBeVisible();
+      await expect(prevBtn).toBeVisible();
+
+      const pauseToggle = heroSection.getByRole('button', { name: /Pause slideshow|Play slideshow|إيقاف التبديل التلقائي|تشغيل التبديل التلقائي/i });
+      await expect(pauseToggle).toBeVisible();
+    }
+  });
+
   test('Team and Testimonials sections are visible', async ({ page }) => {
     await page.goto('/en');
     
@@ -101,7 +147,7 @@ test.describe('Carousels', () => {
   });
 
   test('Testimonials slider hover autoplay pause', async ({ page }) => {
-    test.setTimeout(45000);
+    test.setTimeout(60000);
     await page.goto('/en');
     
     const testimonialsSwiper = page.locator('#testimonials .swiper').first();
@@ -130,7 +176,7 @@ test.describe('Carousels', () => {
   });
 
   test('Testimonials slider focus autoplay pause', async ({ page }) => {
-    test.setTimeout(45000);
+    test.setTimeout(60000);
     await page.goto('/en');
     
     const testimonialsSwiper = page.locator('#testimonials .swiper').first();

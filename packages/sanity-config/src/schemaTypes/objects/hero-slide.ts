@@ -36,15 +36,17 @@ export const heroSlide = defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Background Image',
+      title: 'Slide Artwork Image (Required Public Slide Artwork)',
       type: 'image',
       options: { hotspot: true },
+      description: 'Upload the final designed slide image; visible marketing text should be included inside the artwork.',
       validation: (Rule) => Rule.required(),
       fields: [
         defineField({
           name: 'alt',
           type: 'localizedString',
-          title: 'Alt Text',
+          title: 'Alt Text (AR / EN)',
+          description: 'Descriptive alternative text for accessibility and screen readers (Arabic and English).',
         }),
       ],
     }),

@@ -7,57 +7,63 @@ export const teamMember = defineType({
   type: 'document',
   icon: UsersIcon,
   groups: [
-    { name: 'arabic', title: 'Arabic Content' },
-    { name: 'english', title: 'English Content' },
-    { name: 'media', title: 'Media' },
-    { name: 'social', title: 'Social Links' },
-    { name: 'settings', title: 'Display Settings' },
+    { name: 'general', title: 'Member Info (البيانات الأساسية)', default: true },
+    { name: 'media', title: 'Photo & Media (الصورة)' },
+    { name: 'social', title: 'Social Links (حسابات التواصل)' },
+    { name: 'display', title: 'Display Settings (إعدادات الظهور)' },
   ],
   fields: [
     defineField({
       name: 'name',
-      title: 'Name',
+      title: 'Full Name (الاسم الكامل)',
       type: 'localizedString',
+      description: 'Enter member name in Arabic and English.',
       validation: (Rule) => Rule.required(),
-      group: ['arabic', 'english'],
+      group: 'general',
     }),
     defineField({
       name: 'role',
-      title: 'Role',
+      title: 'Job Role / Title (المسمى الوظيفي)',
       type: 'localizedString',
+      description: 'e.g. "Creative Director" / "المدير الإبداعي"',
       validation: (Rule) => Rule.required(),
-      group: ['arabic', 'english'],
+      group: 'general',
     }),
     defineField({
       name: 'bio',
-      title: 'Biography',
+      title: 'Biography (نبذة مختصرة)',
       type: 'localizedPortableText',
-      group: ['arabic', 'english'],
+      description: 'Brief career summary or introduction in Arabic and English.',
+      group: 'general',
     }),
     defineField({
       name: 'image',
-      title: 'Profile Image',
+      title: 'Profile Photo (الصورة الشخصية)',
       type: 'image',
       options: { hotspot: true },
+      description: 'High-quality professional portrait or photo of the team member.',
+      validation: (Rule) => Rule.required(),
+      group: 'media',
       fields: [
         defineField({
           name: 'alt',
           type: 'localizedString',
-          title: 'Alternative Text',
-        })
+          title: 'Photo Alt Text (النص البديل للصورة)',
+          description: 'Descriptive alt text for accessibility (e.g., "صورة محمد علي")',
+        }),
       ],
-      validation: (Rule) => Rule.required(),
-      group: 'media',
     }),
     defineField({
       name: 'socialLinks',
-      title: 'Social Links',
+      title: 'Social Media Profiles',
       type: 'array',
+      description: 'Add social media accounts for this team member.',
       group: 'social',
       of: [
         defineArrayMember({
           type: 'object',
           name: 'socialLinkItem',
+          title: 'Social Link',
           fields: [
             defineField({
               name: 'platform',
@@ -77,8 +83,9 @@ export const teamMember = defineType({
             }),
             defineField({
               name: 'url',
-              title: 'URL',
+              title: 'Profile URL',
               type: 'url',
+              description: 'Full profile web link starting with https://',
               validation: (Rule) => Rule.required().uri({ scheme: ['http', 'https'] }),
             }),
           ],
@@ -86,49 +93,52 @@ export const teamMember = defineType({
             select: {
               title: 'platform',
               subtitle: 'url',
-            }
-          }
-        })
+            },
+          },
+        }),
       ],
     }),
     defineField({
       name: 'featured',
-      title: 'Featured',
+      title: 'Featured Member',
       type: 'boolean',
+      description: 'Highlight this member across featured listings.',
       initialValue: false,
-      group: 'settings',
+      group: 'display',
     }),
     defineField({
       name: 'active',
-      title: 'Active',
+      title: 'Active / Published Status',
       type: 'boolean',
+      description: 'Toggle off to temporarily hide this team member from the site.',
       initialValue: true,
-      group: 'settings',
+      group: 'display',
     }),
     defineField({
       name: 'order',
-      title: 'Order',
+      title: 'Default Listing Order',
       type: 'number',
+      description: 'Fallback numerical sorting order (lower numbers appear first).',
       initialValue: 0,
-      group: 'settings',
+      group: 'display',
     }),
   ],
   preview: {
     select: {
-      titleEn: 'name.en',
       titleAr: 'name.ar',
-      roleEn: 'role.en',
+      titleEn: 'name.en',
       roleAr: 'role.ar',
+      roleEn: 'role.en',
       active: 'active',
       media: 'image',
     },
-    prepare({ titleEn, titleAr, roleEn, roleAr, active, media }) {
-      const name = titleAr || titleEn || 'Unnamed';
-      const role = roleAr || roleEn || 'No Role';
-      const status = active ? '🟢 Active' : '🔴 Inactive';
+    prepare({ titleAr, titleEn, roleAr, roleEn, active, media }) {
+      const name = titleAr && titleEn ? `${titleAr} (${titleEn})` : titleAr || titleEn || 'Unnamed Member';
+      const role = roleAr && roleEn ? `${roleAr} — ${roleEn}` : roleAr || roleEn || 'No Role';
+      const status = active !== false ? '🟢 Active' : '🔴 Hidden';
       return {
         title: name,
-        subtitle: `${role} | ${status}`,
+        subtitle: `${role} • ${status}`,
         media,
       };
     },

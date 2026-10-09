@@ -6,7 +6,6 @@ import { useLocale } from 'next-intl';
 import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
 import { Play, Pause } from 'lucide-react';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
-import { Link } from '@/i18n/navigation';
 
 /**
  * PENDING_LICENSED_DNINE_SLIDER_EXPORTS
@@ -17,6 +16,7 @@ export interface Slide {
   id?: string;
   _key?: string;
   image: string;
+  imageAlt?: { ar?: string; en?: string };
   category?: { ar?: string; en?: string };
   title?: { ar?: string; en?: string };
   description?: { ar?: string; en?: string };
@@ -25,10 +25,10 @@ export interface Slide {
 }
 
 const DEFAULT_SLIDES: Slide[] = [
-  { id: '1', image: '/slider/slide-01.jpg', category: { ar: 'شريحة ١', en: 'Slide 1' }, title: { ar: 'عنوان ١', en: 'Title 1' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
-  { id: '2', image: '/slider/slide-02.jpg', category: { ar: 'شريحة ٢', en: 'Slide 2' }, title: { ar: 'عنوان ٢', en: 'Title 2' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
-  { id: '3', image: '/slider/slide-03.jpg', category: { ar: 'شريحة ٣', en: 'Slide 3' }, title: { ar: 'عنوان ٣', en: 'Title 3' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
-  { id: '4', image: '/slider/slide-04.jpg', category: { ar: 'شريحة ٤', en: 'Slide 4' }, title: { ar: 'عنوان ٤', en: 'Title 4' }, description: { ar: '', en: '' }, ctaText: { ar: '', en: '' }, ctaLink: '' },
+  { id: '1', image: '/slider/slide-01.jpg', imageAlt: { ar: 'شريحة العرض الأولى — وكالة دي ناين الإبداعية', en: 'Hero Slide 1 — D-NINE Creative Agency' } },
+  { id: '2', image: '/slider/slide-02.jpg', imageAlt: { ar: 'شريحة العرض الثانية — الإنتاج الإعلامي وصناعة المحتوى', en: 'Hero Slide 2 — Media Production & Content Creation' } },
+  { id: '3', image: '/slider/slide-03.jpg', imageAlt: { ar: 'شريحة العرض الثالثة — الهوية البصرية والتصميم الاستراتيجي', en: 'Hero Slide 3 — Visual Identity & Strategic Design' } },
+  { id: '4', image: '/slider/slide-04.jpg', imageAlt: { ar: 'شريحة العرض الرابعة — التسويق الرقمي وإدارة الحملات', en: 'Hero Slide 4 — Digital Marketing & Campaign Management' } },
 ];
 
 export interface HeroSliderProps {
@@ -191,56 +191,22 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
               fill
               priority={currentIndex === 0}
               sizes="100vw"
-              className="pointer-events-none"
+              className="pointer-events-none object-cover"
             />
           </div>
 
-          {/* Layer 2: Sharp Un-cropped Artwork Foreground */}
-          <div className="relative w-full h-full">
-            <div className="relative w-full h-full">
+          {/* Layer 2: Sharp Responsive Artwork Foreground (Full Designer Artwork Containment) */}
+          <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 md:p-12 z-10">
+            <div className="relative w-full h-full max-w-7xl flex items-center justify-center">
               <Image
                 src={currentSlide.image}
-                alt={isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`}
+                alt={currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
                 fill
                 priority={currentIndex === 0}
                 quality={95}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 95vw, 1600px"
-                className="pointer-events-none drop-shadow-2xl"
+                className="pointer-events-none drop-shadow-2xl object-contain object-center"
               />
-            </div>
-            
-            {/* Slide Content overlay */}
-            <div className="absolute inset-0 z-20 flex flex-col justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-0 pointer-events-none">
-              <div className="max-w-2xl space-y-4 pointer-events-auto drop-shadow-md">
-                {currentSlide.category && (currentSlide.category.ar || currentSlide.category.en) && (
-                  <span className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-sm font-bold tracking-widest uppercase">
-                    {currentSlide.category[locale] || currentSlide.category.en}
-                  </span>
-                )}
-                
-                {currentSlide.title && (currentSlide.title.ar || currentSlide.title.en) && (
-                  <h2 className="text-3xl sm:text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight">
-                    {currentSlide.title[locale] || currentSlide.title.en}
-                  </h2>
-                )}
-                
-                {currentSlide.description && (currentSlide.description.ar || currentSlide.description.en) && (
-                  <p className="text-lg sm:text-xl text-white/90 max-w-lg leading-relaxed font-medium">
-                    {currentSlide.description[locale] || currentSlide.description.en}
-                  </p>
-                )}
-                
-                {currentSlide.ctaLink && currentSlide.ctaText && (currentSlide.ctaText.ar || currentSlide.ctaText.en) && (
-                  <div className="pt-4">
-                    <Link
-                      href={currentSlide.ctaLink}
-                      className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white text-slate-950 font-extrabold text-sm sm:text-base hover:bg-brand-cyan hover:text-slate-950 transition-colors duration-300 shadow-xl"
-                    >
-                      {currentSlide.ctaText[locale] || currentSlide.ctaText.en}
-                    </Link>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 

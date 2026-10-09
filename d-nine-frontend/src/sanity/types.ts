@@ -245,6 +245,7 @@ export interface SanityHomePageDoc {
     ctaText?: SanityLocalizedString;
     ctaLink?: string;
     image?: string;
+    imageAlt?: SanityLocalizedString;
   }[];
   creativeSnapshot?: {
     title?: SanityLocalizedString;

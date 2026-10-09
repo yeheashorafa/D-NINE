@@ -24,11 +24,11 @@ export const Logo: React.FC<LogoProps> = ({
   // Footer: ~220px wide (220x93)
   
   const sizeClasses = {
-    header: 'w-[115px] sm:w-[160px] h-auto',
-    footer: 'w-[210px] sm:w-[225px] h-auto',
-    sm: 'w-[110px] h-auto',
-    md: 'w-[160px] h-auto',
-    lg: 'w-[220px] h-auto',
+    header: 'w-[100px] sm:w-[130px] h-auto',
+    footer: 'w-[140px] sm:w-[160px] h-auto',
+    sm: 'w-[95px] h-auto',
+    md: 'w-[130px] h-auto',
+    lg: 'w-[160px] h-auto',
   }[activeVariant];
 
   return (

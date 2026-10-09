@@ -54,7 +54,8 @@ export const homePageQuery = groq`
       description,
       ctaText,
       ctaLink,
-      "image": image.asset->url
+      "image": image.asset->url,
+      "imageAlt": image.alt
     },
     creativeSnapshot {
       title,
