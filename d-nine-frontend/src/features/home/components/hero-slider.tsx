@@ -7,30 +7,29 @@ import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/reac
 import { Play, Pause } from 'lucide-react';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 
-/**
- * PENDING_LICENSED_DNINE_SLIDER_EXPORTS
- * Note: The slide artwork currently contains external studio marks.
- * Prior to production deployment, slide images must be replaced with official licensed D-NINE exports.
- */
 export interface Slide {
   id?: string;
   _key?: string;
-  image: string;
+  // 4 localized artwork fields
+  desktopImageAr?: string;
+  mobileImageAr?: string;
+  desktopImageEn?: string;
+  mobileImageEn?: string;
+  alt?: { ar?: string; en?: string };
+  active?: boolean;
+
+  // Legacy fallback fields
+  image?: string;
   imageAlt?: { ar?: string; en?: string };
   mobileImage?: string;
   mobileImageAlt?: { ar?: string; en?: string };
-  category?: { ar?: string; en?: string };
-  title?: { ar?: string; en?: string };
-  description?: { ar?: string; en?: string };
-  ctaText?: { ar?: string; en?: string };
-  ctaLink?: string;
 }
 
 const DEFAULT_SLIDES: Slide[] = [
-  { id: '1', image: '/slider/slide-01.jpg', imageAlt: { ar: 'شريحة العرض الأولى — وكالة دي ناين الإبداعية', en: 'Hero Slide 1 — D-NINE Creative Agency' } },
-  { id: '2', image: '/slider/slide-02.jpg', imageAlt: { ar: 'شريحة العرض الثانية — الإنتاج الإعلامي وصناعة المحتوى', en: 'Hero Slide 2 — Media Production & Content Creation' } },
-  { id: '3', image: '/slider/slide-03.jpg', imageAlt: { ar: 'شريحة العرض الثالثة — الهوية البصرية والتصميم الاستراتيجي', en: 'Hero Slide 3 — Visual Identity & Strategic Design' } },
-  { id: '4', image: '/slider/slide-04.jpg', imageAlt: { ar: 'شريحة العرض الرابعة — التسويق الرقمي وإدارة الحملات', en: 'Hero Slide 4 — Digital Marketing & Campaign Management' } },
+  { id: '1', image: '/slider/slide-01.jpg', alt: { ar: 'شريحة العرض الأولى — وكالة دي ناين الإبداعية', en: 'Hero Slide 1 — D-NINE Creative Agency' } },
+  { id: '2', image: '/slider/slide-02.jpg', alt: { ar: 'شريحة العرض الثانية — الإنتاج الإعلامي وصناعة المحتوى', en: 'Hero Slide 2 — Media Production & Content Creation' } },
+  { id: '3', image: '/slider/slide-03.jpg', alt: { ar: 'شريحة العرض الثالثة — الهوية البصرية والتصميم الاستراتيجي', en: 'Hero Slide 3 — Visual Identity & Strategic Design' } },
+  { id: '4', image: '/slider/slide-04.jpg', alt: { ar: 'شريحة العرض الرابعة — التسويق الرقمي وإدارة الحملات', en: 'Hero Slide 4 — Digital Marketing & Campaign Management' } },
 ];
 
 export interface HeroSliderProps {
@@ -44,7 +43,9 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
   const isArabic = locale === 'ar';
   const prefersReducedMotion = useReducedMotion();
 
-  const slides = data?.slides && data.slides.length > 0 ? data.slides : DEFAULT_SLIDES;
+  // Filter only active slides
+  const validSlides = (data?.slides || []).filter((s) => s.active !== false);
+  const slides = validSlides.length > 0 ? validSlides : DEFAULT_SLIDES;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
@@ -98,7 +99,24 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
     }
   };
 
-  const currentSlide = slides[currentIndex];
+  const currentSlide = slides[currentIndex] || slides[0];
+
+  // Resolve localized desktop and mobile images with robust cascading fallbacks
+  const resolvedDesktopImage = isArabic
+    ? (currentSlide.desktopImageAr || currentSlide.image || currentSlide.desktopImageEn || '/slider/slide-01.jpg')
+    : (currentSlide.desktopImageEn || currentSlide.image || currentSlide.desktopImageAr || '/slider/slide-01.jpg');
+
+  const resolvedMobileImage = isArabic
+    ? (currentSlide.mobileImageAr || currentSlide.mobileImage || resolvedDesktopImage)
+    : (currentSlide.mobileImageEn || currentSlide.mobileImage || resolvedDesktopImage);
+
+  const resolvedAltText =
+    currentSlide.alt?.[locale] ||
+    currentSlide.alt?.ar ||
+    currentSlide.alt?.en ||
+    currentSlide.imageAlt?.[locale] ||
+    currentSlide.imageAlt?.en ||
+    (isArabic ? `شريحة العرض ${currentIndex + 1} — دي ناين` : `Hero Slide ${currentIndex + 1} — D-NINE`);
 
   // Clip Path Masks for Direction-Aware Reveal
   const getMaskVariant = (): Variants => {
@@ -112,8 +130,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
 
     const isNext = direction === 'next';
     const isRtl = isArabic;
-
-    // Direction calculation respecting RTL
     const slideFromRight = (isNext && !isRtl) || (!isNext && isRtl);
 
     return {
@@ -184,45 +200,31 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
           exit="exit"
           className="absolute inset-0 w-full h-full"
         >
-          {/* Full-Bleed Primary Slide Artwork (Edge-to-Edge Full Viewport Coverage) */}
-          {currentSlide.mobileImage ? (
-            <>
-              {/* Mobile Artwork (< 768px) */}
-              <div className="md:hidden absolute inset-0 w-full h-full">
-                <Image
-                  src={currentSlide.mobileImage}
-                  alt={currentSlide.mobileImageAlt?.[locale] || currentSlide.mobileImageAlt?.en || currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
-                  fill
-                  priority={currentIndex === 0}
-                  quality={95}
-                  sizes="100vw"
-                  className="pointer-events-none object-cover object-center"
-                />
-              </div>
-              {/* Desktop Artwork (>= 768px) */}
-              <div className="hidden md:block absolute inset-0 w-full h-full">
-                <Image
-                  src={currentSlide.image}
-                  alt={currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
-                  fill
-                  priority={currentIndex === 0}
-                  quality={95}
-                  sizes="100vw"
-                  className="pointer-events-none object-cover object-center"
-                />
-              </div>
-            </>
-          ) : (
+          {/* Mobile Artwork (< 768px) */}
+          <div className="md:hidden absolute inset-0 w-full h-full">
             <Image
-              src={currentSlide.image}
-              alt={currentSlide.imageAlt?.[locale] || currentSlide.imageAlt?.en || (isArabic ? `شريحة ${currentIndex + 1}` : `Hero Slide ${currentIndex + 1}`)}
+              src={resolvedMobileImage}
+              alt={resolvedAltText}
               fill
               priority={currentIndex === 0}
               quality={95}
               sizes="100vw"
               className="pointer-events-none object-cover object-center"
             />
-          )}
+          </div>
+
+          {/* Desktop Artwork (>= 768px) */}
+          <div className="hidden md:block absolute inset-0 w-full h-full">
+            <Image
+              src={resolvedDesktopImage}
+              alt={resolvedAltText}
+              fill
+              priority={currentIndex === 0}
+              quality={95}
+              sizes="100vw"
+              className="pointer-events-none object-cover object-center"
+            />
+          </div>
 
           {/* Color Wash Accent Overlay during Slide Transition */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-purple/20 via-transparent to-brand-cyan/20 pointer-events-none z-10" />

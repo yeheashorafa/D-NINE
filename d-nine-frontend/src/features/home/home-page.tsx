@@ -4,25 +4,22 @@ import { CreativeSnapshotSection } from './components/creative-snapshot-section'
 import { FeaturedWorkSection } from './components/featured-work-section';
 import { CoreServicesSection } from './components/core-services-section';
 import { ProcessSection } from './components/process-section';
+import { PartnersSection } from './components/partners-section';
 import { TestimonialsSection } from './components/testimonials-section';
-import { TeamSection } from './components/team-section';
 import { FaqsSection } from './components/faqs-section';
-import { LatestNewsSection } from './components/latest-news-section';
 import { BookACallSection } from './components/book-a-call-section';
 import { getFeaturedProjects } from '@/services/content/projects.service';
 import { getServices } from '@/services/content/services.service';
 import { getCategories } from '@/services/content/categories.service';
 import { getHomePage } from '@/sanity/services/page.service';
-import { getTeamMembers } from '@/services/content/team.service';
 import { getTestimonials } from '@/services/content/testimonials.service';
 
 export async function HomePage() {
-  const [featuredProjects, services, categories, homeData, allTeamMembers, allTestimonials] = await Promise.all([
+  const [featuredProjects, services, categories, homeData, allTestimonials] = await Promise.all([
     getFeaturedProjects(),
     getServices(),
     getCategories(),
     getHomePage(),
-    getTeamMembers(),
     getTestimonials(),
   ]);
 
@@ -35,19 +32,25 @@ export async function HomePage() {
     ? services.filter(s => homeData.featuredServices?.includes(s.slug))
     : services;
 
-  // Ensure slides have required fields and type match
+  // Slides with 4 localized fields or fallback
   const validSlides = (homeData?.heroSlides || []).map(slide => ({
     ...slide,
     image: slide.image || '',
   }));
 
+  // Selected active partners list
+  const partnersList = homeData?.partnersList || [];
+
   return (
     <main className="w-full overflow-hidden">
-      {/* 1. Hero Slider (Approved visual design frozen) */}
+      {/* 1. Hero Slider (Localized 4 artwork fields with safe fallbacks) */}
       <HeroSlider data={{ slides: validSlides }} />
 
-      {/* 2. Creative Snapshot Section (Compact asymmetric Bento replacing oversized showreel) */}
-      <CreativeSnapshotSection data={homeData?.creativeSnapshot} />
+      {/* 2. Canonical 8 Specialties & Showreel (Consumes the same contentCategory) */}
+      <CreativeSnapshotSection
+        data={homeData?.creativeSnapshot}
+        categories={categories}
+      />
 
       {/* 3. Featured Work Showcase */}
       <FeaturedWorkSection projects={displayProjects} categories={categories} />
@@ -58,18 +61,10 @@ export async function HomePage() {
       {/* 5. Agency Process */}
       <ProcessSection data={homeData?.processTimeline} />
 
-      {/* 5.5 Team Preview */}
-      <TeamSection data={{
-        ...homeData?.teamSection,
-        enabled: homeData?.teamSection?.enabled !== false,
-        selectedTeamMembers: homeData?.teamSection?.selectedTeamMembers?.length
-          ? homeData.teamSection.selectedTeamMembers
-          : allTeamMembers,
-        ctaLabel: homeData?.teamSection?.ctaLabel || { en: 'Meet the Team', ar: 'تعرف على الفريق' },
-        ctaPath: homeData?.teamSection?.ctaPath || '/about',
-      }} />
+      {/* 6. Partners Section (Replaces public Team) */}
+      <PartnersSection partners={partnersList} />
 
-      {/* 6. Testimonials */}
+      {/* 7. Testimonials */}
       <TestimonialsSection data={{
         ...homeData?.testimonialsSection,
         enabled: homeData?.testimonialsSection?.enabled !== false,
@@ -78,11 +73,8 @@ export async function HomePage() {
           : allTestimonials,
       }} />
 
-      {/* 7. FAQs */}
+      {/* 8. FAQs */}
       <FaqsSection data={homeData?.faqs} />
-
-      {/* 8. Latest News */}
-      <LatestNewsSection data={homeData?.latestNews} />
 
       {/* 9. Consultation Banner */}
       <BookACallSection data={homeData?.bookACall} />

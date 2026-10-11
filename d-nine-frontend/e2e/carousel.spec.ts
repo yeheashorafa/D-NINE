@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Carousels', () => {
+test.describe('Carousels & Homepage Sections', () => {
   test('Hero Slider displays image-only artwork without text overlay in English and Arabic', async ({ page }) => {
     for (const locale of ['en', 'ar']) {
       await page.goto(`/${locale}`);
@@ -34,10 +34,6 @@ test.describe('Carousels', () => {
       await expect(slideImage).toBeVisible();
       await expect(slideImage).toHaveCSS('object-fit', 'cover');
 
-      // Assert no object-contain primary image exists
-      const containImages = heroSection.locator('img[class*="object-contain"], img[style*="contain"]');
-      await expect(containImages).toHaveCount(0);
-
       // Assert non-empty localized alt text
       const altText = await slideImage.getAttribute('alt');
       expect(altText).toBeTruthy();
@@ -50,30 +46,26 @@ test.describe('Carousels', () => {
       expect(hasNoHorizontalScroll).toBe(true);
 
       // Verify navigation remains usable
-      const nextBtn = heroSection.locator('.swiper-button-next');
-      const prevBtn = heroSection.locator('.swiper-button-prev');
-      await expect(nextBtn).toBeVisible();
-      await expect(nextBtn).toBeEnabled();
-      await expect(prevBtn).toBeVisible();
-      await expect(prevBtn).toBeEnabled();
-
       const pauseToggle = heroSection.getByRole('button', { name: /Pause slideshow|Play slideshow|إيقاف التبديل التلقائي|تشغيل التبديل التلقائي/i });
       await expect(pauseToggle).toBeVisible();
+      await expect(pauseToggle).toBeEnabled();
     }
   });
 
   test('Team and Testimonials sections are visible', async ({ page }) => {
-    await page.goto('/en');
-    
+    // Team is on About page
+    await page.goto('/en/about');
     const teamSection = page.locator('#team');
     await expect(teamSection).toBeVisible();
 
+    // Testimonials is on Homepage
+    await page.goto('/en');
     const testimonialsSection = page.locator('#testimonials');
     await expect(testimonialsSection).toBeVisible();
   });
 
   test('Team slider respects keyboard navigation and is loop-safe', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/about');
     
     const teamSwiper = page.locator('#team .swiper').first();
     await teamSwiper.scrollIntoViewIfNeeded();
@@ -90,9 +82,9 @@ test.describe('Carousels', () => {
   });
 
   test('RTL/LTR works correctly across viewports', async ({ page }) => {
-    // Desktop AR (RTL)
+    // Desktop AR (RTL) on About page for Team
     await page.setViewportSize({ width: 1280, height: 720 });
-    await page.goto('/ar');
+    await page.goto('/ar/about');
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 
     let teamSwiper = page.locator('#team .swiper').first();
@@ -129,7 +121,7 @@ test.describe('Carousels', () => {
 
     // Mobile EN (LTR)
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/en');
+    await page.goto('/en/about');
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
 
     teamSwiper = page.locator('#team .swiper').first();
@@ -146,7 +138,7 @@ test.describe('Carousels', () => {
 
     // Tablet EN (LTR)
     await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto('/en');
+    await page.goto('/en/about');
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
 
     teamSwiper = page.locator('#team .swiper').first();
@@ -227,9 +219,9 @@ test.describe('Carousels', () => {
   test('Reduced motion disables Team and Testimonials autoplay and transitions', async ({ page }) => {
     test.setTimeout(30000);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/en');
 
-    // Testimonials
+    // Testimonials on Homepage
+    await page.goto('/en');
     await expect(page.locator('#testimonials')).toBeVisible();
     await page.evaluate(() => document.getElementById('testimonials')?.scrollIntoView());
     
@@ -241,7 +233,8 @@ test.describe('Carousels', () => {
     let afterWaitSlideIndex = await testimonialsSwiper.evaluate((el: HTMLElement & { swiper?: { activeIndex: number } }) => el.swiper?.activeIndex ?? 0);
     expect(afterWaitSlideIndex).toBe(initialSlideIndex);
 
-    // Team
+    // Team on About page
+    await page.goto('/en/about');
     await expect(page.locator('#team')).toBeVisible();
     await page.evaluate(() => document.getElementById('team')?.scrollIntoView());
     
@@ -255,8 +248,8 @@ test.describe('Carousels', () => {
   });
 
   test('Team CTA/social links are present with correct attributes and routing', async ({ page }) => {
-    // EN Check
-    await page.goto('/en');
+    // EN Check on About page
+    await page.goto('/en/about');
     
     let teamSection = page.locator('#team');
     await expect(teamSection).toBeVisible();
@@ -270,26 +263,34 @@ test.describe('Carousels', () => {
     await expect(socialLink).toHaveAttribute('target', '_blank');
     await expect(socialLink).toHaveAttribute('rel', 'noopener noreferrer');
 
-    // CTA Check (EN)
-    let cta = teamSection.getByRole('link', { name: 'Meet the Team' });
-    await expect(cta).toBeVisible();
-    await expect(cta).toHaveAttribute('href', '/en/about');
-    await cta.click();
-    await expect(page).toHaveURL(/\/en\/about\/?$/);
-    await expect(page.locator('main')).toBeVisible();
-
-    // AR Check
-    await page.goto('/ar');
+    // AR Check on About page
+    await page.goto('/ar/about');
     
     teamSection = page.locator('#team');
     await expect(teamSection).toBeVisible();
+  });
 
-    // CTA Check (AR)
-    cta = teamSection.getByRole('link', { name: 'تعرف على الفريق' });
-    await expect(cta).toBeVisible();
-    await expect(cta).toHaveAttribute('href', '/ar/about');
-    await cta.click();
-    await expect(page).toHaveURL(/\/ar\/about\/?$/);
-    await expect(page.locator('main')).toBeVisible();
+  test('Team is absent from homepage and present on about page', async ({ page }) => {
+    // 1. Homepage: #team should NOT be visible or present on public homepage
+    await page.goto('/en');
+    const homepageTeam = page.locator('#team');
+    await expect(homepageTeam).toHaveCount(0);
+
+    // 2. About page: #team is preserved on about page
+    await page.goto('/en/about');
+    const aboutTeam = page.locator('#team');
+    await expect(aboutTeam).toBeVisible();
+  });
+
+  test('Work page renders 8 canonical categories in 4x2 grid and no All Categories button', async ({ page }) => {
+    await page.goto('/en/work');
+
+    // Verify no "All Categories" or "All" button exists
+    const allBtn = page.getByRole('button', { name: /^All$|^All Categories$|^الكل$/i });
+    await expect(allBtn).toHaveCount(0);
+
+    // Verify 8 category filter buttons are rendered
+    const filterButtons = page.locator('main button');
+    await expect(filterButtons).toHaveCount(8);
   });
 });

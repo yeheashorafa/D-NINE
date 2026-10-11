@@ -5,6 +5,8 @@ export interface ContentCategory {
   slug: string;
   title: LocalizedText;
   description?: LocalizedText;
+  icon?: string;
+  targetLink?: string;
   order: number;
   active: boolean;
 }

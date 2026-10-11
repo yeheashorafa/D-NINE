@@ -3,95 +3,130 @@ import { HomeIcon } from '@sanity/icons';
 
 export const homePage = defineType({
   name: 'homePage',
-  title: 'Home Page Configuration',
+  title: 'الصفحة الرئيسية (Homepage)',
   type: 'document',
   icon: HomeIcon,
-  fieldsets: [
-    { name: 'hero', title: 'Hero & Intro' },
-    { name: 'featured', title: 'Featured Content' },
-    { name: 'methodology', title: 'Agency Methodology' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+  groups: [
+    { name: 'slider', title: 'سلايدر الهيرو (Hero Slider)', default: true },
+    { name: 'specialties', title: 'التخصصات والشواريل (Specialties & Showreel)' },
+    { name: 'featuredWork', title: 'أعمال مختارة (Featured Work)' },
+    { name: 'partners', title: 'الشركاء والعملاء (Partners)' },
+    { name: 'testimonials', title: 'آراء العملاء (Testimonials)' },
+    { name: 'process', title: 'منهجية العمل (Process)' },
+    { name: 'faqs', title: 'الأسئلة الشائعة (FAQs)' },
+    { name: 'cta', title: 'دعوة للتواصل (Call to Action)' },
+    { name: 'seo', title: 'تحسين محركات البحث (SEO)' },
   ],
   fields: [
+    // 1. Slider
     defineField({
       name: 'heroSlides',
-      title: 'Hero Slides',
+      title: 'شرائح العرض البصرية (Hero Slides)',
       type: 'array',
       of: [defineArrayMember({ type: 'heroSlide' })],
-      fieldset: 'hero',
+      group: 'slider',
+      description: 'شرائح العرض الرئيسية. اسحب لإعادة الترتيب.',
     }),
+
+    // 2. Specialties & Showreel
     defineField({
       name: 'creativeSnapshot',
-      title: 'Creative Snapshot Section',
+      title: 'مقدمة التخصصات والفيديو التعريفي (Specialties & Showreel Intro)',
       type: 'creativeSnapshot',
-      fieldset: 'hero',
+      group: 'specialties',
     }),
+
+    // 3. Featured Work
     defineField({
       name: 'featuredProjects',
-      title: 'Featured Projects (Max 6)',
+      title: 'المشاريع المختارة (Featured Projects — Max 6)',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'project' }] })],
-      fieldset: 'featured',
+      group: 'featuredWork',
       validation: (Rule) => Rule.max(6),
+      description: 'اختر المشاريع التي تظهر في الصفحة الرئيسية ورتبها بالسحب والإفلات.',
     }),
     defineField({
       name: 'featuredServices',
-      title: 'Featured Primary Services',
+      title: 'الخدمات المميزة (Legacy Featured Services)',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'service' }] })],
-      fieldset: 'featured',
+      group: 'featuredWork',
+      hidden: true,
     }),
+
+    // 4. Partners
     defineField({
-      name: 'processTimeline',
-      title: '3-Step Methodology Timeline',
+      name: 'partners',
+      title: 'الشركاء المعروضون (Selected Partners)',
       type: 'array',
-      of: [defineArrayMember({ type: 'serviceProcessStep' })],
-      fieldset: 'methodology',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'partner' }] })],
+      group: 'partners',
+      description: 'حدد الشركاء الذين سيتم عرض شعاراتهم في الصفحة الرئيسية، ورتبهم بالسحب والإفلات.',
     }),
+
+    // 5. Testimonials
     defineField({
       name: 'testimonials',
-      title: 'Testimonials Section',
+      title: 'قسم آراء العملاء (Testimonials Section)',
       type: 'testimonialsSection',
-      fieldset: 'featured',
+      group: 'testimonials',
     }),
+
+    // 6. Process Timeline
     defineField({
-      name: 'teamPreview',
-      title: 'Team Preview Section',
-      type: 'teamSection',
-      fieldset: 'featured',
+      name: 'processTimeline',
+      title: 'خطوات منهجية العمل (Agency Process Steps)',
+      type: 'array',
+      of: [defineArrayMember({ type: 'serviceProcessStep' })],
+      group: 'process',
     }),
+
+    // 7. FAQs
     defineField({
       name: 'faqs',
-      title: 'FAQs',
+      title: 'الأسئلة الشائعة (Frequently Asked Questions)',
       type: 'array',
-      of: [defineArrayMember({ type: 'serviceFaq' })], // assuming faq type is serviceFaq
-      fieldset: 'featured',
+      of: [defineArrayMember({ type: 'serviceFaq' })],
+      group: 'faqs',
     }),
+
+    // 8. Book a Call / CTA
     defineField({
       name: 'bookACall',
-      title: 'Book a Call Section',
+      title: 'بانر حجز الاستشارة والتواصل (Book a Call Banner)',
       type: 'bookACallSection',
-      fieldset: 'featured',
+      group: 'cta',
+    }),
+
+    // 9. SEO
+    defineField({
+      name: 'seo',
+      title: 'إعدادات محركات البحث (Home Page SEO)',
+      type: 'seo',
+      group: 'seo',
+    }),
+
+    // Legacy Fields (Hidden to preserve existing data safely)
+    defineField({
+      name: 'teamPreview',
+      title: 'Legacy Team Preview',
+      type: 'teamSection',
+      hidden: true,
     }),
     defineField({
       name: 'latestNews',
-      title: 'Latest News / Blog Posts',
+      title: 'Legacy Latest News',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'blogPost' }] })],
-      fieldset: 'featured',
-    }),
-    defineField({
-      name: 'seo',
-      title: 'Home Page SEO',
-      type: 'seo',
-      fieldset: 'seo',
+      hidden: true,
     }),
   ],
   preview: {
     prepare() {
       return {
-        title: 'Home Page (الصفحة الرئيسية)',
-        subtitle: 'Singleton Content & Featured Sections',
+        title: 'الصفحة الرئيسية (Homepage)',
+        subtitle: 'المحتوى والإعدادات الشاملة للصفحة الرئيسية',
       };
     },
   },

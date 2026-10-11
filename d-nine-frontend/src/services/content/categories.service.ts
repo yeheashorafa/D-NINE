@@ -14,9 +14,13 @@ export async function getCategories(options: { stega?: boolean } = {}): Promise<
       tags: ['categories'],
       stega: options.stega,
     });
-    return (data || []).map(mapSanityCategory);
+    const mapped = (data || []).map(mapSanityCategory);
+    if (mapped.length > 0) {
+      return mapped;
+    }
   }
 
+  // Deterministic fallback to the 8 canonical categories
   return CONTENT_CATEGORIES.filter((c) => c.active).sort((a, b) => a.order - b.order);
 }
 
@@ -28,7 +32,9 @@ export async function getCategoryBySlug(slug: string): Promise<ContentCategory |
       params: { slug },
       tags: ['categories', `category:${slug}`],
     });
-    return data ? mapSanityCategory(data) : null;
+    if (data) {
+      return mapSanityCategory(data);
+    }
   }
 
   const category = CONTENT_CATEGORIES.find((c) => c.slug === slug && c.active);

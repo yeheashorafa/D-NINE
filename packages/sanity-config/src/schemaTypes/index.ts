@@ -21,6 +21,8 @@ import { office } from './objects/office';
 import { testimonialsSection } from './objects/testimonialsSection';
 import { teamSection } from './objects/teamSection';
 
+// Documents
+import { partner } from './documents/partner';
 import { testimonial } from './documents/testimonial';
 import { teamMember } from './documents/teamMember';
 import { contentCategory } from './documents/content-category';
@@ -64,6 +66,7 @@ export const schemaTypes = [
   teamSection,
 
   // Document Types
+  partner,
   testimonial,
   teamMember,
   contentCategory,

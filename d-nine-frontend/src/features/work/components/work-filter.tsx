@@ -8,48 +8,39 @@ export interface WorkFilterProps {
   categories: ContentCategory[];
   activeCategory: string;
   onSelectCategory: (slug: string) => void;
-  allLabel: string;
 }
 
 export const WorkFilter: React.FC<WorkFilterProps> = ({
   categories,
   activeCategory,
   onSelectCategory,
-  allLabel,
 }) => {
   const locale = useLocale();
   const isArabic = locale === 'ar';
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-      <button
-        type="button"
-        onClick={() => onSelectCategory('all')}
-        className={`px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan ${
-          activeCategory === 'all'
-            ? 'bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-md scale-105'
-            : 'bg-surface dark:bg-card border border-border text-text-muted hover:text-foreground hover:border-brand-cyan/40'
-        }`}
-        aria-pressed={activeCategory === 'all'}
-      >
-        {allLabel}
-      </button>
-
-      {categories.map((cat) => (
-        <button
-          key={cat.id}
-          type="button"
-          onClick={() => onSelectCategory(cat.slug)}
-          className={`px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan ${
-            activeCategory === cat.slug
-              ? 'bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-md scale-105'
-              : 'bg-surface dark:bg-card border border-border text-text-muted hover:text-foreground hover:border-brand-cyan/40'
-          }`}
-          aria-pressed={activeCategory === cat.slug}
-        >
-          {isArabic ? cat.title.ar : cat.title.en}
-        </button>
-      ))}
+    <div className="w-full mb-10">
+      {/* 4 columns x 2 rows on desktop, responsive on tablet/mobile */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5 max-w-5xl mx-auto">
+        {categories.map((cat) => {
+          const isActive = activeCategory === cat.slug;
+          return (
+            <button
+              key={cat.id || cat.slug}
+              type="button"
+              onClick={() => onSelectCategory(cat.slug)}
+              className={`min-h-[48px] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center text-center leading-snug border focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan select-none ${
+                isActive
+                  ? 'bg-slate-950 dark:bg-white text-white dark:text-slate-950 border-slate-950 dark:border-white shadow-lg scale-[1.02]'
+                  : 'bg-surface dark:bg-card border-border text-text-muted hover:text-foreground hover:border-brand-cyan/40 hover:bg-surface-hover'
+              }`}
+              aria-pressed={isActive}
+            >
+              <span>{isArabic ? cat.title.ar : cat.title.en}</span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

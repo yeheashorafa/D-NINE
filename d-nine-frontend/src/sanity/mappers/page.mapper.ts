@@ -10,12 +10,13 @@ import type {
   SanitySiteSettingsDoc
 } from '../types';
 
-import { mapTestimonialsSection, mapTeamSection } from './section.mapper';
+import { mapTestimonialsSection, mapTeamSection, mapPartnersList } from './section.mapper';
 
 export function mapHomePage(doc: SanityHomePageDoc | null) {
   if (!doc) return null;
   return {
     ...doc,
+    partnersList: mapPartnersList(doc.partners),
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
     teamSection: mapTeamSection(doc.teamPreview),
   };

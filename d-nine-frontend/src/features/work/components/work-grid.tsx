@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-// import { useTranslations } from 'next-intl';
 import { ProjectItem } from '@/types/project';
 import { ContentCategory } from '@/types/category';
 import { WorkFilter } from './work-filter';
@@ -14,15 +13,17 @@ import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
 export interface WorkGridProps {
   initialProjects: ProjectItem[];
   categories: ContentCategory[];
-  allLabel: string;
 }
 
-export function WorkGrid({ initialProjects, categories, allLabel }: WorkGridProps) {
+export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  // Derive effective active category: selected category or first available canonical category
+  const activeCategory = selectedCategory ?? (categories.length > 0 ? categories[0].slug : '');
+
 
   const filteredProjects = useMemo(() => {
-    if (activeCategory === 'all') return initialProjects;
+    if (!activeCategory) return initialProjects;
     return initialProjects.filter((p) => {
       return (
         p.primaryCategorySlug === activeCategory ||
@@ -45,13 +46,15 @@ export function WorkGrid({ initialProjects, categories, allLabel }: WorkGridProp
 
   return (
     <div className="w-full">
-      {/* Category Tabs */}
-      <WorkFilter
-        categories={categories}
-        activeCategory={activeCategory}
-        onSelectCategory={(slug) => setActiveCategory(slug)}
-        allLabel={allLabel}
-      />
+      {/* Category Tabs: 4x2 responsive layout without All Categories */}
+      {categories.length > 0 && (
+        <WorkFilter
+          categories={categories}
+          activeCategory={activeCategory}
+          onSelectCategory={(slug) => setSelectedCategory(slug)}
+        />
+      )}
+
 
       {/* Grid Display */}
       {visibleItems.length > 0 ? (
@@ -73,14 +76,14 @@ export function WorkGrid({ initialProjects, categories, allLabel }: WorkGridProp
         </motion.div>
       ) : (
         <div className="py-16 text-center text-text-muted">
-          <p>No projects found.</p>
+          <p>لا توجد مشاريع متوفرة في هذا القسم حالياً.</p>
         </div>
       )}
 
-      {/* Pexels-Style Progressive Loader */}
+      {/* Progressive Loader */}
       {(hasMore || isLoadingMore) && (
         <ProgressiveGridLoader isLoading={true} sentinelRef={sentinelRef} />
       )}
     </div>
   );
-};
+}

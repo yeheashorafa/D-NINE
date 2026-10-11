@@ -7,6 +7,8 @@ export const categoriesQuery = groq`
     "slug": slug.current,
     title,
     description,
+    "icon": icon.asset->url,
+    targetLink,
     order,
     active
   }
@@ -19,6 +21,8 @@ export const categoryBySlugQuery = groq`
     "slug": slug.current,
     title,
     description,
+    "icon": icon.asset->url,
+    targetLink,
     order,
     active
   }

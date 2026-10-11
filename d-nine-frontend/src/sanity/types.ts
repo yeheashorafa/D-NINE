@@ -94,9 +94,12 @@ export interface SanityCategoryDoc {
   slug: string;
   title: SanityLocalizedString;
   description?: SanityLocalizedString;
+  icon?: string;
+  targetLink?: string;
   order?: number;
   active?: boolean;
 }
+
 
 export interface SanityServiceDeliverable {
   title: SanityLocalizedString;
@@ -235,10 +238,28 @@ export interface SanitySeo {
   keywords?: SanityLocalizedString;
 }
 
+export interface SanityPartnerDoc {
+  _id: string;
+  id?: string;
+  name: SanityLocalizedString;
+  logo: string;
+  logoAlt?: SanityLocalizedString;
+  url?: string;
+  order?: number;
+  active?: boolean;
+}
+
 export interface SanityHomePageDoc {
   _id: string;
   id?: string;
   heroSlides?: {
+    active?: boolean;
+    desktopImageAr?: string;
+    mobileImageAr?: string;
+    desktopImageEn?: string;
+    mobileImageEn?: string;
+    alt?: SanityLocalizedString;
+    // Legacy fields
     category?: SanityLocalizedString;
     title?: SanityLocalizedString;
     description?: SanityLocalizedString;
@@ -250,6 +271,7 @@ export interface SanityHomePageDoc {
     mobileImageAlt?: SanityLocalizedString;
   }[];
   creativeSnapshot?: {
+    badge?: SanityLocalizedString;
     title?: SanityLocalizedString;
     description?: SanityLocalizedString;
     videoUrl?: string;
@@ -261,6 +283,7 @@ export interface SanityHomePageDoc {
   };
   featuredProjects?: string[];
   featuredServices?: string[];
+  partners?: SanityPartnerDoc[];
   processTimeline?: SanityTimelineItemDoc[];
   testimonials?: SanityTestimonialsSection;
   teamPreview?: SanityTeamSection;
@@ -319,6 +342,7 @@ export interface SanityWorkPageDoc {
   allCategoriesLabel?: SanityLocalizedString;
   seo?: SanitySeo;
 }
+
 
 export interface SanityBlogPageDoc {
   _id: string;

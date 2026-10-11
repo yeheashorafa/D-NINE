@@ -1,102 +1,118 @@
 import { ContentCategory } from '@/types/category';
 
-export const CONTENT_CATEGORIES: ContentCategory[] = [
+export const CANONICAL_CATEGORIES: ContentCategory[] = [
   {
-    id: 'cat-graphic-design',
-    slug: 'graphic-design',
+    id: 'cat-motion-graphics',
+    slug: 'motion-graphics',
     order: 1,
     active: true,
     title: {
-      ar: 'تصميم الجرافيك والابتكار البصري',
-      en: 'Graphic Design & Visual Innovation',
+      ar: 'الموشن جرافيك',
+      en: 'Motion Graphics',
     },
     description: {
-      ar: 'تصاميم إبداعية متميزة تعزز حضور العلامة التجارية وتخلق انطباعاً بصرياً قادراً على ترك أثر لا يُنسى.',
-      en: 'Premium visual designs crafted to strengthen brand presence and capture lasting audience attention.',
+      ar: 'رسوم متحركة إبداعية ومؤثرات بصرية تنبض بالحياة وتبسط المفاهيم المعقدة بجاذبية فائقة.',
+      en: 'Dynamic motion graphics and 2D/3D visual animations crafted to tell stories and engage audiences.',
+    },
+  },
+  {
+    id: 'cat-video-editing',
+    slug: 'video-editing',
+    order: 2,
+    active: true,
+    title: {
+      ar: 'المونتاج وتحرير الفيديو',
+      en: 'Video Editing',
+    },
+    description: {
+      ar: 'مونتاج سينمائي وإيقاع بصري متقن وتلوين احترافي يمنح فيديوهاتك طابعاً استثنائياً.',
+      en: 'High-end video editing, pacing, color grading, and sound design tailored for impactful narratives.',
+    },
+  },
+  {
+    id: 'cat-social-media-design',
+    slug: 'social-media-design',
+    order: 3,
+    active: true,
+    title: {
+      ar: 'تصاميم السوشيال ميديا',
+      en: 'Social Media Design',
+    },
+    description: {
+      ar: 'تصاميم سوشيال ميديا مبتكرة تعزز تفاعل الجمهور وتبرز حضور علامتك الرقمية.',
+      en: 'High-converting, visually striking social media assets designed for modern digital feeds.',
+    },
+  },
+  {
+    id: 'cat-print-design',
+    slug: 'print-design',
+    order: 4,
+    active: true,
+    title: {
+      ar: 'التصاميم والمطبوعات',
+      en: 'Print Design',
+    },
+    description: {
+      ar: 'تصاميم مطبوعات فاخرة ومنشورات وكتيبات دعائية تضمن أعلى معايير الجودة والتميز الملموس.',
+      en: 'Premium editorial, packaging, publication, and tangible collateral built for flawless print execution.',
     },
   },
   {
     id: 'cat-brand-identity',
     slug: 'brand-identity',
-    order: 2,
-    active: true,
-    title: {
-      ar: 'تصميم الهوية البصرية والمستندات الرقمية',
-      en: 'Brand Identity & Visual Design',
-    },
-    description: {
-      ar: 'بناء هويات بصرية متكاملة وشاملة تعكس قيم وأهداف العلامة التجارية بكل دقة واحترافية.',
-      en: 'End-to-end brand identity systems designed to communicate purpose, value, and distinctiveness.',
-    },
-  },
-  {
-    id: 'cat-short-video-reels',
-    slug: 'short-video-reels',
-    order: 3,
-    active: true,
-    title: {
-      ar: 'صناعة الفيديوهات القصيرة (Reels & Shorts)',
-      en: 'Short-Form Video & Reels Production',
-    },
-    description: {
-      ar: 'محتوى مرئي ديناميكي عالي الجاذبية مصمم خصيصاً للمنصات الحديثة لتحقيق أعلى نسب التفاعل.',
-      en: 'High-impact vertical video content engineered for modern social platforms and fast engagement.',
-    },
-  },
-  {
-    id: 'cat-video-production',
-    slug: 'video-production',
-    order: 4,
-    active: true,
-    title: {
-      ar: 'الإنتاج الإعلامي والسينمائي',
-      en: 'Cinematic & Media Production',
-    },
-    description: {
-      ar: 'إنتاج إعلامي وسينمائي احترافي يشمل الأفلام الإعلانية والوثائقية من الفكرة إلى الشاشة.',
-      en: 'Full-scope video production ranging from commercial films to documentary showcases.',
-    },
-  },
-  {
-    id: 'cat-social-content',
-    slug: 'social-content',
     order: 5,
     active: true,
     title: {
-      ar: 'صناعة المحتوى البصري لمنصات التواصل',
-      en: 'Social Media Visual Content',
+      ar: 'تصميم الشعارات والهويات البصرية',
+      en: 'Logos & Brand Identities',
     },
     description: {
-      ar: 'تصميم وصناعة محتوى بصري مبتكر ومتجدد يتناسب مع كافة شبكات التواصل الاجتماعي.',
-      en: 'Tailored visual content assets built to captivate audiences across social channels.',
+      ar: 'بناء أنظمة هوية متكاملة وشعارات استراتيجية تعبر عن روح العلامة التجارية وتدوم في الذاكرة.',
+      en: 'Comprehensive brand identity systems, logo systems, and visual guidelines that stand the test of time.',
     },
   },
   {
-    id: 'cat-social-management',
-    slug: 'social-management',
+    id: 'cat-artificial-intelligence',
+    slug: 'artificial-intelligence',
     order: 6,
     active: true,
     title: {
-      ar: 'إدارة وتوجيه حسابات التواصل الاجتماعي',
-      en: 'Social Media Management & Strategy',
+      ar: 'الذكاء الاصطناعي والإنتاج الرقمي',
+      en: 'Artificial Intelligence',
     },
     description: {
-      ar: 'إدارة استراتيجية وتنفيذية شاملة للحسابات تضمن استمرارية النمو والتفاعل الإيجابي.',
-      en: 'Strategic social media management ensuring audience growth, consistent branding, and engagement.',
+      ar: 'تسخير أدوات وتقنيات الذكاء الاصطناعي التوليدي لابتكار أعمال بصرية رائدة وغير مسبوقة.',
+      en: 'Cutting-edge generative AI workflows and visual synthesis pushing the boundaries of creative innovation.',
     },
   },
   {
-    id: 'cat-integrated-marketing',
-    slug: 'integrated-marketing',
+    id: 'cat-exhibitions',
+    slug: 'exhibitions',
     order: 7,
     active: true,
     title: {
-      ar: 'الحملات التسويقية الإبداعية المتكاملة',
-      en: 'Integrated Creative Campaigns',
+      ar: 'المعارض وتجهيز المساحات',
+      en: 'Exhibitions',
     },
     description: {
-      ar: 'حملات تسويقية متكاملة تجمع بين الفكرة الإبداعية والتنفيذ الاحترافي عبر كافة القنوات.',
-      en: 'Cohesive, multi-channel creative marketing campaigns aligned with commercial goals.',
+      ar: 'تصميم أجنحة المعارض وتجهيز المساحات التفاعلية لتقديم تجارب حضور غامرة ومميزة.',
+      en: 'Immersive exhibition booths, spatial branding, and interactive environmental design.',
+    },
+  },
+  {
+    id: 'cat-festivals',
+    slug: 'festivals',
+    order: 8,
+    active: true,
+    title: {
+      ar: 'المهرجانات والفعاليات',
+      en: 'Festivals',
+    },
+    description: {
+      ar: 'هويات بصرية وتغطيات شاملة للمهرجانات والفعاليات الكبرى تصنع زخماً جماهيرياً لا يُنسى.',
+      en: 'Complete visual identity and experiential branding for grand-scale festivals and cultural celebrations.',
     },
   },
 ];
+
+export const CONTENT_CATEGORIES: ContentCategory[] = CANONICAL_CATEGORIES;

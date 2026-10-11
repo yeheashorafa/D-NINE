@@ -1,6 +1,35 @@
-import type { SanityTestimonialsSection, SanityTeamSection } from '../types';
+import type { SanityTestimonialsSection, SanityTeamSection, SanityPartnerDoc } from '../types';
 import { mapSanityTestimonial } from '../../services/content/testimonials.service';
 import { mapSanityTeamMember } from '../../services/content/team.service';
+import { PartnerItem } from '@/types/partner';
+
+export function mapSanityPartner(doc: SanityPartnerDoc): PartnerItem {
+  return {
+    id: doc._id || doc.id || 'partner',
+    name: {
+      ar: doc.name?.ar || '',
+      en: doc.name?.en || '',
+    },
+    logo: doc.logo || '',
+    logoAlt: doc.logoAlt
+      ? {
+          ar: doc.logoAlt.ar || '',
+          en: doc.logoAlt.en || '',
+        }
+      : undefined,
+    url: doc.url,
+    order: doc.order ?? 0,
+    active: doc.active ?? true,
+  };
+}
+
+export function mapPartnersList(partners?: SanityPartnerDoc[]): PartnerItem[] {
+  if (!partners || partners.length === 0) return [];
+  return partners
+    .filter((p) => p && p.active !== false && p.logo)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map(mapSanityPartner);
+}
 
 export function mapTestimonialsSection(section?: SanityTestimonialsSection) {
   if (!section) return undefined;

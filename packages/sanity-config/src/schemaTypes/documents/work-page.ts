@@ -3,50 +3,53 @@ import { DocumentIcon } from '@sanity/icons';
 
 export const workPage = defineType({
   name: 'workPage',
-  title: 'Work Page',
+  title: 'صفحة الأعمال والمشاريع (Work Page)',
   type: 'document',
   icon: DocumentIcon,
   fieldsets: [
-    { name: 'hero', title: 'Hero Section' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+    { name: 'hero', title: 'مقدمة الصفحة (Hero Section)' },
+    { name: 'seo', title: 'محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     defineField({
       name: 'heroBadge',
-      title: 'Hero Badge',
+      title: 'الشارة التمهيدية (Hero Badge)',
       type: 'localizedString',
       fieldset: 'hero',
     }),
     defineField({
       name: 'heroTitle',
-      title: 'Hero Title',
+      title: 'عنوان الصفحة (Hero Title)',
       type: 'localizedString',
       fieldset: 'hero',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'heroSubtitle',
-      title: 'Hero Subtitle',
+      title: 'الوصف التمهيدي (Hero Subtitle)',
       type: 'localizedText',
       fieldset: 'hero',
     }),
     defineField({
-      name: 'allCategoriesLabel',
-      title: '"All" Category Label',
-      type: 'localizedString',
-    }),
-    defineField({
       name: 'seo',
-      title: 'SEO Settings',
+      title: 'إعدادات محركات البحث (SEO Settings)',
       type: 'seo',
       fieldset: 'seo',
+    }),
+
+    // Legacy field preserved safely without deleting from database
+    defineField({
+      name: 'allCategoriesLabel',
+      title: 'Legacy All Categories Label',
+      type: 'localizedString',
+      hidden: true,
     }),
   ],
   preview: {
     prepare() {
       return {
-        title: 'Work Page (أعمالنا)',
-        subtitle: 'Singleton Content',
+        title: 'صفحة الأعمال (Work Page)',
+        subtitle: 'المحتوى التمهيدي وإعدادات محركات البحث لمعرض الأعمال',
       };
     },
   },

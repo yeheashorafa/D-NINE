@@ -2,6 +2,7 @@
 import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getAboutPage } from '@/sanity/services/page.service';
+import { getTeamMembers } from '@/services/content/team.service';
 import { Sparkles, Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 import { CustomPortableText } from '@/sanity/components/portable-text';
@@ -19,7 +20,11 @@ const getIconComponent = (iconName: string) => {
 export async function AboutPage() {
   const t = await getTranslations('about');
   const locale = await getLocale() as 'ar' | 'en';
-  const pageData = await getAboutPage();
+  const [pageData, allTeamMembers] = await Promise.all([
+    getAboutPage(),
+    getTeamMembers(),
+  ]);
+
   // const isArabic = locale === 'ar';
 
   const valuesFromCMS = pageData?.values && pageData.values.length > 0;
@@ -156,9 +161,16 @@ export async function AboutPage() {
         </div>
 
         {/* Team Section */}
-        <TeamSection data={pageData?.teamSection} />
+        <TeamSection data={{
+          ...pageData?.teamSection,
+          enabled: pageData?.teamSection?.enabled !== false,
+          selectedTeamMembers: pageData?.teamSection?.selectedTeamMembers?.length
+            ? pageData.teamSection.selectedTeamMembers
+            : allTeamMembers,
+        }} />
 
         {/* Testimonials Section */}
+
         <TestimonialsSection data={pageData?.testimonialsSection} />
       </div>
     </main>

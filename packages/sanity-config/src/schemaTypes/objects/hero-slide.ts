@@ -2,88 +2,131 @@ import { defineType, defineField } from 'sanity';
 
 export const heroSlide = defineType({
   name: 'heroSlide',
-  title: 'Hero Slide',
+  title: 'شريحة العرض الرئيسية (Hero Slide)',
   type: 'object',
+  groups: [
+    { name: 'arabic', title: 'النسخة العربية (Arabic Artwork)', default: true },
+    { name: 'english', title: 'النسخة الإنجليزية (English Artwork)' },
+    { name: 'settings', title: 'إعدادات الشريحة (Settings)' },
+  ],
   fields: [
+    // 1. Arabic Desktop Image
     defineField({
-      name: 'category',
-      title: 'Category',
+      name: 'desktopImageAr',
+      title: 'صورة الشاشات الكبيرة — عربي (Arabic Desktop Image)',
+      type: 'image',
+      group: 'arabic',
+      options: { hotspot: true },
+      description: 'أبعاد موصى بها: 1920×1080 بكسل. يجب أن يتضمن العمل الفني التصميم والنصوص المدمجة بالعربية.',
+    }),
+    // 2. Arabic Mobile Image
+    defineField({
+      name: 'mobileImageAr',
+      title: 'صورة الجوال — عربي (Arabic Mobile Image)',
+      type: 'image',
+      group: 'arabic',
+      options: { hotspot: true },
+      description: 'أبعاد موصى بها: 1080×1920 بكسل (رأسي). في حال عدم رفعها، يُستخدم تصميم الشاشات الكبيرة تلقائياً.',
+    }),
+
+    // 3. English Desktop Image
+    defineField({
+      name: 'desktopImageEn',
+      title: 'Desktop Artwork — English (صورة الشاشات الكبيرة — إنجليزي)',
+      type: 'image',
+      group: 'english',
+      options: { hotspot: true },
+      description: 'Recommended: 1920×1080px. Visible marketing artwork tailored for English.',
+    }),
+    // 4. English Mobile Image
+    defineField({
+      name: 'mobileImageEn',
+      title: 'Mobile Artwork — English (صورة الجوال — إنجليزي)',
+      type: 'image',
+      group: 'english',
+      options: { hotspot: true },
+      description: 'Recommended: 1080×1920px (vertical). Falls back to English desktop artwork if omitted.',
+    }),
+
+    // Alt text
+    defineField({
+      name: 'alt',
+      title: 'النص البديل للشريحة (Accessible Alt Text)',
       type: 'localizedString',
-      validation: (Rule) => Rule.required(),
+      group: 'settings',
+      description: 'وصف بديل لقارئات الشاشة ومحركات البحث (عربي وإنجليزي)',
     }),
+
+    // Active Toggle
     defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'localizedString',
-      validation: (Rule) => Rule.required(),
+      name: 'active',
+      title: 'حالة التفعيل (Active Status)',
+      type: 'boolean',
+      group: 'settings',
+      initialValue: true,
+      description: 'إلغاء التفعيل لإخفاء الشريحة مؤقتاً دون حذفها',
     }),
-    defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'localizedText',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'ctaText',
-      title: 'CTA Text',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'ctaLink',
-      title: 'CTA Link',
-      type: 'string',
-      description: 'URL or relative path (e.g., /services or https://example.com)',
-    }),
+
+    // Hidden Legacy Fields (Preserved for safe migration without data loss)
     defineField({
       name: 'image',
-      title: 'Desktop Slide Artwork Image (Required)',
+      title: 'Legacy Desktop Image',
       type: 'image',
-      options: { hotspot: true },
-      description: 'Desktop artwork: recommended 1920×1080. Visible marketing text should be included inside the artwork.',
-      validation: (Rule) => Rule.required(),
-      fields: [
-        defineField({
-          name: 'alt',
-          type: 'localizedString',
-          title: 'Alt Text (AR / EN)',
-          description: 'Descriptive alternative text for accessibility and screen readers (Arabic and English).',
-        }),
-      ],
+      hidden: true,
     }),
     defineField({
       name: 'mobileImage',
-      title: 'Mobile Slide Artwork Image (Optional)',
+      title: 'Legacy Mobile Image',
       type: 'image',
-      options: { hotspot: true },
-      description: 'Mobile artwork: recommended 1080×1920, with all text inside safe margins. Used below 768px; falls back to desktop artwork when absent.',
-      fields: [
-        defineField({
-          name: 'alt',
-          type: 'localizedString',
-          title: 'Alt Text (AR / EN)',
-          description: 'Descriptive alternative text for accessibility and screen readers (Arabic and English).',
-        }),
-      ],
+      hidden: true,
     }),
     defineField({
-      name: 'active',
-      title: 'Is Active',
-      type: 'boolean',
-      initialValue: true,
-      description: 'Turn off to hide this slide without deleting it',
+      name: 'title',
+      title: 'Legacy Title',
+      type: 'localizedString',
+      hidden: true,
+    }),
+    defineField({
+      name: 'category',
+      title: 'Legacy Category',
+      type: 'localizedString',
+      hidden: true,
+    }),
+    defineField({
+      name: 'description',
+      title: 'Legacy Description',
+      type: 'localizedText',
+      hidden: true,
+    }),
+    defineField({
+      name: 'ctaText',
+      title: 'Legacy CTA Text',
+      type: 'localizedString',
+      hidden: true,
+    }),
+    defineField({
+      name: 'ctaLink',
+      title: 'Legacy CTA Link',
+      type: 'string',
+      hidden: true,
     }),
   ],
   preview: {
     select: {
-      media: 'image',
-      titleEn: 'title.en',
-      titleAr: 'title.ar',
+      mediaAr: 'desktopImageAr',
+      mediaEn: 'desktopImageEn',
+      mediaLegacy: 'image',
+      altAr: 'alt.ar',
+      altEn: 'alt.en',
       active: 'active',
     },
-    prepare({ media, titleEn, titleAr, active }) {
+    prepare({ mediaAr, mediaEn, mediaLegacy, altAr, altEn, active }) {
+      const media = mediaAr || mediaEn || mediaLegacy;
+      const title = altAr || altEn || 'شريحة عرض (Hero Slide)';
+      const status = active !== false ? '🟢 نشط' : '🔴 معطل';
       return {
-        title: titleEn || titleAr || 'Slide',
-        subtitle: active ? 'Active' : 'Hidden',
+        title,
+        subtitle: status,
         media,
       };
     },

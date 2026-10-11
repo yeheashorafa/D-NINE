@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === 'production' && !previewUrl) {
 }
 
 const fallbackPreviewUrl = previewUrl || 'http://localhost:3000';
+const isDev = process.env.NODE_ENV === 'development';
 
 export default defineConfig({
   name: 'default',
@@ -42,7 +43,7 @@ export default defineConfig({
         },
       },
     }),
-    visionTool(),
+    ...(isDev ? [visionTool()] : []),
   ],
 
   schema: {

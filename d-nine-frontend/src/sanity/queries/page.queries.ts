@@ -1,5 +1,16 @@
 import { groq } from 'next-sanity';
 
+export const partnerFields = groq`
+  _id,
+  "id": _id,
+  name,
+  "logo": logo.asset->url,
+  "logoAlt": logo.alt,
+  url,
+  order,
+  active
+`;
+
 export const testimonialFields = groq`
   _id,
   "id": _id,
@@ -49,26 +60,29 @@ export const homePageQuery = groq`
     _id,
     "id": _id,
     heroSlides[active != false] {
-      category,
-      title,
-      description,
-      ctaText,
-      ctaLink,
-      "image": image.asset->url,
-      "imageAlt": image.alt,
-      "mobileImage": mobileImage.asset->url,
-      "mobileImageAlt": mobileImage.alt
+      active,
+      "desktopImageAr": desktopImageAr.asset->url,
+      "mobileImageAr": mobileImageAr.asset->url,
+      "desktopImageEn": desktopImageEn.asset->url,
+      "mobileImageEn": mobileImageEn.asset->url,
+      alt,
+      // Legacy fallbacks
+      "image": coalesce(desktopImageAr.asset->url, image.asset->url),
+      "imageAlt": coalesce(alt, image.alt),
+      "mobileImage": coalesce(mobileImageAr.asset->url, mobileImage.asset->url),
+      "mobileImageAlt": coalesce(alt, mobileImage.alt)
     },
     creativeSnapshot {
+      badge,
       title,
       description,
-      stats[] {
-        value,
-        label
-      }
+      "videoThumbnail": videoPoster.asset->url,
+      "videoUrl": coalesce(showreelVideo.asset->url, videoUrl)
     },
     "featuredProjects": featuredProjects[]->slug.current,
-    "featuredServices": featuredServices[]->slug.current,
+    "partners": partners[active != false]-> {
+      ${partnerFields}
+    },
     processTimeline,
     testimonials {
       enabled,
@@ -80,21 +94,8 @@ export const homePageQuery = groq`
         ${testimonialFields}
       }
     },
-    teamPreview {
-      enabled,
-      badge,
-      title,
-      subtitle,
-      maxItems,
-      ctaLabel,
-      ctaPath,
-      selectedTeamMembers[]-> {
-        ${teamMemberFields}
-      }
-    },
     faqs,
     bookACall,
-    latestNews[]-> { title, "slug": slug.current, publishedAt, excerpt, "image": image.asset->url, category, readTimeMinutes },
     seo {
       metaTitle,
       metaDescription,
@@ -188,7 +189,6 @@ export const workPageQuery = groq`
     heroBadge,
     heroTitle,
     heroSubtitle,
-    allCategoriesLabel,
     seo {
       metaTitle,
       metaDescription,
