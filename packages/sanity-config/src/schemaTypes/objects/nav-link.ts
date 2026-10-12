@@ -19,9 +19,16 @@ export const navLink = defineType({
     }),
     defineField({
       name: 'isExternal',
-      title: 'Is External Link',
+      title: 'Is External Link (رابط خارجي)',
       type: 'boolean',
       initialValue: false,
+    }),
+    defineField({
+      name: 'isButton',
+      title: 'Show as CTA Button (عرض كزر تمييزي)',
+      type: 'boolean',
+      initialValue: false,
+      description: 'تحديد ما إذا كان الرابط يظهر كزر CTA بارز بدلاً من نص عادي',
     }),
   ],
   preview: {

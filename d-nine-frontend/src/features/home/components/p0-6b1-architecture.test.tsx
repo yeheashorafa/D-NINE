@@ -37,6 +37,7 @@ vi.mock('@/components/ui/modal', () => ({
 
 vi.mock('@/components/ui/carousel-navigation', () => ({
   CarouselNavigation: () => <div data-testid="carousel-nav" />,
+  SwiperCarouselNavigation: () => <div data-testid="swiper-carousel-nav" />,
 }));
 
 vi.mock('@/features/work/components/work-card', () => ({
@@ -242,17 +243,17 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
     const { container: emptyContainer } = render(<PartnersSection partners={[]} />);
     expect(emptyContainer.firstChild).toBeNull();
 
-    // When partners provided, renders them
+    // When partners provided, renders them (ignoring legacy active field, filtering documents without logo)
     const partners = [
       { id: 'p1', name: { ar: 'شريك 1', en: 'Partner 1' }, logo: '/partners/p1.png', active: true, order: 1 },
       { id: 'p2', name: { ar: 'شريك 2', en: 'Partner 2' }, logo: '/partners/p2.png', active: true, order: 2 },
-      { id: 'p3', name: { ar: 'شريك غير نشط', en: 'Inactive Partner' }, logo: '/partners/p3.png', active: false, order: 3 },
+      { id: 'p3', name: { ar: 'شريك بدون شعار', en: 'Partner without logo' }, logo: '', order: 3 },
     ];
 
     render(<PartnersSection partners={partners} />);
     expect(screen.getByText('شركاء نفخر بالعمل معهم')).toBeInTheDocument();
     
-    // Only active partners rendered
+    // Partners with valid logo rendered
     const partnerLogos = screen.getAllByRole('img');
     expect(partnerLogos).toHaveLength(2);
   });

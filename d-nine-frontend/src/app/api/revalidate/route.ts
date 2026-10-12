@@ -35,6 +35,7 @@ const ALLOWED_DOCUMENT_TYPES: Record<string, readonly string[]> = Object.freeze(
   privacyPage: ['privacy-page', 'privacyPage'],
   termsPage: ['terms-page', 'termsPage'],
   siteSettings: ['site-settings', 'siteSettings'],
+  partner: ['home-page', 'homePage', 'agency', 'partner', 'partners'],
 });
 
 const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
@@ -46,6 +47,7 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   contactPage: ['/ar/contact', '/en/contact'],
   privacyPage: ['/ar/privacy', '/en/privacy'],
   termsPage: ['/ar/terms', '/en/terms'],
+  partner: ['/ar', '/en'],
   siteSettings: [
     '/ar',
     '/en',
@@ -60,7 +62,9 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
     '/ar/contact',
     '/en/contact',
   ],
+  contentCategory: ['/ar/work', '/en/work', '/ar', '/en'],
   service: ['/ar/services', '/en/services'],
+  serviceOffering: ['/ar/services', '/en/services'],
   project: ['/ar/work', '/en/work', '/ar', '/en'],
   testimonial: [
     '/ar',
@@ -74,6 +78,7 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   ],
   teamMember: ['/ar', '/en', '/ar/about', '/en/about'],
   blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
+  author: ['/ar/blog', '/en/blog'],
 });
 
 // Strict slug format allowing letters, digits, and hyphens (Unicode-aware)

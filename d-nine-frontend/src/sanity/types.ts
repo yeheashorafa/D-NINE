@@ -13,6 +13,8 @@ export interface SanityLocalizedPortableText {
 }
 
 export interface SanityCta {
+  title?: SanityLocalizedString;
+  subtitle?: SanityLocalizedString;
   buttonText?: SanityLocalizedString;
   buttonLink?: string;
 }
@@ -276,17 +278,43 @@ export interface SanityHomePageDoc {
     description?: SanityLocalizedString;
     videoUrl?: string;
     videoThumbnail?: string;
+    ctaWatchShowreel?: SanityLocalizedString;
+    ctaExploreWork?: SanityLocalizedString;
+    videoBadgeText?: SanityLocalizedString;
+    videoDuration?: string;
     stats?: {
       value: string;
       label: SanityLocalizedString;
     }[];
   };
+  featuredWorkHeader?: {
+    badge?: SanityLocalizedString;
+    title?: SanityLocalizedString;
+  };
   featuredProjects?: string[];
+  coreServicesHeader?: {
+    badge?: SanityLocalizedString;
+    title?: SanityLocalizedString;
+    subtitle?: SanityLocalizedString;
+  };
   featuredServices?: string[];
+  partnersHeader?: {
+    badge?: SanityLocalizedString;
+    title?: SanityLocalizedString;
+    subtitle?: SanityLocalizedString;
+  };
   partners?: SanityPartnerDoc[];
+  processHeader?: {
+    badge?: SanityLocalizedString;
+    title?: SanityLocalizedString;
+  };
   processTimeline?: SanityTimelineItemDoc[];
   testimonials?: SanityTestimonialsSection;
   teamPreview?: SanityTeamSection;
+  faqsHeader?: {
+    badge?: SanityLocalizedString;
+    title?: SanityLocalizedString;
+  };
   faqs?: SanityFaq[];
   bookACall?: {
     title?: SanityLocalizedString;

@@ -26,7 +26,7 @@ export function mapSanityPartner(doc: SanityPartnerDoc): PartnerItem {
 export function mapPartnersList(partners?: SanityPartnerDoc[]): PartnerItem[] {
   if (!partners || partners.length === 0) return [];
   return partners
-    .filter((p) => p && p.active !== false && p.logo)
+    .filter((p) => p && p.logo && (p.name?.ar || p.name?.en))
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     .map(mapSanityPartner);
 }

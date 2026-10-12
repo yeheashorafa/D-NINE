@@ -152,7 +152,9 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ data }) => {
                   </Card>
                 </SwiperSlide>
               ))}
-              <SwiperCarouselNavigation hidden={isSingle} className="absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between z-10 pointer-events-none px-2 sm:px-4 md:-mx-4 lg:-mx-6 w-[calc(100%+16px)] sm:w-[calc(100%+32px)] md:w-[calc(100%+32px)] lg:w-[calc(100%+48px)] -ml-2 sm:-ml-4 md:ml-0 lg:ml-0" />
+              <div className="flex justify-center mt-8">
+                <SwiperCarouselNavigation hidden={isSingle} />
+              </div>
             </Swiper>
           </div>
         </RevealSection>

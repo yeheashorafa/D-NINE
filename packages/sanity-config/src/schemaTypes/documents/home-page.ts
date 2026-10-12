@@ -38,6 +38,16 @@ export const homePage = defineType({
 
     // 3. Featured Work
     defineField({
+      name: 'featuredWorkHeader',
+      title: 'ترويسة قسم الأعمال المميزة (Featured Work Header)',
+      type: 'object',
+      group: 'featuredWork',
+      fields: [
+        defineField({ name: 'badge', title: 'الشارة (Badge)', type: 'localizedString' }),
+        defineField({ name: 'title', title: 'العنوان (Title)', type: 'localizedString' }),
+      ],
+    }),
+    defineField({
       name: 'featuredProjects',
       title: 'المشاريع المختارة (Featured Projects — Max 6)',
       type: 'array',
@@ -47,22 +57,45 @@ export const homePage = defineType({
       description: 'اختر المشاريع التي تظهر في الصفحة الرئيسية ورتبها بالسحب والإفلات.',
     }),
     defineField({
+      name: 'coreServicesHeader',
+      title: 'ترويسة قسم الخدمات (Core Services Header)',
+      type: 'object',
+      group: 'featuredWork',
+      fields: [
+        defineField({ name: 'badge', title: 'الشارة (Badge)', type: 'localizedString' }),
+        defineField({ name: 'title', title: 'العنوان (Title)', type: 'localizedString' }),
+        defineField({ name: 'subtitle', title: 'الوصف (Subtitle)', type: 'localizedText' }),
+      ],
+    }),
+    defineField({
       name: 'featuredServices',
-      title: 'الخدمات المميزة (Legacy Featured Services)',
+      title: 'الخدمات المعروضة في الرئيسية (Featured Services)',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'service' }] })],
       group: 'featuredWork',
-      hidden: true,
+      description: 'اختر الخدمات التي تظهر في الصفحة الرئيسية ورتبها بالسحب والإفلات. إذا تركت فارغة يتم عرض الخدمات النشطة تلقائياً.',
     }),
 
     // 4. Partners
     defineField({
+      name: 'partnersHeader',
+      title: 'ترويسة قسم الشركاء والعملاء (Partners Header)',
+      type: 'object',
+      group: 'partners',
+      fields: [
+        defineField({ name: 'badge', title: 'الشارة (Badge)', type: 'localizedString' }),
+        defineField({ name: 'title', title: 'العنوان (Title)', type: 'localizedString' }),
+        defineField({ name: 'subtitle', title: 'الوصف (Subtitle)', type: 'localizedText' }),
+      ],
+    }),
+    defineField({
       name: 'partners',
-      title: 'الشركاء المعروضون (Selected Partners)',
+      title: 'الشركاء المعروضون (Legacy Selected Partners)',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'partner' }] })],
       group: 'partners',
-      description: 'حدد الشركاء الذين سيتم عرض شعاراتهم في الصفحة الرئيسية، ورتبهم بالسحب والإفلات.',
+      hidden: true,
+      description: 'حقل قديم مخفي. تظهر وثائق الشركاء المنشورة في قسم الشركاء تلقائياً.',
     }),
 
     // 5. Testimonials
@@ -75,6 +108,16 @@ export const homePage = defineType({
 
     // 6. Process Timeline
     defineField({
+      name: 'processHeader',
+      title: 'ترويسة قسم منهجية العمل (Process Header)',
+      type: 'object',
+      group: 'process',
+      fields: [
+        defineField({ name: 'badge', title: 'الشارة (Badge)', type: 'localizedString' }),
+        defineField({ name: 'title', title: 'العنوان (Title)', type: 'localizedString' }),
+      ],
+    }),
+    defineField({
       name: 'processTimeline',
       title: 'خطوات منهجية العمل (Agency Process Steps)',
       type: 'array',
@@ -83,6 +126,16 @@ export const homePage = defineType({
     }),
 
     // 7. FAQs
+    defineField({
+      name: 'faqsHeader',
+      title: 'ترويسة قسم الأسئلة الشائعة (FAQs Header)',
+      type: 'object',
+      group: 'faqs',
+      fields: [
+        defineField({ name: 'badge', title: 'الشارة (Badge)', type: 'localizedString' }),
+        defineField({ name: 'title', title: 'العنوان (Title)', type: 'localizedString' }),
+      ],
+    }),
     defineField({
       name: 'faqs',
       title: 'الأسئلة الشائعة (Frequently Asked Questions)',

@@ -322,6 +322,33 @@ describe('Webhook Revalidation Route', () => {
     expect(revalidatePath).toHaveBeenCalledWith('/en/work/test-project', 'page');
   });
 
+  it('should revalidate both AR and EN paths and tags when partner document is published', async () => {
+    mockParseBody.mockResolvedValueOnce({
+      isValidSignature: true,
+      body: { _type: 'partner' },
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/revalidate', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ _type: 'partner' }),
+    });
+
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+
+    const data = await response.json();
+    expect(data.revalidated).toBe(true);
+    expect(data.documentType).toBe('partner');
+    expect(data.paths).toEqual(expect.arrayContaining(['/ar', '/en']));
+    expect(data.tags).toEqual(expect.arrayContaining(['partner', 'partners', 'home-page', 'homePage']));
+
+    expect(revalidateTag).toHaveBeenCalledWith('partner', 'max');
+    expect(revalidateTag).toHaveBeenCalledWith('partners', 'max');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en', 'page');
+  });
+
   // --- 5. Generic Error Handling ---
 
   it('returns generic 500 when parseBody or cache revalidation throws', async () => {

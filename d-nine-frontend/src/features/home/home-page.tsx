@@ -13,24 +13,31 @@ import { getServices } from '@/services/content/services.service';
 import { getCategories } from '@/services/content/categories.service';
 import { getHomePage } from '@/sanity/services/page.service';
 import { getTestimonials } from '@/services/content/testimonials.service';
+import { getPartners } from '@/services/content/partners.service';
 
 export async function HomePage() {
-  const [featuredProjects, services, categories, homeData, allTestimonials] = await Promise.all([
+  const [featuredProjects, services, categories, homeData, allTestimonials, allPartners] = await Promise.all([
     getFeaturedProjects(),
     getServices(),
     getCategories(),
     getHomePage(),
     getTestimonials(),
+    getPartners(),
   ]);
 
-  // If homeData exists, filter featured projects and services based on selected slugs
+  // Order featured projects strictly according to client's curated selection order
   const displayProjects = homeData?.featuredProjects?.length
-    ? featuredProjects.filter(p => homeData.featuredProjects?.includes(p.slug))
-    : featuredProjects;
+    ? homeData.featuredProjects
+        .map(slug => featuredProjects.find(p => p.slug === slug))
+        .filter((p): p is typeof featuredProjects[number] => Boolean(p))
+    : featuredProjects.slice(0, 6);
     
+  // Order featured services strictly according to client's curated selection order
   const displayServices = homeData?.featuredServices?.length
-    ? services.filter(s => homeData.featuredServices?.includes(s.slug))
-    : services;
+    ? homeData.featuredServices
+        .map(slug => services.find(s => s.slug === slug))
+        .filter((s): s is typeof services[number] => Boolean(s))
+    : services.slice(0, 6);
 
   // Slides with 4 localized fields or fallback
   const validSlides = (homeData?.heroSlides || []).map(slide => ({
@@ -38,8 +45,8 @@ export async function HomePage() {
     image: slide.image || '',
   }));
 
-  // Selected active partners list
-  const partnersList = homeData?.partnersList || [];
+  // Automatic partners list directly from CMS partner documents (single source of truth: allPartners from getPartners())
+  const partnersList = allPartners;
 
   return (
     <main className="w-full overflow-hidden">
@@ -53,16 +60,29 @@ export async function HomePage() {
       />
 
       {/* 3. Featured Work Showcase */}
-      <FeaturedWorkSection projects={displayProjects} categories={categories} />
+      <FeaturedWorkSection
+        projects={displayProjects}
+        categories={categories}
+        data={homeData?.featuredWorkHeader}
+      />
 
       {/* 4. Core Services Overview */}
-      <CoreServicesSection services={displayServices} />
+      <CoreServicesSection
+        services={displayServices}
+        data={homeData?.coreServicesHeader}
+      />
 
       {/* 5. Agency Process */}
-      <ProcessSection data={homeData?.processTimeline} />
+      <ProcessSection
+        data={homeData?.processTimeline}
+        header={homeData?.processHeader}
+      />
 
       {/* 6. Partners Section (Replaces public Team) */}
-      <PartnersSection partners={partnersList} />
+      <PartnersSection
+        partners={partnersList}
+        header={homeData?.partnersHeader}
+      />
 
       {/* 7. Testimonials */}
       <TestimonialsSection data={{
@@ -74,7 +94,10 @@ export async function HomePage() {
       }} />
 
       {/* 8. FAQs */}
-      <FaqsSection data={homeData?.faqs} />
+      <FaqsSection
+        data={homeData?.faqs}
+        header={homeData?.faqsHeader}
+      />
 
       {/* 9. Consultation Banner */}
       <BookACallSection data={homeData?.bookACall} />

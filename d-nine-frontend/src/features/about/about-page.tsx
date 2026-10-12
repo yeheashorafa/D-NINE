@@ -25,7 +25,7 @@ export async function AboutPage() {
     getTeamMembers(),
   ]);
 
-  // const isArabic = locale === 'ar';
+  const isArabic = locale === 'ar';
 
   const valuesFromCMS = pageData?.values && pageData.values.length > 0;
 
@@ -170,8 +170,26 @@ export async function AboutPage() {
         }} />
 
         {/* Testimonials Section */}
+        {pageData?.testimonialsSection?.enabled !== false && (
+          <TestimonialsSection data={pageData?.testimonialsSection} />
+        )}
 
-        <TestimonialsSection data={pageData?.testimonialsSection} />
+        {/* Call to Action Section */}
+        {pageData?.cta && (pageData.cta.buttonText?.[locale] || pageData.cta.buttonText?.ar || pageData.cta.buttonText?.en) && (
+          <RevealSection className="text-center py-12 px-8 rounded-3xl bg-gradient-to-r from-brand-purple/10 to-brand-cyan/10 border border-brand-cyan/30 space-y-6">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground">
+              {pageData.cta.title?.[locale] || (isArabic ? 'جاهز لبدء مشروعك القادم معنا؟' : 'Ready to start your next creative project?')}
+            </h2>
+            <div className="pt-2">
+              <a
+                href={pageData.cta.buttonLink || '/contact'}
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-brand text-white font-extrabold text-sm sm:text-base hover:opacity-95 shadow-lg shadow-brand-purple/20 transition-all active:scale-95"
+              >
+                <span>{pageData.cta.buttonText?.[locale] || pageData.cta.buttonText?.en || (isArabic ? 'تواصل معنا' : 'Contact Us')}</span>
+              </a>
+            </div>
+          </RevealSection>
+        )}
       </div>
     </main>
   );

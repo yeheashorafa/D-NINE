@@ -36,6 +36,55 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
   const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
 
+  const pauseReasonsRef = React.useRef<Set<string>>(new Set());
+  const interactionTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const cleanupListenersRef = React.useRef<(() => void) | null>(null);
+
+  const pauseAutoplay = React.useCallback((reason: 'hover' | 'focus' | 'interaction') => {
+    pauseReasonsRef.current.add(reason);
+    const swiper = swiperRef.current;
+    if (swiper && swiper.autoplay) {
+      swiper.autoplay.stop();
+    }
+  }, []);
+
+  const resumeAutoplay = React.useCallback((reason: 'hover' | 'focus' | 'interaction') => {
+    pauseReasonsRef.current.delete(reason);
+
+    // If reduced motion is preferred or any other pause reason remains, do NOT resume
+    if (prefersReducedMotion || pauseReasonsRef.current.size > 0) {
+      return;
+    }
+
+    const swiper = swiperRef.current;
+    if (swiper && swiper.autoplay) {
+      swiper.autoplay.start();
+    }
+  }, [prefersReducedMotion]);
+
+  React.useEffect(() => {
+    const swiper = swiperRef.current;
+    if (!swiper || !swiper.autoplay) return;
+    if (prefersReducedMotion) {
+      swiper.autoplay.stop();
+    } else if (pauseReasonsRef.current.size === 0) {
+      swiper.autoplay.start();
+    }
+  }, [prefersReducedMotion]);
+
+  React.useEffect(() => {
+    return () => {
+      if (interactionTimerRef.current) {
+        clearTimeout(interactionTimerRef.current);
+        interactionTimerRef.current = null;
+      }
+      if (cleanupListenersRef.current) {
+        cleanupListenersRef.current();
+        cleanupListenersRef.current = null;
+      }
+    };
+  }, []);
+
   if (data?.enabled === false) return null;
   const allItems = data?.selectedTestimonials || [];
   const max = data?.maxCount || data?.maxItems || allItems.length;
@@ -64,11 +113,10 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
 
         <div
           className="relative group"
-          onFocusCapture={() => swiperRef.current?.autoplay?.pause()}
-          onBlurCapture={() => swiperRef.current?.autoplay?.resume()}
+          onMouseEnter={() => pauseAutoplay('hover')}
+          onMouseLeave={() => resumeAutoplay('hover')}
         >
           <Swiper
-            onSwiper={(s) => (swiperRef.current = s)}
             modules={[Pagination, A11y, Autoplay, Keyboard]}
             spaceBetween={24}
             slidesPerView={1}
@@ -78,13 +126,42 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
             }}
             navigation={false}
             pagination={!isSingle ? { clickable: true } : false}
-            autoplay={!isSingle && !prefersReducedMotion ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
+            autoplay={!isSingle && !prefersReducedMotion ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: false } : false}
             speed={prefersReducedMotion ? 0 : 300}
             loop={!isSingle && items.length > 3}
             keyboard={{ enabled: true, onlyInViewport: true }}
             dir={isArabic ? 'rtl' : 'ltr'}
             watchOverflow={true}
             className="!pb-16 motion-reduce:transition-none"
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+              const el = swiper.el;
+              if (!el) return;
+
+              const handleFocusIn = () => {
+                pauseAutoplay('focus');
+              };
+
+              const handleFocusOut = (e: FocusEvent) => {
+                if (!el.contains(e.relatedTarget as Node)) {
+                  resumeAutoplay('focus');
+                }
+              };
+
+              el.addEventListener('focusin', handleFocusIn);
+              el.addEventListener('focusout', handleFocusOut);
+
+              cleanupListenersRef.current = () => {
+                el.removeEventListener('focusin', handleFocusIn);
+                el.removeEventListener('focusout', handleFocusOut);
+              };
+            }}
+            onDestroy={() => {
+              if (cleanupListenersRef.current) {
+                cleanupListenersRef.current();
+                cleanupListenersRef.current = null;
+              }
+            }}
             a11y={{
               prevSlideMessage: tCommon('carousel.prev'),
               nextSlideMessage: tCommon('carousel.next'),
@@ -127,7 +204,21 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
                 </Card>
               </SwiperSlide>
             ))}
-            <SwiperCarouselNavigation hidden={isSingle} className="absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between z-10 pointer-events-none px-2 sm:px-4 md:-mx-4 lg:-mx-6 w-[calc(100%+16px)] sm:w-[calc(100%+32px)] md:w-[calc(100%+32px)] lg:w-[calc(100%+48px)] -ml-2 sm:-ml-4 md:ml-0 lg:ml-0" />
+            <div className="flex justify-center mt-8">
+              <SwiperCarouselNavigation
+                hidden={isSingle}
+                onInteraction={() => {
+                  pauseAutoplay('interaction');
+                  if (interactionTimerRef.current) {
+                    clearTimeout(interactionTimerRef.current);
+                  }
+                  interactionTimerRef.current = setTimeout(() => {
+                    resumeAutoplay('interaction');
+                    interactionTimerRef.current = null;
+                  }, 4000);
+                }}
+              />
+            </div>
           </Swiper>
         </div>
       </div>

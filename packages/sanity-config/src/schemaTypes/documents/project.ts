@@ -3,15 +3,15 @@ import { CaseIcon } from '@sanity/icons';
 
 export const project = defineType({
   name: 'project',
-  title: 'Project / Case Study',
+  title: 'المشاريع والأعمال (Projects)',
   type: 'document',
   icon: CaseIcon,
   fieldsets: [
-    { name: 'general', title: 'General Info' },
-    { name: 'story', title: 'Case Study Narrative' },
-    { name: 'deliverablesMetrics', title: 'Deliverables & Metrics' },
-    { name: 'mediaGallery', title: 'Media & Gallery' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+    { name: 'general', title: 'بيانات المشروع والتصنيف (General Info & Category)' },
+    { name: 'story', title: 'قصة ودراسة الحالة (Case Study Narrative)' },
+    { name: 'deliverablesMetrics', title: 'المخرجات والأرقام (Deliverables & Metrics)' },
+    { name: 'mediaGallery', title: 'معرض الوسائط والفيديوهات (Media & Gallery)' },
+    { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     defineField({
@@ -48,18 +48,36 @@ export const project = defineType({
     }),
     defineField({
       name: 'primaryCategory',
-      title: 'Primary Category',
+      title: 'التصنيف الأساسي المعتمد (Primary Canonical Category)',
+      description: 'اختر أحد التصنيفات الثمانية المعتمدة للوكالة. يحدد هذا التصنيف مسار الفلترة وظهور المشروع في الموقع.',
       type: 'reference',
       to: [{ type: 'contentCategory' }],
+      options: {
+        filter: 'slug.current in $canonicalKeys && active == true',
+        filterParams: {
+          canonicalKeys: [
+            'motion-graphics',
+            'video-editing',
+            'social-media-design',
+            'print-design',
+            'brand-identity',
+            'artificial-intelligence',
+            'exhibitions',
+            'festivals',
+          ],
+        },
+      },
       fieldset: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'categories',
-      title: 'Additional Categories',
+      title: 'تصنيفات إضافية (موروث - Legacy Categories)',
+      description: 'حقل قديم للقراءة فقط؛ يرجى استخدام "Primary Category" أعلاه لتحديد التصنيف المعتمد للمشروع.',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'contentCategory' }] })],
       fieldset: 'general',
+      hidden: true,
     }),
     defineField({
       name: 'relatedServices',

@@ -7,6 +7,7 @@ export interface NavLink {
   label: { ar: string; en: string };
   href: string;
   isExternal?: boolean;
+  isButton?: boolean;
 }
 
 export interface FooterColumn {
@@ -18,6 +19,8 @@ export interface SiteSettings {
   companyName: { ar: string; en: string };
   legalName: { ar: string; en: string };
   defaultSiteUrl: string;
+  lightLogo?: string;
+  darkLogo?: string;
   email: string;
   phoneDisplay: string;
   phoneHref: string;
@@ -28,12 +31,20 @@ export interface SiteSettings {
   footerColumns: FooterColumn[];
   copyrightText: { ar: string; en: string };
   socialLinks: Array<{ platform: string; url: string }>;
+  defaultSeo?: {
+    metaTitle?: { ar?: string; en?: string };
+    metaDescription?: { ar?: string; en?: string };
+    keywords?: { ar?: string[]; en?: string[] };
+  };
+  defaultOgImage?: string;
 }
 
 const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   companyName,
   legalName,
   defaultSiteUrl,
+  "lightLogo": lightLogo.asset->url,
+  "darkLogo": darkLogo.asset->url,
   email,
   phoneDisplay,
   phoneHref,
@@ -42,7 +53,8 @@ const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   headerNav[]{
     label,
     href,
-    isExternal
+    isExternal,
+    isButton
   },
   footerDescription,
   footerColumns[]{
@@ -50,14 +62,21 @@ const siteSettingsQuery = `*[_type == "siteSettings"][0]{
     links[]{
       label,
       href,
-      isExternal
+      isExternal,
+      isButton
     }
   },
   copyrightText,
   socialLinks[]{
     platform,
     url
-  }
+  },
+  defaultSeo {
+    metaTitle,
+    metaDescription,
+    keywords
+  },
+  "defaultOgImage": defaultOgImage.asset->url
 }`;
 
 export async function getSiteSettings(options: { stega?: boolean } = {}): Promise<SiteSettings> {
@@ -74,6 +93,8 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
         companyName: { ar: data.companyName?.ar || 'دي ناين', en: data.companyName?.en || 'D-NINE' },
         legalName: { ar: data.legalName?.ar || '', en: data.legalName?.en || '' },
         defaultSiteUrl: data.defaultSiteUrl || siteConfig.url,
+        lightLogo: data.lightLogo || undefined,
+        darkLogo: data.darkLogo || undefined,
         email: data.email || siteConfig.contact.email,
         phoneDisplay: data.phoneDisplay || siteConfig.contact.phone.display,
         phoneHref: data.phoneHref || siteConfig.contact.phone.href,
@@ -86,6 +107,7 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
           label: { ar: nav.label?.ar || '', en: nav.label?.en || '' },
           href: nav.href || '#',
           isExternal: nav.isExternal || false,
+          isButton: nav.isButton || false,
         })),
         footerDescription: {
           ar: data.footerDescription?.ar || '',
@@ -97,6 +119,7 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
             label: { ar: link.label?.ar || '', en: link.label?.en || '' },
             href: link.href || '#',
             isExternal: link.isExternal || false,
+            isButton: link.isButton || false,
           })),
         })),
         copyrightText: {
@@ -104,6 +127,8 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
           en: data.copyrightText?.en || 'All rights reserved',
         },
         socialLinks: data.socialLinks || [],
+        defaultSeo: data.defaultSeo || undefined,
+        defaultOgImage: data.defaultOgImage || undefined,
       };
     }
   }
@@ -113,6 +138,8 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
     companyName: { ar: 'دي ناين', en: siteConfig.name },
     legalName: { ar: siteConfig.legalName, en: siteConfig.legalName },
     defaultSiteUrl: siteConfig.url,
+    lightLogo: undefined,
+    darkLogo: undefined,
     email: siteConfig.contact.email,
     phoneDisplay: siteConfig.contact.phone.display,
     phoneHref: siteConfig.contact.phone.href,
@@ -121,7 +148,7 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
       ar: [siteConfig.contact.locations.ar],
       en: [siteConfig.contact.locations.en],
     },
-    headerNav: [], // You can define default static header nav here
+    headerNav: [], // Fallback header nav handled in component
     footerDescription: { ar: '', en: '' },
     footerColumns: [],
     copyrightText: { ar: `© ${new Date().getFullYear()} ${siteConfig.name}`, en: `© ${new Date().getFullYear()} ${siteConfig.name}` },
@@ -130,5 +157,7 @@ export async function getSiteSettings(options: { stega?: boolean } = {}): Promis
       { platform: 'linkedin', url: siteConfig.socials.linkedin },
       { platform: 'twitter', url: siteConfig.socials.twitter },
     ],
+    defaultSeo: undefined,
+    defaultOgImage: undefined,
   };
 }

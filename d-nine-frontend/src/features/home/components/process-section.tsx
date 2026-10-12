@@ -5,8 +5,18 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Sparkles } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 
-export const ProcessSection: React.FC<{ data?: { stepNumber?: string; title?: { ar?: string; en?: string }; description?: { ar?: string; en?: string } }[] }> = ({ data }) => {
+export interface ProcessSectionProps {
+  data?: { stepNumber?: string; title?: { ar?: string; en?: string }; description?: { ar?: string; en?: string } }[];
+  header?: {
+    badge?: { ar?: string; en?: string };
+    title?: { ar?: string; en?: string };
+  };
+}
+
+export const ProcessSection: React.FC<ProcessSectionProps> = ({ data, header }) => {
   const t = useTranslations('home.process');
+  const locale = useLocale() as 'ar' | 'en';
+  const isArabic = locale === 'ar';
 
   const steps = data?.length ? data : [
     {
@@ -26,21 +36,16 @@ export const ProcessSection: React.FC<{ data?: { stepNumber?: string; title?: { 
     },
   ];
 
-  const locale = useLocale();
-  const isArabic = locale === 'ar';
-
-
-
   return (
     <section className="py-16 sm:py-24 relative bg-slate-50 dark:bg-slate-950/40 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <RevealSection className="text-center max-w-3xl mx-auto space-y-4 mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-purple/10 text-brand-purple dark:text-brand-purple-light text-xs sm:text-sm font-semibold">
             <Sparkles className="w-4 h-4" aria-hidden="true" />
-            <span>{t('badge')}</span>
+            <span>{header?.badge?.[locale] || header?.badge?.ar || header?.badge?.en || t('badge')}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            {t('title')}
+            {header?.title?.[locale] || header?.title?.ar || header?.title?.en || t('title')}
           </h2>
         </RevealSection>
 

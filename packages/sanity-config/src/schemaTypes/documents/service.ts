@@ -3,19 +3,20 @@ import { SparklesIcon } from '@sanity/icons';
 
 export const service = defineType({
   name: 'service',
-  title: 'Primary Service',
+  title: 'الخدمات الأساسية (Primary Services)',
   type: 'document',
   icon: SparklesIcon,
   fieldsets: [
-    { name: 'general', title: 'General Info' },
-    { name: 'content', title: 'Descriptions & Details' },
-    { name: 'process', title: 'Process & Deliverables' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+    { name: 'general', title: 'بيانات الخدمة والتصنيف (General Info & Category)' },
+    { name: 'content', title: 'الوصف والمميزات (Descriptions & Details)' },
+    { name: 'process', title: 'خطوات العمل والمخرجات (Process & Deliverables)' },
+    { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     defineField({
       name: 'title',
-      title: 'Service Title',
+      title: 'عنوان الخدمة (Service Title)',
+      description: 'اسم الخدمة باللغتين العربية والإنجليزية',
       type: 'localizedString',
       fieldset: 'general',
       validation: (Rule) => Rule.required(),

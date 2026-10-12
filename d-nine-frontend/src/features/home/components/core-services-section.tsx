@@ -9,6 +9,11 @@ import { RevealSection } from '@/components/motion/reveal-section';
 
 export interface CoreServicesSectionProps {
   services: ServiceItem[];
+  data?: {
+    badge?: { ar?: string; en?: string };
+    title?: { ar?: string; en?: string };
+    subtitle?: { ar?: string; en?: string };
+  };
 }
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
@@ -21,8 +26,8 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   Megaphone,
 };
 
-export const CoreServicesSection: React.FC<CoreServicesSectionProps> = ({ services }) => {
-  const locale = useLocale();
+export const CoreServicesSection: React.FC<CoreServicesSectionProps> = ({ services, data }) => {
+  const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
   const t = useTranslations('home.coreServices');
 
@@ -32,13 +37,13 @@ export const CoreServicesSection: React.FC<CoreServicesSectionProps> = ({ servic
         <RevealSection className="text-center max-w-3xl mx-auto space-y-4 mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 text-brand-cyan text-xs sm:text-sm font-semibold">
             <Sparkles className="w-4 h-4" aria-hidden="true" />
-            <span>{t('badge')}</span>
+            <span>{data?.badge?.[locale] || data?.badge?.ar || data?.badge?.en || t('badge')}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            {t('title')}
+            {data?.title?.[locale] || data?.title?.ar || data?.title?.en || t('title')}
           </h2>
           <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg">
-            {t('subtitle')}
+            {data?.subtitle?.[locale] || data?.subtitle?.ar || data?.subtitle?.en || t('subtitle')}
           </p>
         </RevealSection>
 

@@ -13,13 +13,18 @@ import { RevealSection } from '@/components/motion/reveal-section';
 export interface FeaturedWorkSectionProps {
   projects: ProjectItem[];
   categories: ContentCategory[];
+  data?: {
+    badge?: { ar?: string; en?: string };
+    title?: { ar?: string; en?: string };
+  };
 }
 
 export const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({
   projects,
   categories,
+  data,
 }) => {
-  const locale = useLocale();
+  const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
   const t = useTranslations('home.featuredWork');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -38,10 +43,10 @@ export const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({
         <RevealSection className="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-purple/10 dark:bg-brand-purple/20 text-brand-purple dark:text-brand-purple-light text-xs sm:text-sm font-semibold">
             <Sparkles className="w-4 h-4" aria-hidden="true" />
-            <span>{t('badge')}</span>
+            <span>{data?.badge?.[locale] || data?.badge?.ar || data?.badge?.en || t('badge')}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
-            {t('title')}
+            {data?.title?.[locale] || data?.title?.ar || data?.title?.en || t('title')}
           </h2>
         </RevealSection>
 

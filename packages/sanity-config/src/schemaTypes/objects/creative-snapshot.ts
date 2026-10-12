@@ -43,6 +43,30 @@ export const creativeSnapshot = defineType({
       type: 'url',
       description: 'رابط فيديو خارجي اختياري في حال عدم رفع ملف MP4',
     }),
+    defineField({
+      name: 'ctaWatchShowreel',
+      title: 'نص زر مشاهدة الفيديو التعريفي (Showreel CTA Text)',
+      type: 'localizedString',
+      description: 'النص المكتوب على زر تشغيل الشواريل (افتراضياً: شاهد الفيديو التعريفي / Watch Showreel)',
+    }),
+    defineField({
+      name: 'ctaExploreWork',
+      title: 'نص زر استكشاف الأعمال (Explore Work CTA Text)',
+      type: 'localizedString',
+      description: 'النص المكتوب على زر التوجيه لصفحة الأعمال (افتراضياً: استكشف أعمالنا / Explore Work)',
+    }),
+    defineField({
+      name: 'videoBadgeText',
+      title: 'شارة بطاقة الفيديو (Video Badge Text)',
+      type: 'localizedString',
+      description: 'النص الظاهر على بطاقة الفيديو (افتراضياً: D-NINE SHOWREEL)',
+    }),
+    defineField({
+      name: 'videoDuration',
+      title: 'مدة الفيديو الظاهرة (Displayed Video Duration)',
+      type: 'string',
+      description: 'مدة الفيديو المعروضة على البطاقة إن رغبت (مثل 01:45)',
+    }),
 
     // Legacy fields preserved for safe migration without data loss
     defineField({

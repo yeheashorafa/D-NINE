@@ -42,23 +42,31 @@ export async function Footer({ settings }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12 mb-16">
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-6">
-            <Logo variant="footer" />
+            <Logo
+              variant="footer"
+              lightLogo={settings?.lightLogo}
+              darkLogo={settings?.darkLogo}
+              companyName={settings?.companyName?.[locale] || settings?.companyName?.en}
+            />
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed max-w-md">
               {tagline}
             </p>
             <div className="flex items-center gap-3">
               {settings?.socialLinks && settings.socialLinks.length > 0 ? (
-                settings.socialLinks.map(social => (
-                  <a
-                    key={social.platform}
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-brand-cyan hover:border-brand-cyan/40 transition-colors shadow-sm dark:shadow-none uppercase text-xs font-bold"
-                  >
-                    {social.platform}
-                  </a>
-                ))
+                settings.socialLinks
+                  .filter((social) => social.url && social.url !== '#')
+                  .map(social => (
+                    <a
+                      key={social.platform}
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={social.platform}
+                      className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-brand-cyan hover:border-brand-cyan/40 transition-colors shadow-sm dark:shadow-none uppercase text-xs font-bold"
+                    >
+                      {social.platform}
+                    </a>
+                  ))
               ) : (
                 <>
                   <a
@@ -99,57 +107,91 @@ export async function Footer({ settings }: FooterProps) {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-slate-950 dark:text-white font-bold text-base mb-4 tracking-wide uppercase">
-              {settings?.footerColumns?.[0]?.title?.[locale] || t('footer.quickLinks')}
-            </h3>
-            <ul className="space-y-3 text-sm">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
-                  >
-                    <span>{link.label}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Dynamic Footer Columns from CMS Settings */}
+          {settings?.footerColumns && settings.footerColumns.length > 0 ? (
+            settings.footerColumns.map((col, idx) => (
+              <div key={idx}>
+                <h3 className="text-slate-950 dark:text-white font-bold text-base mb-4 tracking-wide uppercase">
+                  {col.title?.[locale] || col.title?.en}
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  {col.links.map((link, lIdx) => {
+                    const label = link.label?.[locale] || link.label?.en;
+                    if (!label || !link.href || link.href === '#') return null;
 
-          {/* Services Links */}
-          <div>
-            <h3 className="text-slate-950 dark:text-white font-bold text-base mb-4 tracking-wide uppercase">
-              {settings?.footerColumns?.[1]?.title?.[locale] || t('footer.services')}
-            </h3>
-            <ul className="space-y-3 text-sm">
-              {settings?.footerColumns?.[1] ? (
-                settings.footerColumns[1].links.map(link => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
-                    >
-                      <span>{link.label[locale] || link.label.en}</span>
-                    </Link>
-                  </li>
-                ))
-              ) : (
-                services.map((service) => (
-                  <li key={service.slug}>
-                    <Link
-                      href={`/services/${service.slug}`}
-                      className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
-                    >
-                      <span>{service.title[locale as 'ar' | 'en']}</span>
-                    </Link>
-                  </li>
-                ))
-              )}
-            </ul>
-          </div>
+                    if (link.isExternal) {
+                      return (
+                        <li key={lIdx}>
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
+                          >
+                            <span>{label}</span>
+                            <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </a>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={lIdx}>
+                        <Link
+                          href={link.href}
+                          className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
+                        >
+                          <span>{label}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))
+          ) : (
+            <>
+              {/* Quick Links Fallback */}
+              <div>
+                <h3 className="text-slate-950 dark:text-white font-bold text-base mb-4 tracking-wide uppercase">
+                  {t('footer.quickLinks')}
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  {quickLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
+                      >
+                        <span>{link.label}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Services Links Fallback */}
+              <div>
+                <h3 className="text-slate-950 dark:text-white font-bold text-base mb-4 tracking-wide uppercase">
+                  {t('footer.services')}
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  {services.map((service) => (
+                    <li key={service.slug}>
+                      <Link
+                        href={`/services/${service.slug}`}
+                        className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
+                      >
+                        <span>{service.title[locale as 'ar' | 'en']}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
 
           {/* Contact Details */}
           <div>

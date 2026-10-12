@@ -3,7 +3,7 @@ import { MasterDetailIcon } from '@sanity/icons';
 
 export const serviceOffering = defineType({
   name: 'serviceOffering',
-  title: 'Service Offering (Sub-service)',
+  title: 'الخدمات الفرعية والتفصيلية (Service Offerings)',
   type: 'document',
   icon: MasterDetailIcon,
   fields: [

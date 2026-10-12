@@ -79,16 +79,31 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
 
   const locale = (pathname.split('/')[1] || 'ar') as 'ar' | 'en';
   
-  const navLinks = settings?.headerNav && settings.headerNav.length > 0 
-    ? settings.headerNav.map(nav => ({ href: nav.href, label: nav.label[locale] || nav.label.en }))
+  const allLinks = (settings?.headerNav && settings.headerNav.length > 0)
+    ? settings.headerNav
+        .filter((nav) => nav.href && nav.href !== '#' && (nav.label[locale] || nav.label.en))
+        .map((nav) => ({
+          href: nav.href,
+          label: nav.label[locale] || nav.label.en,
+          isExternal: Boolean(nav.isExternal),
+          isButton: Boolean(nav.isButton),
+        }))
     : [
-        { href: '/', label: t('home') },
-        { href: '/about', label: t('about') },
-        { href: '/services', label: t('services') },
-        { href: '/work', label: t('work') },
-        { href: '/blog', label: t('blog') },
-        { href: '/contact', label: t('contact') }
+        { href: '/', label: t('home'), isExternal: false, isButton: false },
+        { href: '/about', label: t('about'), isExternal: false, isButton: false },
+        { href: '/services', label: t('services'), isExternal: false, isButton: false },
+        { href: '/work', label: t('work'), isExternal: false, isButton: false },
+        { href: '/blog', label: t('blog'), isExternal: false, isButton: false },
+        { href: '/contact', label: t('contact'), isExternal: false, isButton: true },
       ];
+
+  // Separate regular nav links from CTA button links if an explicit isButton link exists
+  const buttonLink = allLinks.find((l) => l.isButton);
+  const navLinks = allLinks.filter((l) => l !== buttonLink);
+
+  const ctaLabel = buttonLink ? buttonLink.label : t('contact');
+  const ctaHref = buttonLink ? buttonLink.href : '/contact';
+  const ctaIsExternal = buttonLink ? buttonLink.isExternal : false;
 
   return (
     <header
@@ -101,7 +116,12 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Logo size="md" />
+          <Logo
+            size="md"
+            lightLogo={settings?.lightLogo}
+            darkLogo={settings?.darkLogo}
+            companyName={settings?.companyName?.[locale] || settings?.companyName?.en}
+          />
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md px-4 py-1.5 rounded-full border border-slate-200/80 dark:border-slate-800 shadow-sm">
@@ -135,16 +155,31 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
 
             {/* Desktop Contact CTA */}
             <div className="hidden sm:block">
-              <Link
-                href="/contact"
-                className={getButtonClasses({
-                  variant: 'primary',
-                  size: 'md',
-                  className: 'rounded-full font-extrabold shadow-lg shadow-brand-purple/20'
-                })}
-              >
-                {t('contact')}
-              </Link>
+              {ctaIsExternal ? (
+                <a
+                  href={ctaHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={getButtonClasses({
+                    variant: 'primary',
+                    size: 'md',
+                    className: 'rounded-full font-extrabold shadow-lg shadow-brand-purple/20'
+                  })}
+                >
+                  {ctaLabel}
+                </a>
+              ) : (
+                <Link
+                  href={ctaHref}
+                  className={getButtonClasses({
+                    variant: 'primary',
+                    size: 'md',
+                    className: 'rounded-full font-extrabold shadow-lg shadow-brand-purple/20'
+                  })}
+                >
+                  {ctaLabel}
+                </Link>
+              )}
             </div>
 
             {/* Mobile Menu Toggle Button */}
@@ -221,17 +256,33 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
                 })}
 
                 <div className="pt-4 border-t border-slate-200 dark:border-slate-800 mt-2">
-                  <Link
-                    href="/contact"
-                    onClick={handleCloseMenu}
-                    className={getButtonClasses({
-                      variant: 'primary',
-                      size: 'lg',
-                      className: 'w-full justify-center rounded-2xl font-extrabold shadow-xl',
-                    })}
-                  >
-                    {t('contact')}
-                  </Link>
+                  {ctaIsExternal ? (
+                    <a
+                      href={ctaHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={handleCloseMenu}
+                      className={getButtonClasses({
+                        variant: 'primary',
+                        size: 'lg',
+                        className: 'w-full justify-center rounded-2xl font-extrabold shadow-xl',
+                      })}
+                    >
+                      {ctaLabel}
+                    </a>
+                  ) : (
+                    <Link
+                      href={ctaHref}
+                      onClick={handleCloseMenu}
+                      className={getButtonClasses({
+                        variant: 'primary',
+                        size: 'lg',
+                        className: 'w-full justify-center rounded-2xl font-extrabold shadow-xl',
+                      })}
+                    >
+                      {ctaLabel}
+                    </Link>
+                  )}
                 </div>
               </nav>
             </motion.div>

@@ -3,31 +3,34 @@ import { DocumentIcon } from '@sanity/icons';
 
 export const contactPage = defineType({
   name: 'contactPage',
-  title: 'Contact Page',
+  title: 'صفحة تواصل معنا (Contact Page)',
   type: 'document',
   icon: DocumentIcon,
   fieldsets: [
-    { name: 'hero', title: 'Hero Section' },
-    { name: 'content', title: 'Marketing Content & Titles' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+    { name: 'hero', title: 'مقدمة الصفحة (Hero Section)' },
+    { name: 'content', title: 'محتوى ووسائل التواصل والمكاتب (Contact Methods & Offices)' },
+    { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     defineField({
       name: 'heroBadge',
-      title: 'Hero Badge',
+      title: 'الشارة التمهيدية (Hero Badge)',
+      description: 'نص الشارة الصغيرة أعلى عنوان الصفحة',
       type: 'localizedString',
       fieldset: 'hero',
     }),
     defineField({
       name: 'heroTitle',
-      title: 'Hero Title',
+      title: 'عنوان الصفحة (Hero Title)',
+      description: 'العنوان الرئيسي لصفحة التواصل باللغتين',
       type: 'localizedString',
       fieldset: 'hero',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'heroSubtitle',
-      title: 'Hero Subtitle',
+      title: 'الوصف التمهيدي (Hero Subtitle)',
+      description: 'الوصف النصي القصير أسفل العنوان الرئيسي',
       type: 'localizedText',
       fieldset: 'hero',
     }),

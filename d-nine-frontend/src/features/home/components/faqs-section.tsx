@@ -6,9 +6,17 @@ import { Sparkles } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 import { Accordion } from '@/components/ui/accordion';
 
-export const FaqsSection: React.FC<{ data?: { question?: { ar?: string; en?: string }; answer?: { ar?: string; en?: string } }[] }> = ({ data }) => {
+export interface FaqsSectionProps {
+  data?: { question?: { ar?: string; en?: string }; answer?: { ar?: string; en?: string } }[];
+  header?: {
+    badge?: { ar?: string; en?: string };
+    title?: { ar?: string; en?: string };
+  };
+}
+
+export const FaqsSection: React.FC<FaqsSectionProps> = ({ data, header }) => {
   const t = useTranslations('home.faqs');
-  const locale = useLocale();
+  const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
 
   if (!data || data.length === 0) return null;
@@ -25,10 +33,10 @@ export const FaqsSection: React.FC<{ data?: { question?: { ar?: string; en?: str
         <RevealSection className="text-center space-y-4 mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 text-brand-cyan text-xs sm:text-sm font-semibold">
             <Sparkles className="w-4 h-4" aria-hidden="true" />
-            <span>{t('badge')}</span>
+            <span>{header?.badge?.[locale] || header?.badge?.ar || header?.badge?.en || t('badge')}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            {t('title')}
+            {header?.title?.[locale] || header?.title?.ar || header?.title?.en || t('title')}
           </h2>
         </RevealSection>
 

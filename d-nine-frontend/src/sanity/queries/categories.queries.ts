@@ -1,7 +1,16 @@
 import { groq } from 'next-sanity';
 
 export const categoriesQuery = groq`
-  *[_type == "contentCategory" && active == true] | order(order asc, _createdAt desc, _id asc) {
+  *[_type == "contentCategory" && active == true && slug.current in [
+    "motion-graphics",
+    "video-editing",
+    "social-media-design",
+    "print-design",
+    "brand-identity",
+    "artificial-intelligence",
+    "exhibitions",
+    "festivals"
+  ]] | order(order asc, _createdAt desc, _id asc) {
     _id,
     "id": _id,
     "slug": slug.current,

@@ -9,6 +9,9 @@ export interface LogoProps {
   variant?: 'header' | 'footer' | 'sm' | 'md' | 'lg';
   size?: 'header' | 'footer' | 'sm' | 'md' | 'lg';
   priority?: boolean;
+  lightLogo?: string;
+  darkLogo?: string;
+  companyName?: string;
 }
 
 export const Logo: React.FC<LogoProps> = ({
@@ -16,8 +19,13 @@ export const Logo: React.FC<LogoProps> = ({
   variant,
   size,
   priority = true,
+  lightLogo,
+  darkLogo,
+  companyName = 'D-NINE — Creative Agency',
 }) => {
   const activeVariant = size || variant || 'header';
+  const lightSrc = lightLogo || '/brand/d-nine-logo-light.png';
+  const darkSrc = darkLogo || '/brand/d-nine-logo-dark.png';
   // Dimensions tailored to cropped logo aspect ratio (252x107 ~ 2.355:1)
   // Header Mobile: ~118px wide (118x50)
   // Header Desktop: ~160px wide (160x68)
@@ -40,8 +48,8 @@ export const Logo: React.FC<LogoProps> = ({
       <div className={`relative flex items-center ${sizeClasses}`}>
         {/* Light Mode Logo */}
         <Image
-          src="/brand/d-nine-logo-light.png"
-          alt="D-NINE — Creative Agency"
+          src={lightSrc}
+          alt={companyName}
           width={252}
           height={107}
           priority={priority}
@@ -50,8 +58,8 @@ export const Logo: React.FC<LogoProps> = ({
 
         {/* Dark Mode Logo */}
         <Image
-          src="/brand/d-nine-logo-dark.png"
-          alt="D-NINE — Creative Agency"
+          src={darkSrc}
+          alt={companyName}
           width={252}
           height={107}
           priority={priority}

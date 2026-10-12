@@ -3,7 +3,7 @@ import { StarIcon } from '@sanity/icons';
 
 export const testimonial = defineType({
   name: 'testimonial',
-  title: 'Testimonial',
+  title: 'آراء وتقييمات العملاء (Testimonials)',
   type: 'document',
   icon: StarIcon,
   groups: [

@@ -2378,6 +2378,31 @@
         },
         "optional": true
       },
+      "featuredWorkHeader": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "badge": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            },
+            "title": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            }
+          }
+        },
+        "optional": true
+      },
       "featuredProjects": {
         "type": "objectAttribute",
         "value": {
@@ -2417,6 +2442,39 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "optional": true
+      },
+      "coreServicesHeader": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "badge": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            },
+            "title": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            },
+            "subtitle": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedText"
+              },
+              "optional": true
             }
           }
         },
@@ -2518,6 +2576,31 @@
         },
         "optional": true
       },
+      "processHeader": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "badge": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            },
+            "title": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            }
+          }
+        },
+        "optional": true
+      },
       "processTimeline": {
         "type": "objectAttribute",
         "value": {
@@ -2535,6 +2618,31 @@
             "rest": {
               "type": "inline",
               "name": "serviceProcessStep"
+            }
+          }
+        },
+        "optional": true
+      },
+      "faqsHeader": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "badge": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
+            },
+            "title": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "localizedString"
+              },
+              "optional": true
             }
           }
         },
@@ -2832,6 +2940,37 @@
           "optional": true
         },
         "videoUrl": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "ctaWatchShowreel": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "localizedString"
+          },
+          "optional": true
+        },
+        "ctaExploreWork": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "localizedString"
+          },
+          "optional": true
+        },
+        "videoBadgeText": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "localizedString"
+          },
+          "optional": true
+        },
+        "videoDuration": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
@@ -5231,6 +5370,13 @@
           "optional": false
         },
         "isExternal": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        },
+        "isButton": {
           "type": "objectAttribute",
           "value": {
             "type": "boolean"

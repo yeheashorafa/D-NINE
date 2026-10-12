@@ -28,12 +28,16 @@ export async function generateMetadata({
   const isArabic = locale === "ar";
   const settings = await getSiteSettings({ stega: false });
 
-  const title = stegaClean(isArabic
+  const defaultTitle = isArabic
     ? settings.companyName.ar + " | وكالة إبداعية وإنتاج إعلامي وتصميم الهوية"
-    : settings.companyName.en + " | Creative Agency, Media Production & Brand Identity");
-  const description = stegaClean(isArabic
+    : settings.companyName.en + " | Creative Agency, Media Production & Brand Identity";
+  const defaultDesc = isArabic
     ? "وكالة دي ناين للإنتاج الإعلامي، الهوية البصرية، تصميم الجرافيك، وصناعة الفيديوهات القصيرة في الرياض ودبي."
-    : "D-NINE Creative Agency in Riyadh & Dubai. Video production, brand identity, graphic design, and short-form video reels.");
+    : "D-NINE Creative Agency in Riyadh & Dubai. Video production, brand identity, graphic design, and short-form video reels.";
+
+  const title = stegaClean(settings.defaultSeo?.metaTitle?.[isArabic ? 'ar' : 'en'] || defaultTitle);
+  const description = stegaClean(settings.defaultSeo?.metaDescription?.[isArabic ? 'ar' : 'en'] || defaultDesc);
+  const ogImageUrl = stegaClean(settings.defaultOgImage || "/media/seo/d-nine-og.jpg");
   
   const siteUrl = stegaClean(settings.defaultSiteUrl || process.env.NEXT_PUBLIC_SITE_URL || "https://dnine.agency");
 
@@ -56,7 +60,7 @@ export async function generateMetadata({
       siteName: stegaClean(settings.companyName[isArabic ? 'ar' : 'en'] || "D-NINE Media & Production"),
       images: [
         {
-          url: "/media/seo/d-nine-og.jpg",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: stegaClean(settings.companyName[isArabic ? 'ar' : 'en'] || "D-NINE Creative Agency"),

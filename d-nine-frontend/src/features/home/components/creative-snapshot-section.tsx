@@ -80,22 +80,24 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
 
             {/* CTAs */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
-              <button
-                type="button"
-                onClick={() => setShowreelOpen(true)}
-                className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-gradient-brand text-white font-extrabold text-sm sm:text-base shadow-lg shadow-brand-purple/25 hover:opacity-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan active:scale-95"
-              >
-                <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-                  <Play className="w-4 h-4 fill-current text-white" />
-                </div>
-                <span>{t('ctaWatchShowreel')}</span>
-              </button>
+              {data?.videoUrl && (
+                <button
+                  type="button"
+                  onClick={() => setShowreelOpen(true)}
+                  className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-gradient-brand text-white font-extrabold text-sm sm:text-base shadow-lg shadow-brand-purple/25 hover:opacity-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan active:scale-95"
+                >
+                  <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+                    <Play className="w-4 h-4 fill-current text-white" />
+                  </div>
+                  <span>{data?.ctaWatchShowreel?.[locale] || t('ctaWatchShowreel')}</span>
+                </button>
+              )}
 
               <Link
                 href="/work"
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-surface dark:bg-surface-muted text-foreground font-bold text-sm sm:text-base border border-border hover:border-brand-cyan/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-cyan"
               >
-                <span>{t('ctaExploreWork')}</span>
+                <span>{data?.ctaExploreWork?.[locale] || t('ctaExploreWork')}</span>
                 {isArabic ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
               </Link>
             </div>
@@ -108,17 +110,19 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
             </div>
 
             <div
-              onClick={() => setShowreelOpen(true)}
+              onClick={() => {
+                if (data?.videoUrl) setShowreelOpen(true);
+              }}
               className="group relative rounded-3xl overflow-hidden border border-border bg-slate-900 shadow-2xl cursor-pointer transform transition-transform duration-300 hover:-translate-y-1"
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if ((e.key === 'Enter' || e.key === ' ') && data?.videoUrl) {
                   e.preventDefault();
                   setShowreelOpen(true);
                 }
               }}
-              aria-label={t('ctaWatchShowreel')}
+              aria-label={data?.ctaWatchShowreel?.[locale] || t('ctaWatchShowreel')}
             >
               <div className="relative aspect-[16/10] w-full">
                 <Image
@@ -130,21 +134,25 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
 
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-brand flex items-center justify-center shadow-lg">
-                      <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-current text-white ml-0.5" />
+                {data?.videoUrl && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-brand flex items-center justify-center shadow-lg">
+                        <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-current text-white ml-0.5" />
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white text-xs sm:text-sm font-medium">
                   <span className="bg-slate-950/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 font-bold">
-                    D-NINE SHOWREEL
+                    {data?.videoBadgeText?.[locale] || 'D-NINE SHOWREEL'}
                   </span>
-                  <span className="bg-slate-950/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                    01:45
-                  </span>
+                  {data?.videoDuration && (
+                    <span className="bg-slate-950/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                      {data.videoDuration}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

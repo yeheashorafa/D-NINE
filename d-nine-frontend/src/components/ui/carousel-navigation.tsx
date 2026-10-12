@@ -100,7 +100,18 @@ export const CarouselNavigation: React.FC<CarouselNavigationProps> = ({
   );
 };
 
-export const SwiperCarouselNavigation: React.FC<Omit<CarouselNavigationProps, 'onPrev' | 'onNext' | 'prevDisabled' | 'nextDisabled'>> = (props) => {
+export interface SwiperCarouselNavigationProps extends Omit<CarouselNavigationProps, 'onPrev' | 'onNext' | 'prevDisabled' | 'nextDisabled'> {
+  onInteraction?: () => void;
+  onPrevious?: () => void;
+  onNext?: () => void;
+}
+
+export const SwiperCarouselNavigation: React.FC<SwiperCarouselNavigationProps> = ({
+  onInteraction,
+  onPrevious,
+  onNext,
+  ...props
+}) => {
   const swiper = useSwiper();
   const [isBeginning, setIsBeginning] = useState(swiper.isBeginning);
   const [isEnd, setIsEnd] = useState(swiper.isEnd);
@@ -126,11 +137,23 @@ export const SwiperCarouselNavigation: React.FC<Omit<CarouselNavigationProps, 'o
 
   if (isLocked || props.hidden) return null;
 
+  const handlePrev = () => {
+    onInteraction?.();
+    onPrevious?.();
+    swiper.slidePrev();
+  };
+
+  const handleNext = () => {
+    onInteraction?.();
+    onNext?.();
+    swiper.slideNext();
+  };
+
   return (
     <CarouselNavigation
       {...props}
-      onPrev={() => swiper.slidePrev()}
-      onNext={() => swiper.slideNext()}
+      onPrev={handlePrev}
+      onNext={handleNext}
       prevDisabled={isBeginning && !swiper.params.loop}
       nextDisabled={isEnd && !swiper.params.loop}
     />

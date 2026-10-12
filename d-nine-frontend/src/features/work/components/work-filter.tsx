@@ -28,6 +28,7 @@ export const WorkFilter: React.FC<WorkFilterProps> = ({
             <button
               key={cat.id || cat.slug}
               type="button"
+              data-category-slug={cat.slug}
               onClick={() => onSelectCategory(cat.slug)}
               className={`min-h-[48px] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center text-center leading-snug border focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan select-none ${
                 isActive

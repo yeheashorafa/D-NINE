@@ -3,13 +3,14 @@ import { DocumentIcon } from '@sanity/icons';
 
 export const aboutPage = defineType({
   name: 'aboutPage',
-  title: 'About Page',
+  title: 'صفحة من نحن (About Page)',
   type: 'document',
   icon: DocumentIcon,
   fieldsets: [
-    { name: 'hero', title: 'Hero Section' },
-    { name: 'content', title: 'Agency Story & Identity' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+    { name: 'hero', title: 'مقدمة الصفحة (Hero Section)' },
+    { name: 'content', title: 'قصة وهوية الوكالة والقيم (Agency Story, Values & Media)' },
+    { name: 'sections', title: 'الأقسام الإضافية (Team, Testimonials & CTA)' },
+    { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     defineField({
@@ -77,19 +78,19 @@ export const aboutPage = defineType({
       name: 'cta',
       title: 'Call to Action',
       type: 'cta',
-      fieldset: 'content',
+      fieldset: 'sections',
     }),
     defineField({
       name: 'team',
       title: 'Our Team Section',
       type: 'teamSection',
-      fieldset: 'content',
+      fieldset: 'sections',
     }),
     defineField({
       name: 'testimonials',
       title: 'Testimonials Section',
       type: 'testimonialsSection',
-      fieldset: 'content',
+      fieldset: 'sections',
     }),
     defineField({
       name: 'seo',

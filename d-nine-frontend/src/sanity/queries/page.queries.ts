@@ -77,11 +77,31 @@ export const homePageQuery = groq`
       title,
       description,
       "videoThumbnail": videoPoster.asset->url,
-      "videoUrl": coalesce(showreelVideo.asset->url, videoUrl)
+      "videoUrl": coalesce(showreelVideo.asset->url, videoUrl),
+      ctaWatchShowreel,
+      ctaExploreWork,
+      videoBadgeText,
+      videoDuration
+    },
+    featuredWorkHeader {
+      badge,
+      title
+    },
+    coreServicesHeader {
+      badge,
+      title,
+      subtitle
     },
     "featuredProjects": featuredProjects[]->slug.current,
-    "partners": partners[active != false]-> {
-      ${partnerFields}
+    "featuredServices": featuredServices[]->slug.current,
+    partnersHeader {
+      badge,
+      title,
+      subtitle
+    },
+    processHeader {
+      badge,
+      title
     },
     processTimeline,
     testimonials {
@@ -94,8 +114,21 @@ export const homePageQuery = groq`
         ${testimonialFields}
       }
     },
+    faqsHeader {
+      badge,
+      title
+    },
     faqs,
-    bookACall,
+    bookACall {
+      title,
+      description,
+      cta {
+        title,
+        subtitle,
+        "buttonText": coalesce(label, buttonText),
+        "buttonLink": coalesce(url, buttonLink)
+      }
+    },
     seo {
       metaTitle,
       metaDescription,
@@ -123,8 +156,9 @@ export const aboutPageQuery = groq`
     cta {
       title,
       subtitle,
-      buttonText,
-      buttonLink
+      "buttonText": coalesce(label, buttonText),
+      "buttonLink": coalesce(url, buttonLink),
+      variant
     },
     team {
       enabled,

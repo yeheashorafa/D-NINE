@@ -3,13 +3,13 @@ import { DocumentTextIcon } from '@sanity/icons';
 
 export const blogPost = defineType({
   name: 'blogPost',
-  title: 'Blog Post / Insight',
+  title: 'المقالات والتدوينات (Articles & Insights)',
   type: 'document',
   icon: DocumentTextIcon,
   fieldsets: [
-    { name: 'general', title: 'Post Details' },
-    { name: 'content', title: 'Article Body & Sections' },
-    { name: 'seo', title: 'SEO & Metadata', options: { collapsible: true, collapsed: true } },
+    { name: 'general', title: 'بيانات المقال الأساسية (Post Details)' },
+    { name: 'content', title: 'محتوى المقال والفقرات (Article Body & Content)' },
+    { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     defineField({
