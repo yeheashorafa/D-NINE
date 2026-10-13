@@ -268,7 +268,7 @@ describe('Section J & Contract Wiring Verification', () => {
     expect(screen.getByText('إجابات مباشرة')).toBeTruthy();
   });
 
-  it('8. verifies Partners Section displays both logo and name in localized language without links or CTAs', () => {
+  it('8. verifies Partners Section displays logo only in circular white card without name text, links, or CTAs', () => {
     const realTypedFixture: PartnerItem[] = [
       {
         id: 'p1',
@@ -298,7 +298,7 @@ describe('Section J & Contract Wiring Verification', () => {
       subtitle: { ar: 'وصف مخصص لشركاء النجاح', en: 'Custom Description for Success Partners' },
     };
 
-    // 1. In Arabic locale: partner header from Sanity overrides fallback, renders logo + name
+    // 1. In Arabic locale: partner header from Sanity overrides fallback, renders logo only in white circle
     const { container, rerender } = render(
       <PartnersSection
         partners={realTypedFixture}
@@ -309,13 +309,16 @@ describe('Section J & Contract Wiring Verification', () => {
     expect(screen.getByText('شارة الشركاء المخصصة')).toBeTruthy();
     expect(screen.getByText('شركاؤنا المميزون من CMS')).toBeTruthy();
     expect(screen.getByText('وصف مخصص لشركاء النجاح')).toBeTruthy();
-    expect(screen.getByText('شركة الأفق الرقمي')).toBeTruthy();
-    expect(screen.getByText('رواد التقنية')).toBeTruthy();
+    // Verify no visual partner name text is rendered
+    expect(screen.queryByText('شركة الأفق الرقمي')).toBeNull();
+    expect(screen.queryByText('رواد التقنية')).toBeNull();
     const img = container.querySelector('img');
     expect(img).toBeTruthy();
     expect(img?.getAttribute('alt')).toBe('شعار الأفق');
     expect(img?.getAttribute('src')).toContain('partner1.png');
     expect(img?.className).toContain('object-contain');
+    // Verify circular container
+    expect(container.querySelectorAll('.rounded-full.aspect-square').length).toBeGreaterThan(0);
 
     // Prove there are NO link tags to any website, no CTA inside cards, and only carousel nav buttons exist
     const links = container.querySelectorAll('a');
@@ -351,7 +354,8 @@ describe('Section J & Contract Wiring Verification', () => {
         header={headerFixture}
       />
     );
-    expect(screen.getByText('المتحدة للإعلام')).toBeTruthy();
+    expect(screen.queryByText('المتحدة للإعلام')).toBeNull();
+    expect(screen.getByAltText('شعار المتحدة')).toBeTruthy();
   });
 
   it('8b. verifies full pipeline: getPartners fixture -> HomePage -> PartnersSection renders in DOM', async () => {
@@ -408,8 +412,8 @@ describe('Section J & Contract Wiring Verification', () => {
     expect(partnersSection).toBeTruthy();
     expect(screen.getByText('شركاء الثقة')).toBeTruthy();
     expect(screen.getByText('تحالفاتنا الاستراتيجية')).toBeTruthy();
-    expect(screen.getByText('مجموعة النخبة القابضة')).toBeTruthy();
-    expect(screen.getByText('شركة أصول الإعلامية')).toBeTruthy();
+    expect(screen.queryByText('مجموعة النخبة القابضة')).toBeNull();
+    expect(screen.queryByText('شركة أصول الإعلامية')).toBeNull();
 
     const imgs = partnersSection?.querySelectorAll('img');
     expect(imgs?.length).toBeGreaterThanOrEqual(2);
@@ -457,8 +461,10 @@ describe('Section J & Contract Wiring Verification', () => {
     const partnersSection = container.querySelector('#partners');
     expect(partnersSection).toBeTruthy();
     // Proves legacy active: false is ignored and all partners with logo/name are rendered
-    expect(screen.getByText('شريك 1')).toBeTruthy();
-    expect(screen.getByText('شريك 2')).toBeTruthy();
+    expect(screen.getAllByAltText('شعار شريك 1').length).toBeGreaterThan(0);
+    expect(screen.getAllByAltText('شعار شريك 2').length).toBeGreaterThan(0);
+    expect(screen.queryByText('شريك 1')).toBeNull();
+    expect(screen.queryByText('شريك 2')).toBeNull();
 
     const hoverTarget = partnersSection?.querySelector('.group.px-1');
     expect(hoverTarget).toBeTruthy();

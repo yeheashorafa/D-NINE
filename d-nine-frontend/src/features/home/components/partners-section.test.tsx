@@ -34,7 +34,7 @@ vi.mock('@/components/motion/reveal-section', () => ({
 }));
 
 vi.mock('swiper/react', () => ({
-  Swiper: ({ children, onSwiper }: { children: React.ReactNode; onSwiper?: (swiper: unknown) => void }) => {
+  Swiper: ({ children, onSwiper, dir }: { children: React.ReactNode; onSwiper?: (swiper: unknown) => void; dir?: string }) => {
     const containerRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useLayoutEffect(() => {
@@ -49,6 +49,7 @@ vi.mock('swiper/react', () => ({
       <div
         ref={containerRef}
         data-testid="swiper-mock-container"
+        data-dir={dir}
         className="swiper-mock"
       >
         {children}
@@ -143,13 +144,70 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
     vi.clearAllMocks();
   });
 
-  it('renders partners and connects onSwiper to register DOM focus listeners', () => {
+  it('renders partners in white circular cards with contain object-fit, no visual name text, and no links/CTAs', () => {
     const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
     expect(container.querySelector('#partners')).toBeInTheDocument();
 
     const swiperContainer = container.querySelector('[data-testid="swiper-mock-container"]') as HTMLDivElement;
     expect(swiperContainer).toBeInTheDocument();
-    expect(screen.getByText('الشامل مول')).toBeInTheDocument();
+
+    // 1. Logos render with proper accessible alt
+    const logoImgs = screen.getAllByAltText('شعار الشامل مول');
+    expect(logoImgs.length).toBeGreaterThan(0);
+    const firstImg = logoImgs[0];
+    expect(firstImg).toHaveClass('object-contain');
+
+    // 2. Partner name is NOT rendered visually as text in the section
+    expect(screen.queryByText('الشامل مول')).not.toBeInTheDocument();
+    expect(screen.queryByText('Al Shamel Mall')).not.toBeInTheDocument();
+
+    // 3. Logos are inside circular containers (aspect-ratio 1/1, rounded-full, bg-white, overflow hidden)
+    const circularContainers = container.querySelectorAll('.rounded-full.aspect-square');
+    expect(circularContainers.length).toBe(testPartners.length);
+    circularContainers.forEach((circle) => {
+      expect(circle).toHaveStyle({
+        backgroundColor: '#ffffff',
+        borderRadius: '9999px',
+        overflow: 'hidden',
+      });
+    });
+
+    // 4. No links <a> and no buttons inside the slide/card
+    expect(container.querySelectorAll('.swiper-slide a')).toHaveLength(0);
+    expect(container.querySelectorAll('.swiper-slide button')).toHaveLength(0);
+  });
+
+  it('1 partner: exactly 1 slide rendered (no fake loop/duplication) and no navigation arrows', () => {
+    const singlePartner: PartnerItem[] = [testPartners[0]];
+    const { container } = renderWithIntl(<PartnersSection partners={singlePartner} />);
+
+    // Exactly 1 slide, zero fake duplicated slides
+    const slides = container.querySelectorAll('[data-testid="swiper-slide-mock"]');
+    expect(slides).toHaveLength(1);
+
+    // No useless navigation arrows for a single partner
+    const prevBtn = container.querySelector('.swiper-button-prev');
+    const nextBtn = container.querySelector('.swiper-button-next');
+    expect(prevBtn).toBeNull();
+    expect(nextBtn).toBeNull();
+
+    // Logo still renders in white circle with accessible alt
+    expect(screen.getByAltText('شعار الشامل مول')).toBeInTheDocument();
+    expect(screen.queryByText('الشامل مول')).not.toBeInTheDocument();
+  });
+
+  it('3 partners: renders exactly 3 slides (no fake duplicates) and enables carousel with navigation arrows', () => {
+    const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
+
+    // Exactly 3 slides (no fake repeating)
+    const slides = container.querySelectorAll('[data-testid="swiper-slide-mock"]');
+    expect(slides).toHaveLength(3);
+
+    // Navigation arrows are rendered
+    const prevBtn = container.querySelector('.swiper-button-prev');
+    const nextBtn = container.querySelector('.swiper-button-next');
+    expect(prevBtn).toBeInTheDocument();
+    expect(nextBtn).toBeInTheDocument();
   });
 
   it('hover => pause (stop) is called; mouseleave with no other reason => resume (start) is called', () => {
@@ -205,7 +263,7 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
     expect(lastSwiperInstance!.autoplay.start).toHaveBeenCalledTimes(1);
   });
 
-  it('arrow button interaction pauses autoplay and prevents resumption until 4000ms timer elapses', () => {
+  it('arrow button interaction pauses autoplay and resumes after interaction timer elapses', () => {
     const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
     const nextButton = container.querySelector('.swiper-button-next') as HTMLButtonElement;
     expect(nextButton).toBeInTheDocument();
@@ -222,9 +280,9 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
     });
     expect(lastSwiperInstance!.autoplay.resume).toHaveBeenCalledTimes(0);
 
-    // At 4100ms (timer finished), resume is safely called
+    // At 4600ms (timer finished), resume is safely called
     act(() => {
-      vi.advanceTimersByTime(2100);
+      vi.advanceTimersByTime(2600);
     });
     expect(lastSwiperInstance!.autoplay.resume).toHaveBeenCalledTimes(1);
     expect(lastSwiperInstance!.autoplay.start).toHaveBeenCalledTimes(1);
@@ -244,21 +302,20 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
     expect(lastSwiperInstance!.autoplay.start).toHaveBeenCalledTimes(0);
   });
 
-  it('hides carousel navigation arrows when partners count is <= 2 (e.g. 1 partner)', () => {
-    const singlePartner: PartnerItem[] = [testPartners[0]];
-    const { container } = renderWithIntl(<PartnersSection partners={singlePartner} />);
-    const prevBtn = container.querySelector('.swiper-button-prev');
-    const nextBtn = container.querySelector('.swiper-button-next');
-    expect(prevBtn).toBeNull();
-    expect(nextBtn).toBeNull();
-  });
+  it('renders correctly in Arabic (dir=rtl) and English (dir=ltr)', () => {
+    // 1. Arabic (RTL)
+    const { container: arContainer, unmount: unmountAr } = renderWithIntl(<PartnersSection partners={testPartners} />, 'ar');
+    const arSwiper = arContainer.querySelector('[data-testid="swiper-mock-container"]');
+    expect(arSwiper).toHaveAttribute('data-dir', 'rtl');
+    unmountAr();
 
-  it('renders carousel navigation arrows when partners count is >= 3', () => {
-    const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
-    const prevBtn = container.querySelector('.swiper-button-prev');
-    const nextBtn = container.querySelector('.swiper-button-next');
-    expect(prevBtn).toBeInTheDocument();
-    expect(nextBtn).toBeInTheDocument();
+    // 2. English (LTR)
+    const { container: enContainer } = renderWithIntl(<PartnersSection partners={testPartners} />, 'en');
+    const enSwiper = enContainer.querySelector('[data-testid="swiper-mock-container"]');
+    expect(enSwiper).toHaveAttribute('data-dir', 'ltr');
+    // Name is in English alt, still not visually in DOM
+    expect(screen.getByAltText('Al Shamel Mall Logo')).toBeInTheDocument();
+    expect(enContainer.querySelector('#partners')).toBeInTheDocument();
   });
 
   it('unmount cleans up listeners and timers safely without leaks', () => {

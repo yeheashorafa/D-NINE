@@ -4,17 +4,19 @@ import { mapSanityTeamMember } from '../../services/content/team.service';
 import { PartnerItem } from '@/types/partner';
 
 export function mapSanityPartner(doc: SanityPartnerDoc): PartnerItem {
+  const arName = doc.name?.ar || '';
+  const enName = doc.name?.en || arName;
   return {
     id: doc._id || doc.id || 'partner',
     name: {
-      ar: doc.name?.ar || '',
-      en: doc.name?.en || '',
+      ar: arName,
+      en: enName,
     },
     logo: doc.logo || '',
     logoAlt: doc.logoAlt
       ? {
-          ar: doc.logoAlt.ar || '',
-          en: doc.logoAlt.en || '',
+          ar: doc.logoAlt.ar || arName,
+          en: doc.logoAlt.en || enName,
         }
       : undefined,
     url: doc.url,

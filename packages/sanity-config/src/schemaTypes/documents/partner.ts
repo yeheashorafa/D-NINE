@@ -10,8 +10,31 @@ export const partner = defineType({
     defineField({
       name: 'name',
       title: 'اسم الشريك (Partner Name)',
-      type: 'localizedString',
-      description: 'اسم الشريك أو العميل باللغتين العربية والإنجليزية',
+      type: 'object',
+      description: 'اسم الشريك أو العميل (العربية مطلوبة، والإنجليزية اختيارية مع اعتماد العربية كبديل)',
+      fieldsets: [
+        {
+          name: 'languages',
+          title: 'الترجمة (Translations)',
+          options: { columns: 2 },
+        },
+      ],
+      fields: [
+        defineField({
+          name: 'ar',
+          title: 'العربية (Arabic)',
+          type: 'string',
+          fieldset: 'languages',
+          validation: (Rule) => Rule.required().error('اسم الشريك بالعربية مطلوب'),
+        }),
+        defineField({
+          name: 'en',
+          title: 'English (اختياري / Fallback)',
+          type: 'string',
+          fieldset: 'languages',
+          description: 'إذا تُرِك فارغاً، سيتم اعتماد الاسم العربي تلقائياً',
+        }),
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -26,7 +49,8 @@ export const partner = defineType({
           name: 'alt',
           type: 'localizedString',
           title: 'النص البديل للشعار (Logo Alt Text)',
-          description: 'نص بديل وصفي للوصول ومحركات البحث (عربي وإنجليزي)',
+          description: 'نص بديل قديم مخفي (يُعتمد اسم الشريك تلقائياً للوصول)',
+          hidden: true,
         }),
       ],
     }),
@@ -73,8 +97,10 @@ export const partner = defineType({
       order: 'order',
     },
     prepare({ nameAr, nameEn, media, active, order }) {
+      const displayName = nameAr || nameEn || 'بدون اسم';
+      const secondaryName = nameEn && nameAr && nameEn !== nameAr ? ` (${nameEn})` : '';
       return {
-        title: `${nameAr || 'بدون اسم'} (${nameEn || 'Untitled'})`,
+        title: `${displayName}${secondaryName}`,
         subtitle: `[ترتيب: ${order ?? 0}] ${active !== false ? '🟢 نشط' : '🔴 معطل'}`,
         media,
       };

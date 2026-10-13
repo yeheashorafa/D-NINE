@@ -123,15 +123,19 @@ export const SwiperCarouselNavigation: React.FC<SwiperCarouselNavigationProps> =
       setIsEnd(swiper.isEnd);
       setIsLocked(swiper.isLocked);
     };
-    
+
+    handleUpdate();
+
     swiper.on('slideChange', handleUpdate);
     swiper.on('update', handleUpdate);
     swiper.on('resize', handleUpdate);
-    
+    swiper.on('breakpoint', handleUpdate);
+
     return () => {
       swiper.off('slideChange', handleUpdate);
       swiper.off('update', handleUpdate);
       swiper.off('resize', handleUpdate);
+      swiper.off('breakpoint', handleUpdate);
     };
   }, [swiper]);
 

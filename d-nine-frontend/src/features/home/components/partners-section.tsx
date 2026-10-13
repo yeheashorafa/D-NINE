@@ -114,12 +114,20 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
     }
   }, [prefersReducedMotion]);
 
+  // Enable loop ONLY when count allows it without warnings (> 5 for desktop slidesPerView: 5).
+  // Zero fake dummy data or manual slide repetition!
+  const isLoopable = activePartners.length > 5;
+  const displayPartners = React.useMemo(() => {
+    return activePartners.map((p) => ({
+      ...p,
+      slideKey: p.id,
+    }));
+  }, [activePartners]);
+
   // If no partners are published or active, hide the section cleanly
   if (activePartners.length === 0) {
     return null;
   }
-
-  const isEnoughForLoop = activePartners.length >= 6;
 
   return (
     <section id="partners" className="py-16 sm:py-24 relative bg-background transition-colors duration-300 overflow-hidden border-t border-border/50">
@@ -140,7 +148,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
           </p>
         </RevealSection>
 
-        {/* Partners Logos & Names Carousel */}
+        {/* Partners Logos Carousel */}
         <RevealSection>
           <div
             className="relative group px-1 sm:px-2"
@@ -149,14 +157,17 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
           >
             <Swiper
               modules={[Autoplay, A11y, Keyboard]}
-              spaceBetween={24}
+              spaceBetween={20}
               slidesPerView={2}
-              loop={isEnoughForLoop}
+              speed={prefersReducedMotion ? 0 : 800}
+              loop={isLoopable}
+              rewind={!isLoopable && activePartners.length > 2}
+              centerInsufficientSlides={true}
               autoplay={
-                prefersReducedMotion
+                prefersReducedMotion || activePartners.length <= 2
                   ? false
                   : {
-                      delay: 5000,
+                      delay: 4500,
                       disableOnInteraction: false,
                       pauseOnMouseEnter: false,
                     }
@@ -204,6 +215,10 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                   slidesPerView: 3,
                   spaceBetween: 24,
                 },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 24,
+                },
                 1024: {
                   slidesPerView: 4,
                   spaceBetween: 28,
@@ -215,38 +230,41 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               }}
               className="!pb-4 !pt-2"
             >
-              {activePartners.map((partner) => {
+              {displayPartners.map((partner) => {
                 const partnerName = partner.name?.[locale] || partner.name?.[isArabic ? 'ar' : 'en'] || partner.name?.en || partner.name?.ar || 'Partner';
                 const logoAlt =
                   partner.logoAlt?.[locale] ||
                   partner.logoAlt?.ar ||
                   partner.logoAlt?.en ||
-                  partnerName;
+                  (isArabic ? `شعار ${partnerName}` : `${partnerName} logo`);
 
                 return (
-                  <SwiperSlide key={partner.id} className="h-auto">
-                    <div
-                      className="relative w-full h-36 sm:h-40 p-4 rounded-2xl bg-surface/60 dark:bg-card/60 border border-border/60 hover:border-brand-cyan/40 hover:bg-surface hover:shadow-md transition-all duration-300 flex flex-col items-center justify-between grayscale hover:grayscale-0 opacity-85 hover:opacity-100 group select-none"
-                    >
-                      {/* Logo */}
-                      <div className="relative w-full h-20 sm:h-24 flex items-center justify-center">
-                        {partner.logo ? (
-                          <Image
-                            src={partner.logo}
-                            alt={logoAlt}
-                            fill
-                            className="object-contain filter transition-all duration-200"
-                            sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 200px"
-                          />
-                        ) : (
-                          <Handshake className="w-8 h-8 text-brand-cyan/40" aria-hidden="true" />
-                        )}
+                  <SwiperSlide key={partner.slideKey} className="h-auto">
+                    <div className="w-full flex items-center justify-center p-1 sm:p-2">
+                      <div
+                        className="relative w-full aspect-square rounded-full bg-white border border-slate-200/90 dark:border-white/15 shadow-sm hover:shadow-md hover:border-brand-cyan/40 transition-all duration-300 flex items-center justify-center p-5 sm:p-6 md:p-7 group select-none overflow-hidden mx-auto"
+                        style={{
+                          aspectRatio: '1 / 1',
+                          borderRadius: '9999px',
+                          backgroundColor: '#ffffff',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {/* Logo Container */}
+                        <div className="relative w-full h-full flex items-center justify-center">
+                          {partner.logo ? (
+                            <Image
+                              src={partner.logo}
+                              alt={logoAlt}
+                              fill
+                              className="object-contain filter transition-transform duration-300 group-hover:scale-105"
+                              sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 220px"
+                            />
+                          ) : (
+                            <Handshake className="w-8 h-8 text-slate-400" aria-hidden="true" />
+                          )}
+                        </div>
                       </div>
-
-                      {/* Partner Name Only (Localized) */}
-                      <span className="text-xs sm:text-sm font-semibold text-foreground text-center line-clamp-1 w-full px-1">
-                        {partnerName}
-                      </span>
                     </div>
                   </SwiperSlide>
                 );
@@ -262,7 +280,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                     interactionTimerRef.current = setTimeout(() => {
                       resumeAutoplay('interaction');
                       interactionTimerRef.current = null;
-                    }, 4000);
+                    }, 4500);
                   }}
                 />
               </div>
