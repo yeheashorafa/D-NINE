@@ -114,9 +114,11 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
     }
   }, [prefersReducedMotion]);
 
-  // Enable loop ONLY when count allows it without warnings (> 5 for desktop slidesPerView: 5).
-  // Zero fake dummy data or manual slide repetition!
+  // Enable loop ONLY when active partners count exceeds maximum slidesPerView (5).
+  // Do not duplicate data manually or add fake logos.
+  // If count does not exceed visible slides, keep it static.
   const isLoopable = activePartners.length > 5;
+  const canSlide = activePartners.length > 2;
   const displayPartners = React.useMemo(() => {
     return activePartners.map((p) => ({
       ...p,
@@ -159,17 +161,17 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               modules={[Autoplay, A11y, Keyboard]}
               spaceBetween={20}
               slidesPerView={2}
-              speed={prefersReducedMotion ? 0 : 800}
+              speed={prefersReducedMotion ? 0 : 900}
               loop={isLoopable}
-              rewind={!isLoopable && activePartners.length > 2}
+              rewind={!isLoopable && canSlide}
               centerInsufficientSlides={true}
               autoplay={
-                prefersReducedMotion || activePartners.length <= 2
+                prefersReducedMotion || !canSlide
                   ? false
                   : {
                       delay: 4500,
                       disableOnInteraction: false,
-                      pauseOnMouseEnter: false,
+                      pauseOnMouseEnter: true,
                     }
               }
               keyboard={{ enabled: true, onlyInViewport: true }}
@@ -207,23 +209,11 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                 }
               }}
               breakpoints={{
-                480: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
                 640: {
                   slidesPerView: 3,
                   spaceBetween: 24,
                 },
-                768: {
-                  slidesPerView: 3,
-                  spaceBetween: 24,
-                },
                 1024: {
-                  slidesPerView: 4,
-                  spaceBetween: 28,
-                },
-                1280: {
                   slidesPerView: 5,
                   spaceBetween: 32,
                 },
