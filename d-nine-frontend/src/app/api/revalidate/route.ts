@@ -36,6 +36,7 @@ const ALLOWED_DOCUMENT_TYPES: Record<string, readonly string[]> = Object.freeze(
   termsPage: ['terms-page', 'termsPage'],
   siteSettings: ['site-settings', 'siteSettings'],
   partner: ['home-page', 'homePage', 'agency', 'partner', 'partners'],
+  themeSettings: ['themeSettings', 'theme-settings', 'site-settings', 'siteSettings', 'home-page', 'homePage'],
 });
 
 const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
@@ -79,6 +80,24 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   teamMember: ['/ar', '/en', '/ar/about', '/en/about'],
   blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
   author: ['/ar/blog', '/en/blog'],
+  themeSettings: [
+    '/ar',
+    '/en',
+    '/ar/about',
+    '/en/about',
+    '/ar/services',
+    '/en/services',
+    '/ar/work',
+    '/en/work',
+    '/ar/blog',
+    '/en/blog',
+    '/ar/contact',
+    '/en/contact',
+    '/ar/privacy',
+    '/en/privacy',
+    '/ar/terms',
+    '/en/terms',
+  ],
 });
 
 // Strict slug format allowing letters, digits, and hyphens (Unicode-aware)

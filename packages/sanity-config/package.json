@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "dependencies": {
+    "@d-nine/contracts": "*",
     "sanity": "^4.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

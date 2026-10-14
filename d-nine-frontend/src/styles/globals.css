@@ -22,15 +22,30 @@
 
 /* Semantic Design Tokens for Light & Dark Modes */
 :root {
-  --background: #FAFAFC;
-  --foreground: #0F172A;
-  --surface: #FFFFFF;
+  --theme-primary: #6D2878;
+  --theme-secondary: #16B5C5;
+  --theme-accent: #9C36AD;
+  --theme-page: #FAFAFC;
+  --theme-surface: #FFFFFF;
+  --theme-card: #FFFFFF;
+  --theme-heading: #0F172A;
+  --theme-text: #0F172A;
+  --theme-muted: #64748B;
+  --theme-border: #E2E8F0;
+  --theme-button-primary-bg: #6D2878;
+  --theme-button-primary-text: #FFFFFF;
+  --theme-button-secondary-bg: #16B5C5;
+  --theme-button-secondary-text: #091522;
+
+  --background: var(--theme-page);
+  --foreground: var(--theme-heading);
+  --surface: var(--theme-surface);
   --surface-muted: #F1F5F9;
-  --card: #FFFFFF;
-  --card-border: #E2E8F0;
-  --border: #E2E8F0;
-  --text: #0F172A;
-  --text-muted: #64748B;
+  --card: var(--theme-card);
+  --card-border: var(--theme-border);
+  --border: var(--theme-border);
+  --text: var(--theme-text);
+  --text-muted: var(--theme-muted);
   --input: #F8FAFC;
   --overlay: rgba(15, 23, 42, 0.4);
   --glass-bg: rgba(255, 255, 255, 0.85);
@@ -41,15 +56,30 @@
 }
 
 .dark {
-  --background: #091522;
-  --foreground: #F8FAFC;
-  --surface: #0F1B2C;
+  --theme-primary: #6D2878;
+  --theme-secondary: #16B5C5;
+  --theme-accent: #38D4E3;
+  --theme-page: #091522;
+  --theme-surface: #0F1B2C;
+  --theme-card: #111D30;
+  --theme-heading: #F8FAFC;
+  --theme-text: #F8FAFC;
+  --theme-muted: #94A3B8;
+  --theme-border: #1E2E4A;
+  --theme-button-primary-bg: #6D2878;
+  --theme-button-primary-text: #FFFFFF;
+  --theme-button-secondary-bg: #16B5C5;
+  --theme-button-secondary-text: #091522;
+
+  --background: var(--theme-page);
+  --foreground: var(--theme-heading);
+  --surface: var(--theme-surface);
   --surface-muted: #162438;
-  --card: #111D30;
-  --card-border: #1E2E4A;
-  --border: #1E2E4A;
-  --text: #F8FAFC;
-  --text-muted: #94A3B8;
+  --card: var(--theme-card);
+  --card-border: var(--theme-border);
+  --border: var(--theme-border);
+  --text: var(--theme-text);
+  --text-muted: var(--theme-muted);
   --input: #0D1929;
   --overlay: rgba(0, 0, 0, 0.7);
   --glass-bg: rgba(15, 27, 44, 0.85);
@@ -60,6 +90,21 @@
 }
 
 @theme inline {
+  --color-theme-primary: var(--theme-primary);
+  --color-theme-secondary: var(--theme-secondary);
+  --color-theme-accent: var(--theme-accent);
+  --color-theme-page: var(--theme-page);
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-card: var(--theme-card);
+  --color-theme-heading: var(--theme-heading);
+  --color-theme-text: var(--theme-text);
+  --color-theme-muted: var(--theme-muted);
+  --color-theme-border: var(--theme-border);
+  --color-theme-btn-primary-bg: var(--theme-button-primary-bg);
+  --color-theme-btn-primary-text: var(--theme-button-primary-text);
+  --color-theme-btn-secondary-bg: var(--theme-button-secondary-bg);
+  --color-theme-btn-secondary-text: var(--theme-button-secondary-text);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -78,10 +123,14 @@
   }
 
   body {
-    background-color: var(--background);
-    color: var(--text);
+    background-color: var(--theme-page);
+    color: var(--theme-text);
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--theme-heading);
   }
 }
 

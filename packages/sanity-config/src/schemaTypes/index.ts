@@ -20,6 +20,7 @@ import { contactMethod } from './objects/contact-method';
 import { office } from './objects/office';
 import { testimonialsSection } from './objects/testimonialsSection';
 import { teamSection } from './objects/teamSection';
+import { lightThemePalette, darkThemePalette } from './objects/theme-palette';
 
 // Documents
 import { partner } from './documents/partner';
@@ -40,6 +41,7 @@ import { contactPage } from './documents/contact-page';
 import { privacyPage } from './documents/privacy-page';
 import { termsPage } from './documents/terms-page';
 import { siteSettings } from './documents/site-settings';
+import { themeSettings } from './documents/theme-settings';
 
 export const schemaTypes = [
   // Object Types
@@ -64,6 +66,8 @@ export const schemaTypes = [
   office,
   testimonialsSection,
   teamSection,
+  lightThemePalette,
+  darkThemePalette,
 
   // Document Types
   partner,
@@ -84,4 +88,5 @@ export const schemaTypes = [
   privacyPage,
   termsPage,
   siteSettings,
+  themeSettings,
 ];

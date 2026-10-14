@@ -14,8 +14,8 @@ export const Card: React.FC<CardProps> = ({
   glassmorphism = true
 }) => {
   const glassStyles = glassmorphism
-    ? 'bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm'
-    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm';
+    ? 'bg-[var(--theme-card)]/80 backdrop-blur-xl border border-[var(--theme-border)]/80 shadow-sm'
+    : 'bg-[var(--theme-card)] border border-[var(--theme-border)] shadow-sm';
 
   const hoverStyles = hoverEffect
     ? 'transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-brand-purple/30 dark:hover:border-brand-cyan/30'

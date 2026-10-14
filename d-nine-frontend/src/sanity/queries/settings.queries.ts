@@ -42,3 +42,41 @@ export const siteSettingsQuery = groq`
     "defaultOgImage": defaultOgImage.asset->url
   }
 `;
+
+export const themeSettingsQuery = groq`
+  *[_type == "themeSettings"][0] {
+    _id,
+    lightMode {
+      primary,
+      secondary,
+      accent,
+      pageBackground,
+      surfaceBackground,
+      cardBackground,
+      headingColor,
+      bodyTextColor,
+      mutedTextColor,
+      borderColor,
+      primaryButtonBackground,
+      primaryButtonText,
+      secondaryButtonBackground,
+      secondaryButtonText
+    },
+    darkMode {
+      primary,
+      secondary,
+      accent,
+      pageBackground,
+      surfaceBackground,
+      cardBackground,
+      headingColor,
+      bodyTextColor,
+      mutedTextColor,
+      borderColor,
+      primaryButtonBackground,
+      primaryButtonText,
+      secondaryButtonBackground,
+      secondaryButtonText
+    }
+  }
+`;

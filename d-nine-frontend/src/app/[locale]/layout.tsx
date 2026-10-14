@@ -11,6 +11,8 @@ import { Footer } from "@/components/layout/footer";
 import { VisualEditing } from "@/components/sanity/visual-editing";
 import { ibmPlexSansArabic, ibmPlexSansEnglish } from "@/app/fonts";
 import { getSiteSettings } from "@/services/content/settings.service";
+import { getThemeSettings } from "@/services/content/theme.service";
+import { generateThemeCss } from "@/sanity/mappers/theme.mapper";
 import "@/styles/globals.css";
 
 export function generateStaticParams() {
@@ -94,6 +96,8 @@ export default async function RootLayout({
 
   const isDraft = (await draftMode()).isEnabled;
   const settings = await getSiteSettings();
+  const theme = await getThemeSettings();
+  const themeCss = generateThemeCss(theme);
 
   return (
     <html
@@ -103,6 +107,9 @@ export default async function RootLayout({
       className={`${fontClass} ${isArabic ? "font-arabic" : "font-sans"}`}
       suppressHydrationWarning
     >
+      <head>
+        <style id="d-nine-theme-variables">{themeCss}</style>
+      </head>
       <body className="bg-background text-text min-h-screen flex flex-col antialiased selection:bg-brand-cyan selection:text-slate-950 transition-colors duration-300">
         <ThemeProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>

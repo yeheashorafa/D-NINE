@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 shadow-md py-3'
+          ? 'bg-[var(--theme-surface)]/85 backdrop-blur-xl border-b border-[var(--theme-border)]/80 shadow-md py-3'
           : 'bg-transparent py-5'
       }`}
     >
@@ -124,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
           />
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md px-4 py-1.5 rounded-full border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <nav className="hidden lg:flex items-center gap-1 bg-[var(--theme-surface)]/70 backdrop-blur-md px-4 py-1.5 rounded-full border border-[var(--theme-border)]/80 shadow-sm">
             {navLinks.map((link) => {
               const isActive =
                 link.href === '/'
@@ -187,7 +187,7 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
               ref={toggleBtnRef}
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+              className="lg:hidden p-2.5 rounded-2xl bg-[var(--theme-surface)]/80 border border-[var(--theme-border)] text-slate-800 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
               aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu-drawer"
@@ -223,7 +223,7 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="lg:hidden fixed inset-x-0 top-[73px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border-b border-slate-200 dark:border-slate-800 shadow-2xl p-6 z-50 transition-colors"
+              className="lg:hidden fixed inset-x-0 top-[73px] bg-[var(--theme-surface)]/95 backdrop-blur-2xl border-b border-[var(--theme-border)] shadow-2xl p-6 z-50 transition-colors"
             >
               <nav className="flex flex-col gap-3">
                 {navLinks.map((link) => {

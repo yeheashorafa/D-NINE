@@ -11,7 +11,8 @@ export const singletonTypes = new Set([
   'contactPage',
   'privacyPage',
   'termsPage',
-  'siteSettings'
+  'siteSettings',
+  'themeSettings',
 ]);
 
 export const CANONICAL_CATEGORY_DOCUMENT_IDS = new Set([

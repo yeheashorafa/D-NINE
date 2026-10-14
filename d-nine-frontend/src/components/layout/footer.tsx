@@ -33,7 +33,7 @@ export async function Footer({ settings }: FooterProps) {
     : t('footer.tagline');
 
   return (
-    <footer className="relative bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/80 pt-16 pb-12 overflow-hidden transition-colors duration-300">
+    <footer className="relative bg-[var(--theme-surface)] border-t border-[var(--theme-border)] pt-16 pb-12 overflow-hidden transition-colors duration-300">
       {/* Background glow accents */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-purple/5 dark:bg-brand-purple/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-cyan/5 dark:bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />

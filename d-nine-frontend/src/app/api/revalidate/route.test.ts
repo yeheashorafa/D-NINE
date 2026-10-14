@@ -349,6 +349,37 @@ describe('Webhook Revalidation Route', () => {
     expect(revalidatePath).toHaveBeenCalledWith('/en', 'page');
   });
 
+  it('should revalidate themeSettings tags and all affected routes on theme change', async () => {
+    mockParseBody.mockResolvedValueOnce({
+      isValidSignature: true,
+      body: { _type: 'themeSettings' },
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/revalidate', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ _type: 'themeSettings' }),
+    });
+
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+
+    const data = await response.json();
+    expect(data.revalidated).toBe(true);
+    expect(data.documentType).toBe('themeSettings');
+    expect(data.tags).toContain('themeSettings');
+    expect(data.tags).toContain('theme-settings');
+    expect(revalidateTag).toHaveBeenCalledWith('themeSettings', 'max');
+    expect(revalidateTag).toHaveBeenCalledWith('theme-settings', 'max');
+    expect(revalidateTag).toHaveBeenCalledWith('home-page', 'max');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/about', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/about', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar/contact', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/en/contact', 'page');
+  });
+
   // --- 5. Generic Error Handling ---
 
   it('returns generic 500 when parseBody or cache revalidation throws', async () => {

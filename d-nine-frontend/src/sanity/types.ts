@@ -421,3 +421,27 @@ export interface SanitySiteSettingsDoc {
   defaultSeo?: SanitySeo;
   defaultOgImage?: string;
 }
+
+export interface SanityThemePalette {
+  primary?: string;
+  secondary?: string;
+  accent?: string;
+  pageBackground?: string;
+  surfaceBackground?: string;
+  cardBackground?: string;
+  headingColor?: string;
+  bodyTextColor?: string;
+  mutedTextColor?: string;
+  borderColor?: string;
+  primaryButtonBackground?: string;
+  primaryButtonText?: string;
+  secondaryButtonBackground?: string;
+  secondaryButtonText?: string;
+}
+
+export interface SanityThemeSettingsDoc {
+  _id?: string;
+  _type?: 'themeSettings';
+  lightMode?: SanityThemePalette;
+  darkMode?: SanityThemePalette;
+}

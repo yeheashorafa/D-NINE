@@ -10,6 +10,7 @@ import {
   StarIcon,
   UsersIcon,
   UserIcon,
+  DropIcon,
 } from '@sanity/icons';
 
 const SINGLETON_DOCUMENT_TYPES = [
@@ -21,7 +22,8 @@ const SINGLETON_DOCUMENT_TYPES = [
   'contactPage',
   'privacyPage',
   'termsPage',
-  'siteSettings'
+  'siteSettings',
+  'themeSettings',
 ];
 
 export const structure: StructureResolver = (S) =>
@@ -114,7 +116,10 @@ export const structure: StructureResolver = (S) =>
             ])
         ),
 
-      // 8. إعدادات الموقع (Site Settings)
+      // 8. ألوان وهوية الموقع (Theme Settings)
+      singletonListItem(S, 'themeSettings', 'ألوان وهوية الموقع', DropIcon),
+
+      // 9. إعدادات الموقع (Site Settings)
       singletonListItem(S, 'siteSettings', 'إعدادات الموقع', CogIcon),
 
       // Filter out singletons, teamMember (hidden from client), and manually organized types from fallback root list

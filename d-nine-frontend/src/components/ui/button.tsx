@@ -29,11 +29,11 @@ export function getButtonClasses({
 
   const variantStyles = {
     primary:
-      'bg-gradient-to-r from-brand-purple via-deep-purple to-brand-cyan text-white shadow-md hover:shadow-lg hover:shadow-brand-purple/20 focus:ring-brand-purple/50 border border-white/10',
+      'bg-[var(--theme-button-primary-bg)] text-[var(--theme-button-primary-text)] shadow-md hover:opacity-90 hover:shadow-lg focus:ring-[var(--theme-primary)]/50 border border-white/10',
     secondary:
-      'bg-brand-cyan text-slate-950 shadow-md hover:bg-cyan-400 hover:shadow-cyan-500/20 focus:ring-brand-cyan/50',
+      'bg-[var(--theme-button-secondary-bg)] text-[var(--theme-button-secondary-text)] shadow-md hover:opacity-90 focus:ring-[var(--theme-secondary)]/50',
     outline:
-      'border-2 border-brand-purple/40 dark:border-brand-cyan/40 text-brand-purple dark:text-brand-cyan hover:bg-brand-purple/10 dark:hover:bg-brand-cyan/10 focus:ring-brand-purple/50',
+      'border-2 border-[var(--theme-primary)]/40 dark:border-[var(--theme-secondary)]/40 text-[var(--theme-primary)] dark:text-[var(--theme-secondary)] hover:bg-[var(--theme-primary)]/10 dark:hover:bg-[var(--theme-secondary)]/10 focus:ring-[var(--theme-primary)]/50',
     ghost:
       'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60 focus:ring-slate-400',
     dark:
