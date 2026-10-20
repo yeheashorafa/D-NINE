@@ -52,7 +52,7 @@ export function ColorInput(props: StringInputProps) {
 
   return (
     <Card padding={2} radius={2} border tone={isCustom ? 'primary' : 'default'}>
-      <Stack space={3}>
+      <Stack gap={3}>
         <Flex align="center" gap={3} wrap="wrap">
           {/* Native HTML5 Color Picker */}
           <Box style={{ position: 'relative', width: 44, height: 38, flexShrink: 0 }}>
@@ -104,7 +104,7 @@ export function ColorInput(props: StringInputProps) {
           </Box>
 
           {/* Status Badge */}
-          <Badge tone={isCustom ? 'positive' : 'caution'} size={1}>
+          <Badge tone={isCustom ? 'positive' : 'caution'} fontSize={1}>
             {isCustom ? 'مخصص' : 'الافتراضي'}
           </Badge>
 
