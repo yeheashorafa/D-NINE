@@ -94,9 +94,12 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
 
   // Requirement 4: Category slugs are protected from client edits in Sanity schema
   it('4. ensures contentCategory slug field is readOnly and canonical in Sanity schema', () => {
-    const slugField = contentCategory.fields.find((f: any) => f.name === 'slug');
+    const slugField = contentCategory.fields.find((field) => field.name === 'slug');
     expect(slugField).toBeDefined();
-    expect(slugField?.readOnly).toBe(true);
+    expect(slugField).toMatchObject({
+      name: 'slug',
+      readOnly: true,
+    });
   });
 
   // Requirement 5: Homepage second section and Work page consume the same canonical category source

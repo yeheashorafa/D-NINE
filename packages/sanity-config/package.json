@@ -6,7 +6,8 @@
   "type": "module",
   "dependencies": {
     "@d-nine/contracts": "*",
-    "sanity": "^4.22.0",
+    "@sanity/icons": "3.7.0",
+    "sanity": "6.19.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

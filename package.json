@@ -29,7 +29,7 @@
     "build:hostinger:backend:ci": "npm install --include=dev && npm run build:hostinger:backend"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22.12.0"
   },
   "overrides": {
     "next-sanity": {

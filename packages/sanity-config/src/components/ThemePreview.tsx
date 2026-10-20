@@ -60,7 +60,7 @@ export function ThemePaletteInput(props: ObjectInputProps) {
   const accentCol = safeHex(value.accent, defaultAccent);
 
   return (
-    <Stack space={4}>
+    <Stack gap={4}>
       {/* Live Preview Container */}
       <Card
         padding={4}
@@ -71,12 +71,12 @@ export function ThemePaletteInput(props: ObjectInputProps) {
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
         }}
       >
-        <Stack space={3}>
+        <Stack gap={3}>
           <Flex justify="space-between" align="center">
             <Text size={1} weight="bold" style={{ color: headingCol }}>
               معاينة حية للهوية البصرية ({isDark ? 'الوضع الداكن' : 'الوضع الفاتح'})
             </Text>
-            <Badge tone={isDark ? 'caution' : 'primary'} size={1}>
+            <Badge tone={isDark ? 'caution' : 'primary'} fontSize={1}>
               {isDark ? 'Dark Mode Preview' : 'Light Mode Preview'}
             </Badge>
           </Flex>
@@ -117,7 +117,7 @@ export function ThemePaletteInput(props: ObjectInputProps) {
               boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
             }}
           >
-            <Stack space={3}>
+            <Stack gap={3}>
               <h3
                 style={{
                   color: headingCol,
