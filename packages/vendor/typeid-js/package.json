@@ -1,0 +1,36 @@
+{
+  "name": "typeid-js",
+  "version": "1.2.0",
+  "description": "Official implementation of the TypeID specification in TypeScript. TypeIDs are type-safe, K-sortable, and globally unique identifiers inspired by Stripe IDs",
+  "keywords": [
+    "typeid",
+    "uuid",
+    "uuidv7",
+    "guid"
+  ],
+  "homepage": "https://github.com/jetify-com/typeid-js",
+  "bugs": "https://github.com/jetify-com/typeid-js/issues",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "jetify",
+    "email": "opensource@jetify.com"
+  },
+  "repository": "github:jetify-com/typeid-js",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/**"
+  ],
+  "dependencies": {
+    "uuid": "^11.1.1"
+  }
+}

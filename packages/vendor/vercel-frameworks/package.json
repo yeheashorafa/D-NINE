@@ -1,0 +1,20 @@
+{
+  "name": "@vercel/frameworks",
+  "version": "3.29.0",
+  "main": "./dist/frameworks.js",
+  "types": "./dist/frameworks.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vercel/vercel.git",
+    "directory": "packages/frameworks"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "smol-toml": "1.9.1",
+    "js-yaml": "4.3.2",
+    "@vercel/error-utils": "2.2.0"
+  }
+}
