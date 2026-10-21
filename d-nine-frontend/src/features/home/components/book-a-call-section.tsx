@@ -190,7 +190,7 @@ export const BookACallSection: React.FC<{ data?: { title?: { ar?: string; en?: s
             {/* Content */}
             <motion.div
               className="relative z-10 mx-auto flex max-w-2xl flex-col items-center space-y-6"
-              initial="hidden"
+              initial={false}
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
               variants={{

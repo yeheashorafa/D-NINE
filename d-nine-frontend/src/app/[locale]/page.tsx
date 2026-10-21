@@ -14,8 +14,19 @@ export async function generateMetadata({
   const isArabic = locale === 'ar';
   const pageData = await getHomePage({ stega: false });
 
-  const seoTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'الرئيسية | دي ناين' : 'Home | D-NINE'));
-  const seoDesc = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'وكالة دي ناين للإنتاج الإعلامي' : 'D-NINE Creative Agency'));
+  const configuredTitle = stegaClean(pageData?.seo?.metaTitle?.[isArabic ? 'ar' : 'en'] || '');
+  const configuredDescription = stegaClean(pageData?.seo?.metaDescription?.[isArabic ? 'ar' : 'en'] || '');
+  const seoTitle = configuredTitle && !/^(home|الرئيسية)\s*\|\s*(d-nine|دي ناين)$/i.test(configuredTitle)
+    ? configuredTitle
+    : isArabic
+      ? 'دي ناين للإنتاج الإعلامي وتصميم الهوية'
+      : 'Creative Agency for Media Production & Brand Identity';
+  const usesGenericDescription = /^(D-NINE Creative Agency|وكالة دي ناين للإنتاج الإعلامي)$/i.test(configuredDescription);
+  const seoDesc = configuredDescription && !usesGenericDescription
+    ? configuredDescription
+    : isArabic
+      ? 'دي ناين وكالة إبداعية متخصصة في الإنتاج الإعلامي، تصميم الهوية البصرية، الجرافيك، وإنتاج الفيديو والمحتوى الرقمي في الرياض ودبي.'
+      : 'D-NINE is a creative agency in Riyadh and Dubai specializing in media production, brand identity, graphic design, video, and digital content.';
 
   return constructMetadata({
     title: seoTitle,
