@@ -22,7 +22,10 @@ export const RevealSection: React.FC<RevealSectionProps> = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      // Keep server-rendered content visible. Scroll animation is progressive
+      // enhancement and must never leave page content permanently transparent
+      // when IntersectionObserver/hydration is unavailable or delayed.
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.5, delay, ease: 'easeOut' }}
