@@ -202,3 +202,11 @@
     scroll-behavior: auto !important;
   }
 }
+/* Keep below-the-fold homepage content in the HTML for SEO while allowing the
+   browser to postpone its paint/layout work until it approaches the viewport. */
+@supports (content-visibility: auto) {
+  .home-page > section:not(:first-child) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+}

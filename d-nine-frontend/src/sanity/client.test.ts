@@ -37,7 +37,7 @@ describe('sanityFetch', () => {
       '*[]',
       {},
       {
-        next: { tags: [], revalidate: 60 },
+        next: { tags: [], revalidate: 15 },
         stega: false,
       }
     );

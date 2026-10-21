@@ -378,6 +378,26 @@ describe('Webhook Revalidation Route', () => {
     expect(revalidatePath).toHaveBeenCalledWith('/en/about', 'page');
     expect(revalidatePath).toHaveBeenCalledWith('/ar/contact', 'page');
     expect(revalidatePath).toHaveBeenCalledWith('/en/contact', 'page');
+    expect(revalidatePath).toHaveBeenCalledWith('/ar', 'layout');
+    expect(revalidatePath).toHaveBeenCalledWith('/en', 'layout');
+  });
+
+  it('should invalidate locale layouts when global site settings change', async () => {
+    mockParseBody.mockResolvedValueOnce({
+      isValidSignature: true,
+      body: { _type: 'siteSettings' },
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/revalidate', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ _type: 'siteSettings' }),
+    });
+
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+    expect(revalidatePath).toHaveBeenCalledWith('/ar', 'layout');
+    expect(revalidatePath).toHaveBeenCalledWith('/en', 'layout');
   });
 
   // --- 5. Generic Error Handling ---

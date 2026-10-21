@@ -100,6 +100,14 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   ],
 });
 
+/**
+ * These documents are consumed by the locale layout itself. Invalidating only
+ * individual pages can leave a previously rendered layout shell (including
+ * theme CSS, header and footer settings) cached. Explicit layout invalidation
+ * makes CMS theme/site-setting publishes visible immediately across descendants.
+ */
+const LOCALE_LAYOUT_DOCUMENT_TYPES = new Set(['siteSettings', 'themeSettings']);
+
 // Strict slug format allowing letters, digits, and hyphens (Unicode-aware)
 const SLUG_REGEX = /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u;
 
@@ -296,6 +304,11 @@ export async function POST(req: NextRequest) {
     const uniquePaths = [...new Set(pathsToRevalidate)];
     for (const p of uniquePaths) {
       revalidatePath(p, 'page');
+    }
+
+    if (LOCALE_LAYOUT_DOCUMENT_TYPES.has(docType)) {
+      revalidatePath('/ar', 'layout');
+      revalidatePath('/en', 'layout');
     }
 
     return NextResponse.json(
