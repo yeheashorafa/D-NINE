@@ -68,7 +68,10 @@ export async function sanityFetch<T>({
   }
 
   const selectedClient = isDraftMode ? previewClient : client;
-  const revalidate = isDraftMode ? 0 : 60; // Published fallback revalidate approximately 60 seconds
+  // Webhooks are the primary invalidation mechanism. Keep a short fallback so
+  // published CMS changes still reach production quickly if a webhook delivery
+  // is delayed or temporarily unavailable.
+  const revalidate = isDraftMode ? 0 : 15;
 
   try {
     return await selectedClient.fetch<T>(query, params, {
