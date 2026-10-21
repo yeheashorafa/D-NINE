@@ -145,8 +145,11 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
     );
 
     // In Arabic locale, images must resolve to Arabic images (desktop and mobile)
-    const images = container.querySelectorAll('img');
-    const sources = Array.from(images).map((img) => img.getAttribute('src'));
+    const responsiveMedia = container.querySelectorAll('picture source, picture img');
+    const sources = Array.from(responsiveMedia).flatMap((element) => [
+      element.getAttribute('src'),
+      element.getAttribute('srcset'),
+    ]);
     const hasMobile = sources.some((s) => s?.includes('ar-mobile.jpg'));
     const hasDesktop = sources.some((s) => s?.includes('ar-desktop.jpg'));
     expect(hasMobile).toBe(true);
@@ -165,8 +168,11 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
       <HeroSlider data={{ slides: [legacySlide] }} />
     );
 
-    const fallbackImages = fallbackContainer.querySelectorAll('img');
-    const fallbackSources = Array.from(fallbackImages).map((img) => img.getAttribute('src'));
+    const fallbackMedia = fallbackContainer.querySelectorAll('picture source, picture img');
+    const fallbackSources = Array.from(fallbackMedia).flatMap((element) => [
+      element.getAttribute('src'),
+      element.getAttribute('srcset'),
+    ]);
     const hasLegacyDesktop = fallbackSources.some((s) => s?.includes('legacy-desktop.jpg'));
     const hasLegacyMobile = fallbackSources.some((s) => s?.includes('legacy-mobile.jpg'));
     expect(hasLegacyDesktop).toBe(true);
