@@ -47,6 +47,11 @@ export async function generateMetadata({
     title,
     description,
     metadataBase: new URL(siteUrl),
+    icons: {
+      icon: [{ url: "/favicon.ico", sizes: "any" }],
+      shortcut: ["/favicon.ico"],
+      apple: [{ url: "/favicon.ico" }],
+    },
     alternates: {
       canonical: `/${locale}`,
       languages: {
