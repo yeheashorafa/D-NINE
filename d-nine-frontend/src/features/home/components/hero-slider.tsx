@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
-import Image from 'next/image';
+import { getImageProps } from 'next/image';
 import { useLocale } from 'next-intl';
 import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
 import { Play, Pause } from 'lucide-react';
@@ -118,6 +118,24 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
     currentSlide.imageAlt?.en ||
     (isArabic ? `شريحة العرض ${currentIndex + 1} — دي ناين` : `Hero Slide ${currentIndex + 1} — D-NINE`);
 
+  // Build one responsive <picture> instead of rendering separate mobile and
+  // desktop <Image> trees. This prevents the browser from discovering two
+  // competing LCP candidates and keeps the first visible artwork high priority.
+  const { props: mobileImageProps } = getImageProps({
+    src: resolvedMobileImage,
+    alt: resolvedAltText,
+    fill: true,
+    quality: 75,
+    sizes: '100vw',
+  });
+  const { props: desktopImageProps } = getImageProps({
+    src: resolvedDesktopImage,
+    alt: resolvedAltText,
+    fill: true,
+    quality: 75,
+    sizes: '100vw',
+  });
+
   // Clip Path Masks for Direction-Aware Reveal
   const getMaskVariant = (): Variants => {
     if (prefersReducedMotion) {
@@ -200,31 +218,21 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
           exit="exit"
           className="absolute inset-0 w-full h-full"
         >
-          {/* Mobile Artwork (< 768px) */}
-          <div className="md:hidden absolute inset-0 w-full h-full">
-            <Image
-              src={resolvedMobileImage}
+          {/* A single responsive artwork candidate for the active viewport. */}
+          <picture>
+            <source
+              media="(max-width: 767px)"
+              srcSet={mobileImageProps.srcSet}
+              sizes={mobileImageProps.sizes}
+            />
+            <img
+              {...desktopImageProps}
               alt={resolvedAltText}
-              fill
-              priority={currentIndex === 0}
-              quality={95}
-              sizes="100vw"
+              fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
+              loading={currentIndex === 0 ? 'eager' : 'lazy'}
               className="pointer-events-none object-cover object-center"
             />
-          </div>
-
-          {/* Desktop Artwork (>= 768px) */}
-          <div className="hidden md:block absolute inset-0 w-full h-full">
-            <Image
-              src={resolvedDesktopImage}
-              alt={resolvedAltText}
-              fill
-              priority={currentIndex === 0}
-              quality={95}
-              sizes="100vw"
-              className="pointer-events-none object-cover object-center"
-            />
-          </div>
+          </picture>
 
           {/* Color Wash Accent Overlay during Slide Transition */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-purple/20 via-transparent to-brand-cyan/20 pointer-events-none z-10" />
