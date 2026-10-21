@@ -37,6 +37,7 @@ export const ibmPlexSansArabic = localFont({
   ],
   variable: '--font-ibm-plex-arabic',
   display: 'swap',
+  preload: false,
 });
 
 export const ibmPlexSansEnglish = localFont({
@@ -69,4 +70,5 @@ export const ibmPlexSansEnglish = localFont({
   ],
   variable: '--font-ibm-plex-latin',
   display: 'swap',
+  preload: false,
 });

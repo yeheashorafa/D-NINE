@@ -49,7 +49,7 @@ export async function HomePage() {
   const partnersList = allPartners;
 
   return (
-    <main className="w-full overflow-hidden">
+    <main className="home-page w-full overflow-hidden">
       {/* 1. Hero Slider (Localized 4 artwork fields with safe fallbacks) */}
       <HeroSlider data={{ slides: validSlides }} />
 
