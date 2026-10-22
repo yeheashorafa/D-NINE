@@ -18,6 +18,8 @@
     "switchTheme": "Toggle Theme",
     "switchToLight": "Switch to Light Mode",
     "switchToDark": "Switch to Dark Mode",
+    "lightMode": "Light",
+    "darkMode": "Dark",
     "switchLang": "العربية"
   },
   "common": {
