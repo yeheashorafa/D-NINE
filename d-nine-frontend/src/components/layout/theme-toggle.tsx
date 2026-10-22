@@ -27,20 +27,25 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
   };
 
   const isDark = theme === 'dark';
+  const actionLabel = t(isDark ? 'switchToLight' : 'switchToDark');
+  const shortLabel = t(isDark ? 'lightMode' : 'darkMode');
 
   return (
     <button
       type="button"
       onClick={cycleTheme}
-      className={`relative p-2 text-slate-700 dark:text-slate-200 hover:text-brand-cyan dark:hover:text-brand-cyan rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-cyan/50 ${className}`}
-      aria-label={t(isDark ? 'switchToLight' : 'switchToDark')}
-      title={t(isDark ? 'switchToLight' : 'switchToDark')}
+      className={`relative inline-flex min-h-9 min-w-9 items-center justify-center gap-1.5 rounded-full border border-slate-300 bg-white/90 px-2.5 text-xs font-bold text-slate-800 shadow-sm transition-all hover:border-brand-cyan hover:text-brand-cyan focus:outline-none focus:ring-2 focus:ring-brand-cyan/50 dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-100 ${className}`}
+      aria-label={actionLabel}
+      title={actionLabel}
     >
       {isDark ? (
         <Sun className="w-4 h-4 text-amber-500" />
       ) : (
         <Moon className="w-4 h-4 text-cyan-700" />
       )}
+      <span className="hidden min-[480px]:inline" aria-hidden="true">
+        {shortLabel}
+      </span>
     </button>
   );
 };

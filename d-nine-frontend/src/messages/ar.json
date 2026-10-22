@@ -18,6 +18,8 @@
     "switchTheme": "تغيير المظهر",
     "switchToLight": "التبديل إلى الوضع الفاتح",
     "switchToDark": "التبديل إلى الوضع الداكن",
+    "lightMode": "فاتح",
+    "darkMode": "داكن",
     "switchLang": "English"
   },
   "common": {
