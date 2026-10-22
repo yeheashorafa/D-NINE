@@ -136,8 +136,9 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
     sizes: '100vw',
   });
 
-  // Clip Path Masks for Direction-Aware Reveal
-  const getMaskVariant = (): Variants => {
+  // Direction-aware cinematic transition. The small pan and zoom keep the
+  // full-screen hero engaging without using rotation or aggressive effects.
+  const getSlideVariant = (): Variants => {
     if (prefersReducedMotion) {
       return {
         initial: { opacity: 0, scale: 1 },
@@ -147,32 +148,32 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
     }
 
     const isNext = direction === 'next';
-    const isRtl = isArabic;
-    const slideFromRight = (isNext && !isRtl) || (!isNext && isRtl);
+    const entersFromRight = (isNext && !isArabic) || (!isNext && isArabic);
+    const enterOffset = entersFromRight ? '2.5%' : '-2.5%';
+    const exitOffset = entersFromRight ? '-1.5%' : '1.5%';
 
     return {
       initial: {
-        clipPath: slideFromRight
-          ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
-          : 'polygon(0 0, 0 0, 0 100%, 0 100%)',
-        scale: 1.05,
+        opacity: 0,
+        x: enterOffset,
+        scale: 1.055,
       },
       animate: {
-        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        opacity: 1,
+        x: '0%',
         scale: 1,
         transition: {
-          duration: 1.0,
-          ease: [0.76, 0, 0.24, 1],
+          duration: 1.15,
+          ease: [0.22, 1, 0.36, 1],
         },
       },
       exit: {
-        clipPath: slideFromRight
-          ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-          : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
-        scale: 0.96,
+        opacity: 0,
+        x: exitOffset,
+        scale: 1.015,
         transition: {
-          duration: 1.0,
-          ease: [0.76, 0, 0.24, 1],
+          duration: 0.75,
+          ease: [0.4, 0, 0.2, 1],
         },
       },
     };
@@ -212,7 +213,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
       >
         <motion.div
           key={currentSlide.id || currentSlide._key || String(currentIndex)}
-          variants={getMaskVariant()}
+          variants={getSlideVariant()}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -236,6 +237,17 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
 
           {/* Color Wash Accent Overlay during Slide Transition */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-purple/20 via-transparent to-brand-cyan/20 pointer-events-none z-10" />
+
+          {/* A restrained light veil adds depth while the artwork settles. */}
+          {!prefersReducedMotion && (
+            <motion.div
+              className="absolute inset-y-0 -left-1/3 w-2/3 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none z-10"
+              initial={{ x: '-35%', opacity: 0 }}
+              animate={{ x: '210%', opacity: [0, 0.55, 0] }}
+              transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden="true"
+            />
+          )}
         </motion.div>
       </AnimatePresence>
 
