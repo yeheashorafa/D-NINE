@@ -161,7 +161,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               modules={[Autoplay, A11y, Keyboard]}
               spaceBetween={20}
               slidesPerView={2}
-              speed={prefersReducedMotion ? 0 : 900}
+              speed={prefersReducedMotion ? 0 : 700}
               loop={isLoopable}
               rewind={!isLoopable && canSlide}
               centerInsufficientSlides={true}
@@ -169,7 +169,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                 prefersReducedMotion || !canSlide
                   ? false
                   : {
-                      delay: 4500,
+                      delay: 3200,
                       disableOnInteraction: false,
                       pauseOnMouseEnter: true,
                     }
@@ -270,7 +270,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                     interactionTimerRef.current = setTimeout(() => {
                       resumeAutoplay('interaction');
                       interactionTimerRef.current = null;
-                    }, 4500);
+                    }, 3200);
                   }}
                 />
               </div>
