@@ -12,6 +12,7 @@ export interface LogoProps {
   lightLogo?: string;
   darkLogo?: string;
   companyName?: string;
+  appearance?: 'auto' | 'on-dark';
 }
 
 export const Logo: React.FC<LogoProps> = ({
@@ -22,6 +23,7 @@ export const Logo: React.FC<LogoProps> = ({
   lightLogo,
   darkLogo,
   companyName = 'D-NINE — Creative Agency',
+  appearance = 'auto',
 }) => {
   const activeVariant = size || variant || 'header';
   const lightSrc = lightLogo || '/brand/d-nine-logo-light.png';
@@ -53,7 +55,9 @@ export const Logo: React.FC<LogoProps> = ({
           width={252}
           height={107}
           priority={priority}
-          className="w-full h-auto object-contain dark:hidden block"
+          className={`w-full h-auto object-contain ${
+            appearance === 'on-dark' ? 'hidden' : 'block dark:hidden'
+          }`}
         />
 
         {/* Dark Mode Logo */}
@@ -63,7 +67,9 @@ export const Logo: React.FC<LogoProps> = ({
           width={252}
           height={107}
           priority={priority}
-          className="w-full h-auto object-contain hidden dark:block"
+          className={`w-full h-auto object-contain ${
+            appearance === 'on-dark' ? 'block' : 'hidden dark:block'
+          }`}
         />
       </div>
     </Link>
