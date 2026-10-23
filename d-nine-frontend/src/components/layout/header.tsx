@@ -28,7 +28,8 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -78,6 +79,8 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
   };
 
   const locale = (pathname.split('/')[1] || 'ar') as 'ar' | 'en';
+  const isHomePage = pathname === '' || pathname === '/' || pathname === '/ar' || pathname === '/en';
+  const isOverHero = isHomePage && !isScrolled;
   
   const allLinks = (settings?.headerNav && settings.headerNav.length > 0)
     ? settings.headerNav
@@ -121,6 +124,7 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
             lightLogo={settings?.lightLogo}
             darkLogo={settings?.darkLogo}
             companyName={settings?.companyName?.[locale] || settings?.companyName?.en}
+            appearance={isOverHero ? 'on-dark' : 'auto'}
           />
 
           {/* Desktop Navigation */}
