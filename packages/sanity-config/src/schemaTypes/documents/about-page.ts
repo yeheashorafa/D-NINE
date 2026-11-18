@@ -38,6 +38,19 @@ export const aboutPage = defineType({
       type: 'localizedPortableText',
       fieldset: 'content',
     }),
+    defineField({ name: 'approvedIntroduction', title: 'النبذة المعتمدة', type: 'localizedText', fieldset: 'content' }),
+    defineField({ name: 'approvedMission', title: 'الرسالة المعتمدة', type: 'localizedText', fieldset: 'content' }),
+    defineField({ name: 'approvedVision', title: 'الرؤية المعتمدة', type: 'localizedText', fieldset: 'content' }),
+    defineField({ name: 'whyIntroduction', title: 'مقدمة لماذا دي ناين؟', type: 'localizedText', fieldset: 'content' }),
+    defineField({
+      name: 'advantages', title: 'مزايا لماذا دي ناين؟', type: 'array', fieldset: 'content',
+      description: 'يمكن الإضافة والحذف وإعادة الترتيب. التصميم الأنسب يعرض 6 بطاقات.',
+      of: [defineArrayMember({ type: 'object', fields: [
+        defineField({ name: 'title', title: 'العنوان', type: 'localizedString', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'description', title: 'الوصف', type: 'localizedText', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'iconName', title: 'الأيقونة', type: 'string', options: { list: ['Layers3', 'Route', 'Sparkles', 'Puzzle', 'Handshake', 'Target'] } }),
+      ] })],
+    }),
     defineField({
       name: 'mission',
       title: 'Mission',

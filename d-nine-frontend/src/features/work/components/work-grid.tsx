@@ -9,6 +9,7 @@ import { WorkCard } from './work-card';
 import { useProgressiveGrid } from '@/hooks/use-progressive-grid';
 import { useIntersectionLoader } from '@/hooks/use-intersection-loader';
 import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
+import { PORTFOLIO_GROUPS } from '@/features/sectors/sector-content';
 
 export interface WorkGridProps {
   initialProjects: ProjectItem[];
@@ -19,15 +20,16 @@ export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Derive effective active category: selected category or first available canonical category
-  const activeCategory = selectedCategory ?? (categories.length > 0 ? categories[0].slug : '');
+  const activeCategory = selectedCategory ?? PORTFOLIO_GROUPS[0].slug;
 
 
   const filteredProjects = useMemo(() => {
-    if (!activeCategory) return initialProjects;
+    const activeGroup = PORTFOLIO_GROUPS.find((group) => group.slug === activeCategory);
+    if (!activeGroup) return initialProjects;
     return initialProjects.filter((p) => {
       return (
-        p.primaryCategorySlug === activeCategory ||
-        (p.categorySlugs && p.categorySlugs.includes(activeCategory))
+        activeGroup.categorySlugs.includes(p.primaryCategorySlug) ||
+        (p.categorySlugs && p.categorySlugs.some((slug) => activeGroup.categorySlugs.includes(slug)))
       );
     });
   }, [initialProjects, activeCategory]);
@@ -49,7 +51,6 @@ export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
       {/* Category Tabs: 4x2 responsive layout without All Categories */}
       {categories.length > 0 && (
         <WorkFilter
-          categories={categories}
           activeCategory={activeCategory}
           onSelectCategory={(slug) => setSelectedCategory(slug)}
         />

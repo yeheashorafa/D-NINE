@@ -35,6 +35,19 @@ export const homePage = defineType({
       type: 'creativeSnapshot',
       group: 'specialties',
     }),
+    defineField({
+      name: 'whyUs',
+      title: 'عناصر لماذا دي ناين؟ (Why D-NINE)',
+      type: 'array',
+      group: 'specialties',
+      description: 'يمكن الإضافة والحذف والترتيب. يفضل عرض 4 عناصر.',
+      validation: (Rule) => Rule.max(6),
+      of: [defineArrayMember({ type: 'object', fields: [
+        defineField({ name: 'title', title: 'العنوان', type: 'localizedString', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'description', title: 'الوصف', type: 'localizedText', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'iconName', title: 'الأيقونة', type: 'string', options: { list: ['Route', 'Layers3', 'Puzzle', 'BadgeCheck'] } }),
+      ] })],
+    }),
 
     // 3. Featured Work
     defineField({

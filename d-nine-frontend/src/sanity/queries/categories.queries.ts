@@ -18,6 +18,7 @@ export const categoriesQuery = groq`
     description,
     "icon": icon.asset->url,
     targetLink,
+    portfolioGroup,
     order,
     active
   }
@@ -32,6 +33,7 @@ export const categoryBySlugQuery = groq`
     description,
     "icon": icon.asset->url,
     targetLink,
+    portfolioGroup,
     order,
     active
   }

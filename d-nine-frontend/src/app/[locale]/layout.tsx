@@ -14,6 +14,7 @@ import { getSiteSettings } from "@/services/content/settings.service";
 import { getThemeSettings } from "@/services/content/theme.service";
 import { generateThemeCss } from "@/sanity/mappers/theme.mapper";
 import "@/styles/globals.css";
+import { WhatsAppFloat } from '@/components/layout/whatsapp-float';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -121,6 +122,7 @@ export default async function RootLayout({
             <Header settings={settings} />
             <div className="flex-1 w-full">{children}</div>
             <Footer settings={settings} />
+            <WhatsAppFloat number={settings.whatsapp || '+966 50 273 2528'} />
             {isDraft && <VisualEditing />}
           </NextIntlClientProvider>
         </ThemeProvider>
