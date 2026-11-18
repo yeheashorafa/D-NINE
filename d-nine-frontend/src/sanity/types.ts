@@ -100,6 +100,7 @@ export interface SanityCategoryDoc {
   targetLink?: string;
   order?: number;
   active?: boolean;
+  portfolioGroup?: 'events' | 'identity-design' | 'media-production' | 'content-marketing';
 }
 
 
@@ -272,6 +273,10 @@ export interface SanityHomePageDoc {
     mobileImage?: string;
     mobileImageAlt?: SanityLocalizedString;
   }[];
+  heroIntro?: {
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+  };
   creativeSnapshot?: {
     badge?: SanityLocalizedString;
     title?: SanityLocalizedString;
@@ -287,6 +292,11 @@ export interface SanityHomePageDoc {
       label: SanityLocalizedString;
     }[];
   };
+  whyUs?: {
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+    iconName?: string;
+  }[];
   featuredWorkHeader?: {
     badge?: SanityLocalizedString;
     title?: SanityLocalizedString;
@@ -332,6 +342,15 @@ export interface SanityAboutPageDoc {
   heroTitle?: SanityLocalizedString;
   heroSubtitle?: SanityLocalizedString;
   agencyStory?: SanityLocalizedPortableText;
+  clientIntro?: SanityLocalizedString;
+  missionText?: SanityLocalizedString;
+  visionText?: SanityLocalizedString;
+  whyUsIntro?: SanityLocalizedString;
+  advantages?: {
+    title?: SanityLocalizedString;
+    description?: SanityLocalizedString;
+    iconName?: string;
+  }[];
   mission?: SanityLocalizedPortableText;
   vision?: SanityLocalizedPortableText;
   values?: {

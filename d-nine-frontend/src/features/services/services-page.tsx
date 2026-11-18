@@ -8,15 +8,19 @@ import { TestimonialsSection } from '../home/components/testimonials-section';
 
 import { getServicesPage } from '@/sanity/services/page.service';
 import { getLocale } from 'next-intl/server';
+import { SectorOverviewSection } from '../home/components/sector-overview-section';
+import { getSectorPage } from '@/sanity/services/sector.service';
+import { SECTORS } from '@/features/client-revision/client-content';
 
 export async function ServicesPage() {
   const locale = await getLocale();
   const isArabic = locale === 'ar';
   
-  const [offerings, categories, pageData] = await Promise.all([
+  const [offerings, categories, pageData, sectorPages] = await Promise.all([
     getAllServiceOfferings(),
     getCategories(),
     getServicesPage(),
+    Promise.all(SECTORS.map((sector) => getSectorPage(sector.slug))),
   ]);
 
   const badge = pageData?.heroBadge?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'خدماتنا' : 'Our Services');
@@ -51,6 +55,11 @@ export async function ServicesPage() {
             </p>
           )}
         </div>
+      </div>
+
+      <SectorOverviewSection sectors={sectorPages.filter((sector): sector is NonNullable<typeof sector> => Boolean(sector))} />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Services Grid with Progressive Loading */}
         <ServicesGrid 

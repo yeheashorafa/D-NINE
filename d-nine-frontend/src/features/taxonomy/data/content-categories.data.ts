@@ -6,6 +6,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'motion-graphics',
     order: 1,
     active: true,
+    portfolioGroup: 'media-production',
     title: {
       ar: 'الموشن جرافيك',
       en: 'Motion Graphics',
@@ -20,6 +21,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'video-editing',
     order: 2,
     active: true,
+    portfolioGroup: 'media-production',
     title: {
       ar: 'المونتاج وتحرير الفيديو',
       en: 'Video Editing',
@@ -34,6 +36,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'social-media-design',
     order: 3,
     active: true,
+    portfolioGroup: 'content-marketing',
     title: {
       ar: 'تصاميم السوشيال ميديا',
       en: 'Social Media Design',
@@ -48,6 +51,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'print-design',
     order: 4,
     active: true,
+    portfolioGroup: 'identity-design',
     title: {
       ar: 'التصاميم والمطبوعات',
       en: 'Print Design',
@@ -62,6 +66,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'brand-identity',
     order: 5,
     active: true,
+    portfolioGroup: 'identity-design',
     title: {
       ar: 'تصميم الشعارات والهويات البصرية',
       en: 'Logos & Brand Identities',
@@ -76,6 +81,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'artificial-intelligence',
     order: 6,
     active: true,
+    portfolioGroup: 'media-production',
     title: {
       ar: 'الذكاء الاصطناعي والإنتاج الرقمي',
       en: 'Artificial Intelligence',
@@ -90,6 +96,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'exhibitions',
     order: 7,
     active: true,
+    portfolioGroup: 'events',
     title: {
       ar: 'المعارض وتجهيز المساحات',
       en: 'Exhibitions',
@@ -104,6 +111,7 @@ export const CANONICAL_CATEGORIES: ContentCategory[] = [
     slug: 'festivals',
     order: 8,
     active: true,
+    portfolioGroup: 'events',
     title: {
       ar: 'المهرجانات والفعاليات',
       en: 'Festivals',

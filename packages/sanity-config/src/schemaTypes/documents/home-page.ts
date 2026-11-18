@@ -27,6 +27,23 @@ export const homePage = defineType({
       group: 'slider',
       description: 'شرائح العرض الرئيسية. اسحب لإعادة الترتيب.',
     }),
+    defineField({
+      name: 'heroIntro',
+      title: 'رسالة الواجهة الرئيسية (Hero Message)',
+      type: 'object',
+      group: 'slider',
+      fields: [
+        defineField({ name: 'title', title: 'العنوان الرئيسي (Title)', type: 'localizedString', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'description', title: 'الوصف (Description)', type: 'localizedText', validation: (Rule) => Rule.required() }),
+      ],
+      initialValue: {
+        title: { ar: 'نصنع التجارب، ونبني الحضور، ونحوّل الأفكار إلى أثر.', en: 'We create experiences, build presence, and turn ideas into impact.' },
+        description: {
+          ar: 'من تنظيم الملتقيات والمعارض إلى الإنتاج الإعلامي والتسويق الرقمي، نجمع بين التخطيط والإبداع والتنفيذ لتحويل الأفكار إلى مشاريع متكاملة.',
+          en: 'From conferences and exhibitions to media production and digital marketing, we bring planning, creativity, and execution together to transform ideas into integrated projects.',
+        },
+      },
+    }),
 
     // 2. Specialties & Showreel
     defineField({
@@ -34,6 +51,15 @@ export const homePage = defineType({
       title: 'مقدمة التخصصات والفيديو التعريفي (Specialties & Showreel Intro)',
       type: 'creativeSnapshot',
       group: 'specialties',
+    }),
+    defineField({
+      name: 'whyUs', title: 'مزايا لماذا دي ناين (Why D-NINE)', type: 'array', group: 'specialties',
+      validation: (Rule) => Rule.max(4),
+      of: [defineArrayMember({ type: 'object', fields: [
+        defineField({ name: 'title', title: 'العنوان', type: 'localizedString', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'description', title: 'الوصف', type: 'localizedText', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'iconName', title: 'اسم الأيقونة', type: 'string' }),
+      ] })],
     }),
 
     // 3. Featured Work

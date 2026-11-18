@@ -19,5 +19,6 @@ export function mapSanityCategory(doc: SanityCategoryDoc): ContentCategory {
     targetLink: doc.targetLink,
     order: doc.order ?? 0,
     active: doc.active ?? true,
+    portfolioGroup: doc.portfolioGroup,
   };
 }
