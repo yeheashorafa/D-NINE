@@ -9,5 +9,4 @@ export interface ContentCategory {
   targetLink?: string;
   order: number;
   active: boolean;
-  portfolioGroup?: 'events' | 'identity-design' | 'media-production' | 'content-marketing';
 }

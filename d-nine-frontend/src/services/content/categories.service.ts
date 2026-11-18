@@ -39,14 +39,13 @@ export async function getCategories(options: { stega?: boolean } = {}): Promise<
     for (let i = 0; i < CANONICAL_CATEGORY_KEYS.length; i++) {
       const key = CANONICAL_CATEGORY_KEYS[i];
       const sanityCat = sanityBySlug.get(key);
-      const fallbackCat = canonicalMap.get(key);
       if (sanityCat) {
         result.push({
           ...sanityCat,
-          portfolioGroup: sanityCat.portfolioGroup || fallbackCat?.portfolioGroup,
           order: i + 1,
         });
       } else {
+        const fallbackCat = canonicalMap.get(key);
         if (fallbackCat) {
           result.push({
             ...fallbackCat,

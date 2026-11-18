@@ -49,19 +49,6 @@ export const contentCategory = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'portfolioGroup',
-      title: 'التصنيف الرئيسي للأعمال (Portfolio Group)',
-      description: 'المجموعة الرئيسية من التصنيفات الأربعة الجديدة مع الإبقاء على هذا التصنيف التفصيلي.',
-      type: 'string',
-      options: { list: [
-        { title: 'المعارض والملتقيات والمؤتمرات', value: 'events' },
-        { title: 'الهوية والتصاميم', value: 'identity-design' },
-        { title: 'الفيديو والإنتاج الإعلامي', value: 'media-production' },
-        { title: 'المحتوى والتسويق', value: 'content-marketing' },
-      ] },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: 'order',
       title: 'ترتيب الظهور (Display Order)',
       description: 'الرقم الترتيبي للتخصص والفئة (الرقم الأصغر يظهر أولاً)',

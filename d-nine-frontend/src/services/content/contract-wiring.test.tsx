@@ -493,7 +493,6 @@ describe('Section J & Contract Wiring Verification', () => {
       heroBadge: { ar: 'شارة من نحن' },
       heroTitle: { ar: 'عنوان قصة دي ناين' },
       heroSubtitle: { ar: 'مقدمة تعريفية للوكالة' },
-      clientIntro: { ar: 'النبذة المعتمدة الجديدة من CMS' },
       agencyStory: {
         ar: [
           {
@@ -521,8 +520,6 @@ describe('Section J & Contract Wiring Verification', () => {
           },
         ],
       },
-      missionText: { ar: 'رسالتنا المعتمدة الجديدة من CMS' },
-      visionText: { ar: 'رؤيتنا المعتمدة الجديدة من CMS' },
       cta: {
         title: { ar: 'هل أنت مستعد لنقل علامتك للقمة؟' },
         buttonText: { ar: 'تواصل مع فريقنا الآن' },
@@ -536,9 +533,8 @@ describe('Section J & Contract Wiring Verification', () => {
     expect(screen.getByText('شارة من نحن')).toBeTruthy();
     expect(screen.getByText('عنوان قصة دي ناين')).toBeTruthy();
     expect(screen.getByText('هذه قصة وكالة دي ناين الحقيقية من CMS')).toBeTruthy();
-    expect(screen.getByText('النبذة المعتمدة الجديدة من CMS')).toBeTruthy();
-    expect(screen.getByText('رسالتنا المعتمدة الجديدة من CMS')).toBeTruthy();
-    expect(screen.getByText('رؤيتنا المعتمدة الجديدة من CMS')).toBeTruthy();
+    expect(screen.getByText('رسالتنا هي قيادة الإبداع البصري في المنطقة')).toBeTruthy();
+    expect(screen.getByText('رؤيتنا 2030 لتمكين الشركات الكبرى')).toBeTruthy();
     expect(screen.getByText('هل أنت مستعد لنقل علامتك للقمة؟')).toBeTruthy();
     expect(screen.getByText('تواصل مع فريقنا الآن')).toBeTruthy();
   });

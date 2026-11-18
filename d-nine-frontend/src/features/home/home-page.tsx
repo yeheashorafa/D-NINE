@@ -5,8 +5,6 @@ import { FeaturedWorkSection } from './components/featured-work-section';
 import { CoreServicesSection } from './components/core-services-section';
 import { ProcessSection } from './components/process-section';
 import { PartnersSection } from './components/partners-section';
-import { SectorOverviewSection } from './components/sector-overview-section';
-import { WhyDnineSection } from './components/why-dnine-section';
 import { TestimonialsSection } from './components/testimonials-section';
 import { FaqsSection } from './components/faqs-section';
 import { BookACallSection } from './components/book-a-call-section';
@@ -16,18 +14,15 @@ import { getCategories } from '@/services/content/categories.service';
 import { getHomePage } from '@/sanity/services/page.service';
 import { getTestimonials } from '@/services/content/testimonials.service';
 import { getPartners } from '@/services/content/partners.service';
-import { getSectorPage } from '@/sanity/services/sector.service';
-import { SECTORS, WHY_D9 } from '@/features/client-revision/client-content';
 
 export async function HomePage() {
-  const [featuredProjects, services, categories, homeData, allTestimonials, allPartners, sectorPages] = await Promise.all([
+  const [featuredProjects, services, categories, homeData, allTestimonials, allPartners] = await Promise.all([
     getFeaturedProjects(),
     getServices(),
     getCategories(),
     getHomePage(),
     getTestimonials(),
     getPartners(),
-    Promise.all(SECTORS.map((sector) => getSectorPage(sector.slug))),
   ]);
 
   // Order featured projects strictly according to client's curated selection order
@@ -56,17 +51,9 @@ export async function HomePage() {
   return (
     <main className="home-page w-full overflow-hidden">
       {/* 1. Hero Slider (Localized 4 artwork fields with safe fallbacks) */}
-      <HeroSlider data={{ slides: validSlides, intro: homeData?.heroIntro }} />
+      <HeroSlider data={{ slides: validSlides }} />
 
-      {/* Client-approved sector structure and positioning message */}
-      <SectorOverviewSection sectors={sectorPages.filter((sector): sector is NonNullable<typeof sector> => Boolean(sector))} />
-      <WhyDnineSection items={(homeData?.whyUs?.length ? homeData.whyUs : WHY_D9).map((item) => ({
-        iconName: item.iconName || 'BadgeCheck',
-        title: { ar: item.title?.ar || '', en: item.title?.en || '' },
-        description: { ar: item.description?.ar || '', en: item.description?.en || '' },
-      }))} />
-
-      {/* Existing sections remain available as requested by the client */}
+      {/* 2. Canonical 8 Specialties & Showreel (Consumes the same contentCategory) */}
       <CreativeSnapshotSection
         data={homeData?.creativeSnapshot}
         categories={categories}

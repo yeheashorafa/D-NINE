@@ -2,7 +2,6 @@ import { MetadataRoute } from 'next';
 import { getAllServiceSlugs } from '@/services/content/services.service';
 import { getAllProjectSlugs } from '@/services/content/projects.service';
 import { getAllBlogSlugs } from '@/services/content/blog.service';
-import { SECTORS } from '@/features/client-revision/client-content';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dnine.agency';
@@ -32,15 +31,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.7,
-      });
-    });
-
-    SECTORS.forEach((sector) => {
-      entries.push({
-        url: `${baseUrl}/${locale}/services/sectors/${sector.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.85,
       });
     });
 

@@ -19,8 +19,7 @@ export const categoriesQuery = groq`
     "icon": icon.asset->url,
     targetLink,
     order,
-    active,
-    portfolioGroup
+    active
   }
 `;
 
@@ -34,7 +33,6 @@ export const categoryBySlugQuery = groq`
     "icon": icon.asset->url,
     targetLink,
     order,
-    active,
-    portfolioGroup
+    active
   }
 `;

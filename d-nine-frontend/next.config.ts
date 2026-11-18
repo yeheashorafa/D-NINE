@@ -94,7 +94,6 @@ const nextConfig: NextConfig = {
   },
 
   experimental: {
-    agentUpgrade: 'security',
     staticGenerationRetryCount: 3,
     staticGenerationMaxConcurrency: 1,
     staticGenerationMinPagesPerWorker: 100,

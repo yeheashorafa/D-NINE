@@ -38,19 +38,6 @@ export const aboutPage = defineType({
       type: 'localizedPortableText',
       fieldset: 'content',
     }),
-    defineField({ name: 'clientIntro', title: 'النبذة المعتمدة (Approved Introduction)', type: 'localizedText', fieldset: 'content' }),
-    defineField({ name: 'missionText', title: 'الرسالة المعتمدة (Approved Mission)', type: 'localizedText', fieldset: 'content' }),
-    defineField({ name: 'visionText', title: 'الرؤية المعتمدة (Approved Vision)', type: 'localizedText', fieldset: 'content' }),
-    defineField({ name: 'whyUsIntro', title: 'مقدمة لماذا دي ناين (Why D-NINE Intro)', type: 'localizedText', fieldset: 'content' }),
-    defineField({
-      name: 'advantages', title: 'مزايا دي ناين الست (Six Advantages)', type: 'array', fieldset: 'content',
-      validation: (Rule) => Rule.max(6),
-      of: [defineArrayMember({ type: 'object', fields: [
-        defineField({ name: 'title', title: 'العنوان', type: 'localizedString', validation: (Rule) => Rule.required() }),
-        defineField({ name: 'description', title: 'الوصف', type: 'localizedText', validation: (Rule) => Rule.required() }),
-        defineField({ name: 'iconName', title: 'اسم الأيقونة (Lucide)', type: 'string' }),
-      ] })],
-    }),
     defineField({
       name: 'mission',
       title: 'Mission',

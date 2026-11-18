@@ -3,17 +3,16 @@ import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getAboutPage } from '@/sanity/services/page.service';
 import { getTeamMembers } from '@/services/content/team.service';
-import { Sparkles, Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool, Layers3, Route, Puzzle, Handshake, Target } from 'lucide-react';
+import { Sparkles, Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 import { CustomPortableText } from '@/sanity/components/portable-text';
 import { TeamSection } from '../home/components/team-section';
 import { TestimonialsSection } from '../home/components/testimonials-section';
-import { ABOUT_CONTENT } from '../client-revision/client-content';
 
 // Helper to map string icon names to Lucide components safely
 const getIconComponent = (iconName: string) => {
   const icons: Record<string, any> = {
-    Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool, Layers3, Route, Puzzle, Handshake, Target, Sparkles
+    Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool
   };
   return icons[iconName] || Palette;
 };
@@ -66,7 +65,7 @@ export async function AboutPage() {
             {pageData?.heroTitle?.[locale] || t('hero.title')}
           </h1>
           <p className="text-text-muted text-base sm:text-lg leading-relaxed whitespace-pre-wrap">
-            {pageData?.clientIntro?.[locale] || ABOUT_CONTENT.intro[locale]}
+            {pageData?.heroSubtitle?.[locale] || t('hero.subtitle')}
           </p>
         </RevealSection>
 
@@ -97,7 +96,11 @@ export async function AboutPage() {
               {t('missionVision.missionTitle')}
             </h3>
             <div className="text-text-muted leading-relaxed prose prose-sm dark:prose-invert">
-              <p>{pageData?.missionText?.[locale] || ABOUT_CONTENT.mission[locale]}</p>
+              {pageData?.mission?.[locale] ? (
+                <CustomPortableText value={pageData.mission[locale]} />
+              ) : (
+                <p>{t('missionVision.missionDesc')}</p>
+              )}
             </div>
           </RevealSection>
 
@@ -106,24 +109,13 @@ export async function AboutPage() {
               {t('missionVision.visionTitle')}
             </h3>
             <div className="text-text-muted leading-relaxed prose prose-sm dark:prose-invert">
-              <p>{pageData?.visionText?.[locale] || ABOUT_CONTENT.vision[locale]}</p>
+              {pageData?.vision?.[locale] ? (
+                <CustomPortableText value={pageData.vision[locale]} />
+              ) : (
+                <p>{t('missionVision.visionDesc')}</p>
+              )}
             </div>
           </RevealSection>
-        </div>
-
-        {/* Client-approved Why D-NINE section */}
-        <div className="space-y-8">
-          <RevealSection className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold text-brand-cyan uppercase tracking-wider">{isArabic ? 'لماذا دي ناين؟' : 'Why D-NINE?'}</span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground">{isArabic ? 'من الفكرة إلى أثر حقيقي' : 'From an idea to meaningful impact'}</h2>
-            <p className="text-text-muted leading-8">{pageData?.whyUsIntro?.[locale] || ABOUT_CONTENT.whyIntro[locale]}</p>
-          </RevealSection>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(pageData?.advantages?.length ? pageData.advantages : ABOUT_CONTENT.advantages).slice(0, 6).map((item: any, idx: number) => {
-              const IconComp = getIconComponent(item.iconName);
-              return <RevealSection key={item.title?.en || idx}><article className="h-full rounded-3xl border border-border bg-surface/80 dark:bg-card p-6"><div className="w-11 h-11 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center mb-4"><IconComp className="w-5 h-5" /></div><h3 className="text-lg font-extrabold text-foreground">{item.title?.[locale]}</h3><p className="mt-3 text-sm leading-7 text-text-muted">{item.description?.[locale]}</p></article></RevealSection>;
-            })}
-          </div>
         </div>
 
         {/* Core Values */}
