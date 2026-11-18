@@ -83,6 +83,7 @@ export const homePageQuery = groq`
       videoBadgeText,
       videoDuration
     },
+    whyUs[]{title, description, iconName},
     featuredWorkHeader {
       badge,
       title
@@ -145,6 +146,11 @@ export const aboutPageQuery = groq`
     heroTitle,
     heroSubtitle,
     agencyStory,
+    approvedIntroduction,
+    approvedMission,
+    approvedVision,
+    whyIntroduction,
+    advantages[]{title, description, iconName},
     mission,
     vision,
     values[] {

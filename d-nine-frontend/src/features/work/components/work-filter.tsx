@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { useLocale } from 'next-intl';
-import { ContentCategory } from '@/types/category';
+import { PORTFOLIO_GROUPS } from '@/features/sectors/sector-content';
+import type { ContentCategory } from '@/types/category';
 
 export interface WorkFilterProps {
-  categories: ContentCategory[];
+  categories?: ContentCategory[];
   activeCategory: string;
   onSelectCategory: (slug: string) => void;
 }
@@ -22,14 +23,14 @@ export const WorkFilter: React.FC<WorkFilterProps> = ({
     <div className="w-full mb-10">
       {/* 4 columns x 2 rows on desktop, responsive on tablet/mobile */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5 max-w-5xl mx-auto">
-        {categories.map((cat) => {
-          const isActive = activeCategory === cat.slug;
+        {(categories || PORTFOLIO_GROUPS).map((group) => {
+          const isActive = activeCategory === group.slug;
           return (
             <button
-              key={cat.id || cat.slug}
+              key={group.slug}
               type="button"
-              data-category-slug={cat.slug}
-              onClick={() => onSelectCategory(cat.slug)}
+              data-category-slug={group.slug}
+              onClick={() => onSelectCategory(group.slug)}
               className={`min-h-[48px] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center text-center leading-snug border focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan select-none ${
                 isActive
                   ? 'bg-slate-950 dark:bg-white text-white dark:text-slate-950 border-slate-950 dark:border-white shadow-lg scale-[1.02]'
@@ -37,7 +38,7 @@ export const WorkFilter: React.FC<WorkFilterProps> = ({
               }`}
               aria-pressed={isActive}
             >
-              <span>{isArabic ? cat.title.ar : cat.title.en}</span>
+              <span>{group.title[isArabic ? 'ar' : 'en']}</span>
             </button>
           );
         })}

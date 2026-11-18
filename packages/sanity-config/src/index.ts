@@ -1,6 +1,7 @@
 export { schemaTypes } from './schemaTypes';
 export { structure } from './structure';
 export { locations, mainDocuments } from './presentation/resolve';
+export { sectorTemplates } from './sector-templates';
 
 export const singletonTypes = new Set([
   'homePage',

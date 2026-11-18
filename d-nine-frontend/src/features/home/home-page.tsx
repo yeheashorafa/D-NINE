@@ -10,19 +10,20 @@ import { FaqsSection } from './components/faqs-section';
 import { BookACallSection } from './components/book-a-call-section';
 import { getFeaturedProjects } from '@/services/content/projects.service';
 import { getServices } from '@/services/content/services.service';
-import { getCategories } from '@/services/content/categories.service';
 import { getHomePage } from '@/sanity/services/page.service';
 import { getTestimonials } from '@/services/content/testimonials.service';
 import { getPartners } from '@/services/content/partners.service';
+import { getSectors } from '@/sanity/services/sector.service';
+import { WhyDnineSection } from './components/why-dnine-section';
 
 export async function HomePage() {
-  const [featuredProjects, services, categories, homeData, allTestimonials, allPartners] = await Promise.all([
+  const [featuredProjects, services, homeData, allTestimonials, allPartners, sectors] = await Promise.all([
     getFeaturedProjects(),
     getServices(),
-    getCategories(),
     getHomePage(),
     getTestimonials(),
     getPartners(),
+    getSectors(),
   ]);
 
   // Order featured projects strictly according to client's curated selection order
@@ -56,13 +57,15 @@ export async function HomePage() {
       {/* 2. Canonical 8 Specialties & Showreel (Consumes the same contentCategory) */}
       <CreativeSnapshotSection
         data={homeData?.creativeSnapshot}
-        categories={categories}
+        sectors={sectors}
       />
 
-      {/* 3. Featured Work Showcase */}
+      {/* 3. Why D-NINE */}
+      <WhyDnineSection items={homeData?.whyUs} />
+
+      {/* 4. Featured Work Showcase */}
       <FeaturedWorkSection
         projects={displayProjects}
-        categories={categories}
         data={homeData?.featuredWorkHeader}
       />
 

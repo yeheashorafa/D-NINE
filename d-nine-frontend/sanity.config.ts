@@ -8,7 +8,8 @@ import {
   locations,
   mainDocuments,
   singletonDocumentActions,
-  singletonNewDocumentOptions
+  singletonNewDocumentOptions,
+  sectorTemplates,
 } from '@d-nine/sanity-config';
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'placeholder-id';
@@ -48,6 +49,7 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+    templates: (previous) => [...previous, ...sectorTemplates],
   },
 
   document: {

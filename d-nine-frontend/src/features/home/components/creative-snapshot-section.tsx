@@ -7,52 +7,33 @@ import { Link } from '@/i18n/navigation';
 import {
   Play,
   Sparkles,
-  Film,
-  Palette,
-  Scissors,
   ArrowRight,
   ArrowLeft,
-  Share2,
-  Printer,
-  Cpu,
-  Building2,
-  PartyPopper,
-  LucideIcon
 } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 import { Floating3DAsset } from '@/components/motion/floating-3d-asset';
 import { Modal } from '@/components/ui/modal';
 import type { SanityHomePageDoc } from '@/sanity/types';
+import type { SectorContent } from '@/features/sectors/sector-content';
+import { SectorCards } from '@/features/sectors/sector-cards';
 import type { ContentCategory } from '@/types/category';
-
-// Dynamic icon resolution for the 8 canonical specialties
-const SPECIALTY_ICONS: Record<string, LucideIcon> = {
-  'motion-graphics': Film,
-  'video-editing': Scissors,
-  'social-media-design': Share2,
-  'print-design': Printer,
-  'brand-identity': Palette,
-  'artificial-intelligence': Cpu,
-  'exhibitions': Building2,
-  'festivals': PartyPopper,
-};
 
 export interface CreativeSnapshotSectionProps {
   data?: NonNullable<SanityHomePageDoc['creativeSnapshot']>;
+  sectors?: SectorContent[];
+  /** Legacy test/caller compatibility; sector cards are now the public taxonomy. */
   categories?: ContentCategory[];
 }
 
 export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = ({
   data,
-  categories = [],
+  sectors = [],
+  categories,
 }) => {
   const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
   const t = useTranslations('home.creativeSnapshot');
   const [showreelOpen, setShowreelOpen] = useState(false);
-
-  // Active categories sorted by order (exactly 8 specialties)
-  const activeSpecialties = (categories || []).filter((c) => c.active !== false);
 
   return (
     <section className="py-16 sm:py-24 relative overflow-hidden bg-background transition-colors duration-300">
@@ -159,47 +140,16 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
           </div>
         </RevealSection>
 
-        {/* Bottom Section: 8 Specialties Canonical Grid (4 x 2 on desktop) */}
-        {activeSpecialties.length > 0 && (
+        {/* Two main sectors replace the previous eight service cards. */}
+        {sectors.length > 0 && (
+          <RevealSection className="pt-6">
+            <SectorCards sectors={sectors} />
+          </RevealSection>
+        )}
+        {sectors.length === 0 && categories && categories.length > 0 && (
           <RevealSection className="pt-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              {activeSpecialties.map((specialty) => {
-                const IconComponent = SPECIALTY_ICONS[specialty.slug] || Sparkles;
-                const linkHref = specialty.targetLink || `/work?category=${specialty.slug}`;
-
-                return (
-                  <Link
-                    key={specialty.id || specialty.slug}
-                    href={linkHref}
-                    className="group p-5 sm:p-6 rounded-3xl bg-surface/80 dark:bg-card border border-border/80 hover:border-brand-cyan/60 hover:shadow-xl hover:shadow-brand-cyan/5 transition-all duration-300 flex flex-col justify-between space-y-4"
-                  >
-                    <div className="space-y-3">
-                      <div className="w-11 h-11 rounded-2xl bg-brand-purple/10 dark:bg-brand-purple/15 text-brand-purple dark:text-brand-purple-light flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                        {specialty.icon ? (
-                          <div className="relative w-6 h-6">
-                            <Image src={specialty.icon} alt="" fill className="object-contain" />
-                          </div>
-                        ) : (
-                          <IconComponent className="w-5 h-5" aria-hidden="true" />
-                        )}
-                      </div>
-                      <h3 className="font-extrabold text-base sm:text-lg text-foreground group-hover:text-brand-cyan transition-colors">
-                        {specialty.title[locale] || specialty.title.en}
-                      </h3>
-                      {specialty.description && (
-                        <p className="text-xs sm:text-sm text-text-muted leading-relaxed line-clamp-3">
-                          {specialty.description[locale] || specialty.description.en}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-cyan group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform pt-1">
-                      <span>{t('ctaExploreWork')}</span>
-                      {isArabic ? <ArrowLeft className="w-3.5 h-3.5" /> : <ArrowRight className="w-3.5 h-3.5" />}
-                    </div>
-                  </Link>
-                );
-              })}
+              {categories.map((category) => <Link key={category.slug} href={category.targetLink || `/work?category=${category.slug}`} className="p-5 rounded-3xl border border-border bg-surface"><h3 className="font-extrabold text-foreground">{category.title[locale]}</h3></Link>)}
             </div>
           </RevealSection>
         )}

@@ -42,6 +42,7 @@ import { privacyPage } from './documents/privacy-page';
 import { termsPage } from './documents/terms-page';
 import { siteSettings } from './documents/site-settings';
 import { themeSettings } from './documents/theme-settings';
+import { sectorPage } from './documents/sector-page';
 
 export const schemaTypes = [
   // Object Types
@@ -89,4 +90,5 @@ export const schemaTypes = [
   termsPage,
   siteSettings,
   themeSettings,
+  sectorPage,
 ];

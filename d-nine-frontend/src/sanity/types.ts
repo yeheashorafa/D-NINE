@@ -98,6 +98,7 @@ export interface SanityCategoryDoc {
   description?: SanityLocalizedString;
   icon?: string;
   targetLink?: string;
+  portfolioGroup?: 'events' | 'identity-design' | 'media-production' | 'content-marketing';
   order?: number;
   active?: boolean;
 }
@@ -287,6 +288,11 @@ export interface SanityHomePageDoc {
       label: SanityLocalizedString;
     }[];
   };
+  whyUs?: {
+    title: SanityLocalizedString;
+    description: SanityLocalizedString;
+    iconName: string;
+  }[];
   featuredWorkHeader?: {
     badge?: SanityLocalizedString;
     title?: SanityLocalizedString;
@@ -332,6 +338,11 @@ export interface SanityAboutPageDoc {
   heroTitle?: SanityLocalizedString;
   heroSubtitle?: SanityLocalizedString;
   agencyStory?: SanityLocalizedPortableText;
+  approvedIntroduction?: SanityLocalizedString;
+  approvedMission?: SanityLocalizedString;
+  approvedVision?: SanityLocalizedString;
+  whyIntroduction?: SanityLocalizedString;
+  advantages?: { title: SanityLocalizedString; description: SanityLocalizedString; iconName?: string }[];
   mission?: SanityLocalizedPortableText;
   vision?: SanityLocalizedPortableText;
   values?: {
