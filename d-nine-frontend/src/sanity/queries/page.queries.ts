@@ -72,6 +72,7 @@ export const homePageQuery = groq`
       "mobileImage": coalesce(mobileImageAr.asset->url, mobileImage.asset->url),
       "mobileImageAlt": coalesce(alt, mobileImage.alt)
     },
+    heroIntro { title, description },
     creativeSnapshot {
       badge,
       title,
@@ -83,6 +84,7 @@ export const homePageQuery = groq`
       videoBadgeText,
       videoDuration
     },
+    whyUs[]{ title, description, iconName },
     featuredWorkHeader {
       badge,
       title
@@ -145,6 +147,11 @@ export const aboutPageQuery = groq`
     heroTitle,
     heroSubtitle,
     agencyStory,
+    clientIntro,
+    missionText,
+    visionText,
+    whyUsIntro,
+    advantages[]{ title, description, iconName },
     mission,
     vision,
     values[] {

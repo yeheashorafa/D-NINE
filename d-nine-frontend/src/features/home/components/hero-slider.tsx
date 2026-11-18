@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl';
 import { motion, AnimatePresence, useReducedMotion, Variants } from 'motion/react';
 import { Play, Pause } from 'lucide-react';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
+import { HOME_INTRO } from '@/features/client-revision/client-content';
 
 export interface Slide {
   id?: string;
@@ -26,15 +27,25 @@ export interface Slide {
 }
 
 const DEFAULT_SLIDES: Slide[] = [
-  { id: '1', image: '/slider/slide-01.jpg', alt: { ar: 'شريحة العرض الأولى — وكالة دي ناين الإبداعية', en: 'Hero Slide 1 — D-NINE Creative Agency' } },
-  { id: '2', image: '/slider/slide-02.jpg', alt: { ar: 'شريحة العرض الثانية — الإنتاج الإعلامي وصناعة المحتوى', en: 'Hero Slide 2 — Media Production & Content Creation' } },
-  { id: '3', image: '/slider/slide-03.jpg', alt: { ar: 'شريحة العرض الثالثة — الهوية البصرية والتصميم الاستراتيجي', en: 'Hero Slide 3 — Visual Identity & Strategic Design' } },
-  { id: '4', image: '/slider/slide-04.jpg', alt: { ar: 'شريحة العرض الرابعة — التسويق الرقمي وإدارة الحملات', en: 'Hero Slide 4 — Digital Marketing & Campaign Management' } },
+  { id: 'events', image: '/slider/slide-01.jpg', alt: { ar: 'تنظيم الملتقيات والمعارض', en: 'Forums and exhibition management' } },
+  { id: 'identity', image: '/slider/slide-02.jpg', alt: { ar: 'تصميم الهويات البصرية والشعارات', en: 'Brand identity and logo design' } },
+  { id: 'social', image: '/media/services/social-management.jpg', alt: { ar: 'إدارة حسابات التواصل الاجتماعي', en: 'Social media account management' } },
+  { id: 'campaigns', image: '/slider/slide-04.jpg', alt: { ar: 'إدارة وتنفيذ الحملات التسويقية', en: 'Marketing campaign management' } },
+  { id: 'content', image: '/media/services/social-content.jpg', alt: { ar: 'صناعة المحتوى والأفكار', en: 'Content and concept creation' } },
+  { id: 'coverage', image: '/media/services/video-production.jpg', alt: { ar: 'التصوير والتغطيات المرئية', en: 'Photography and visual coverage' } },
+  { id: 'commerce', image: '/media/work/project-4.jpg', alt: { ar: 'إدارة المتاجر الإلكترونية', en: 'E-commerce management' } },
+  { id: 'motion', image: '/slider/slide-03.jpg', alt: { ar: 'فيديوهات الموشن جرافيك', en: 'Motion graphics videos' } },
+  { id: 'profile-video', image: '/media/video/documentary-poster.jpg', alt: { ar: 'إنتاج الفيديوهات التعريفية', en: 'Corporate profile video production' } },
+  { id: 'print', image: '/media/services/graphic-design.jpg', alt: { ar: 'تصاميم المطبوعات', en: 'Print design' } },
 ];
 
 export interface HeroSliderProps {
   data?: {
     slides: Slide[];
+    intro?: {
+      title?: { ar?: string; en?: string };
+      description?: { ar?: string; en?: string };
+    };
   };
 }
 
@@ -45,7 +56,11 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
 
   // Filter only active slides
   const validSlides = (data?.slides || []).filter((s) => s.active !== false);
-  const slides = validSlides.length > 0 ? validSlides : DEFAULT_SLIDES;
+  const slides = validSlides.length >= 10
+    ? validSlides.slice(0, 10)
+    : [...validSlides, ...DEFAULT_SLIDES.filter((fallback) => !validSlides.some((slide) => (slide.id || slide._key) === fallback.id))].slice(0, 10);
+  const heroTitle = data?.intro?.title?.[locale] || HOME_INTRO.title[locale];
+  const heroDescription = data?.intro?.description?.[locale] || HOME_INTRO.description[locale];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
@@ -191,12 +206,14 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
       aria-roledescription="carousel"
       aria-label={isArabic ? 'معرض الأعمال والمشاريع البارزة' : 'Featured Work & Agency Showcase'}
     >
-      {/* Accessible Localized H1 Heading */}
-      <h1 className="sr-only">
-        {isArabic
-          ? 'دي ناين — وكالة إبداعية متخصصة في الإنتاج الإعلامي والهوية البصرية'
-          : 'D-NINE — Creative Agency Specializing in Media Production & Brand Identity'}
-      </h1>
+      <div className="absolute inset-0 z-[25] flex items-center pointer-events-none">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+          <div className="max-w-3xl rounded-3xl bg-black/30 backdrop-blur-[2px] p-5 sm:p-8 lg:p-10 border border-white/10 shadow-2xl">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white text-balance">{heroTitle}</h1>
+            <p className="mt-4 sm:mt-6 max-w-2xl text-sm sm:text-lg lg:text-xl leading-7 sm:leading-9 text-white/90">{heroDescription}</p>
+          </div>
+        </div>
+      </div>
 
       {/* Screen Reader Live Announcement */}
       <div className="sr-only" aria-live="polite" aria-atomic="true">

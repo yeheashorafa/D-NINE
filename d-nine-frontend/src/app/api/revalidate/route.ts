@@ -21,6 +21,7 @@ const ALLOWED_DOCUMENT_TYPES: Record<string, readonly string[]> = Object.freeze(
   contentCategory: ['categories'],
   service: ['services'],
   serviceOffering: ['service-offerings', 'services'],
+  sectorPage: ['sector-pages', 'services'],
   project: ['projects'],
   testimonial: ['testimonials'],
   teamMember: ['team-members'],
@@ -66,6 +67,7 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   contentCategory: ['/ar/work', '/en/work', '/ar', '/en'],
   service: ['/ar/services', '/en/services'],
   serviceOffering: ['/ar/services', '/en/services'],
+  sectorPage: ['/ar/services', '/en/services'],
   project: ['/ar/work', '/en/work', '/ar', '/en'],
   testimonial: [
     '/ar',
@@ -286,6 +288,10 @@ export async function POST(req: NextRequest) {
       if (docType === 'service') {
         revalidateTag(`service:${slug}`, 'max');
         pathsToRevalidate.push(`/ar/services/${slug}`, `/en/services/${slug}`);
+      }
+      if (docType === 'sectorPage') {
+        revalidateTag(`sector:${slug}`, 'max');
+        pathsToRevalidate.push(`/ar/services/sectors/${slug}`, `/en/services/sectors/${slug}`, '/ar/services', '/en/services');
       }
       if (docType === 'project') {
         revalidateTag(`project:${slug}`, 'max');

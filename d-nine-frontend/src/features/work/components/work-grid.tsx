@@ -9,6 +9,8 @@ import { WorkCard } from './work-card';
 import { useProgressiveGrid } from '@/hooks/use-progressive-grid';
 import { useIntersectionLoader } from '@/hooks/use-intersection-loader';
 import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
+import { useLocale } from 'next-intl';
+import { PORTFOLIO_GROUPS, type PortfolioGroupSlug } from '@/features/client-revision/client-content';
 
 export interface WorkGridProps {
   initialProjects: ProjectItem[];
@@ -16,26 +18,29 @@ export interface WorkGridProps {
 }
 
 export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
+  const locale = useLocale() as 'ar' | 'en';
+  const [selectedGroup, setSelectedGroup] = useState<PortfolioGroupSlug>('events');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Derive effective active category: selected category or first available canonical category
-  const activeCategory = selectedCategory ?? (categories.length > 0 ? categories[0].slug : '');
-
+  const group = PORTFOLIO_GROUPS.find((item) => item.slug === selectedGroup) || PORTFOLIO_GROUPS[0];
+  const groupCategories = categories.filter((category) =>
+    (category.portfolioGroup ?? (group.categories.includes(category.slug) ? selectedGroup : undefined)) === selectedGroup
+  );
 
   const filteredProjects = useMemo(() => {
-    if (!activeCategory) return initialProjects;
+    const acceptedCategories = selectedCategory ? [selectedCategory] : group.categories;
     return initialProjects.filter((p) => {
       return (
-        p.primaryCategorySlug === activeCategory ||
-        (p.categorySlugs && p.categorySlugs.includes(activeCategory))
+        acceptedCategories.includes(p.primaryCategorySlug) ||
+        (p.categorySlugs && p.categorySlugs.some((slug) => acceptedCategories.includes(slug)))
       );
     });
-  }, [initialProjects, activeCategory]);
+  }, [initialProjects, group.categories, selectedCategory]);
 
   const { visibleItems, hasMore, isLoadingMore, loadMore } = useProgressiveGrid({
     allItems: filteredProjects,
     batchSize: 6,
-    resetDependencies: [activeCategory],
+    resetDependencies: [selectedGroup, selectedCategory],
   });
 
   const { sentinelRef } = useIntersectionLoader({
@@ -46,13 +51,24 @@ export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
 
   return (
     <div className="w-full">
-      {/* Category Tabs: 4x2 responsive layout without All Categories */}
-      {categories.length > 0 && (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6" aria-label={locale === 'ar' ? 'التصنيفات الرئيسية للأعمال' : 'Main work categories'}>
+        {PORTFOLIO_GROUPS.map((item) => (
+          <button key={item.slug} type="button" aria-pressed={selectedGroup === item.slug} onClick={() => { setSelectedGroup(item.slug); setSelectedCategory(null); }} className={`min-h-16 rounded-2xl border px-4 py-3 text-sm font-extrabold transition-all ${selectedGroup === item.slug ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950 border-transparent shadow-lg' : 'bg-surface dark:bg-card border-border text-foreground hover:border-brand-cyan/50'}`}>
+            {item.title[locale]}
+          </button>
+        ))}
+      </div>
+
+      {/* Detailed canonical categories remain available beneath each main group. */}
+      {groupCategories.length > 0 && (
+        <div className="mb-10">
+          <button type="button" onClick={() => setSelectedCategory(null)} className={`mx-auto mb-3 block rounded-full px-5 py-2 text-xs font-bold border ${selectedCategory === null ? 'bg-brand-cyan text-slate-950 border-brand-cyan' : 'border-border text-text-muted'}`}>{locale === 'ar' ? 'عرض الكل في هذا القطاع' : 'View all in this sector'}</button>
         <WorkFilter
-          categories={categories}
-          activeCategory={activeCategory}
+          categories={groupCategories}
+          activeCategory={selectedCategory || ''}
           onSelectCategory={(slug) => setSelectedCategory(slug)}
         />
+        </div>
       )}
 
 
