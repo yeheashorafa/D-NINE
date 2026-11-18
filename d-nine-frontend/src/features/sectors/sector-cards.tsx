@@ -1,27 +1,36 @@
 'use client';
 
-import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CalendarRange, Megaphone } from 'lucide-react';
 import type { SectorContent } from './sector-content';
 
 export function SectorCards({ sectors }: { sectors: SectorContent[] }) {
   const locale = useLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-      {sectors.map((sector) => (
-        <Link key={sector.slug} href={`/services/sectors/${sector.slug}`} className="group relative min-h-[360px] overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand-cyan/60 hover:shadow-2xl">
-          {sector.image && <Image src={sector.image} alt={sector.title[locale]} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-slate-950/10" />
-          <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 text-white">
-            <h3 className="text-2xl sm:text-3xl font-extrabold leading-tight">{sector.title[locale]}</h3>
-            <p className="mt-3 max-w-xl text-sm sm:text-base leading-7 text-white/80 line-clamp-3">{sector.introduction[locale]}</p>
-            <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-cyan-light">{isArabic ? 'استكشف القطاع' : 'Explore sector'} {isArabic ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}</span>
-          </div>
-        </Link>
-      ))}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+      {sectors.map((sector, index) => {
+        const Icon = index === 0 ? CalendarRange : Megaphone;
+        return (
+          <Link key={sector.slug} href={`/services/sectors/${sector.slug}`} className="group relative overflow-hidden rounded-2xl border border-border/80 bg-card p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-cyan/60 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">
+            <div className="absolute inset-y-0 start-0 w-1 bg-gradient-brand opacity-70 transition-all duration-300 group-hover:w-1.5 group-hover:opacity-100" aria-hidden="true" />
+            <div className="flex items-start gap-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-purple/10 text-brand-purple transition-transform duration-300 group-hover:scale-105 dark:bg-brand-cyan/10 dark:text-brand-cyan-light" aria-hidden="true">
+                <Icon className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-lg sm:text-xl font-extrabold leading-snug text-foreground">{sector.title[locale]}</h3>
+                <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{sector.introduction[locale]}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-brand-cyan-dark dark:text-brand-cyan-light">
+                  {isArabic ? 'استكشف القطاع' : 'Explore sector'}
+                  {isArabic ? <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> : <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                </span>
+              </div>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
