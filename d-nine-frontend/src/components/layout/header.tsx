@@ -102,9 +102,17 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
 
   // Separate regular nav links from CTA button links if an explicit isButton link exists
   const buttonLink = allLinks.find((l) => l.isButton);
-  const navLinks = allLinks.filter((l) => l !== buttonLink);
+  const configuredNavLinks = allLinks.filter((l) => l !== buttonLink);
+  const navLinks = configuredNavLinks.some((link) => link.href === '/contact')
+    ? configuredNavLinks
+    : [
+        ...configuredNavLinks,
+        { href: '/contact', label: t('contact'), isExternal: false, isButton: false },
+      ];
 
-  const ctaLabel = buttonLink ? buttonLink.label : t('contact');
+  const ctaLabel = buttonLink && buttonLink.label !== t('contact')
+    ? buttonLink.label
+    : t('getStarted');
   const ctaHref = buttonLink ? buttonLink.href : '/contact';
   const ctaIsExternal = buttonLink ? buttonLink.isExternal : false;
 
