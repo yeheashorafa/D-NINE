@@ -89,42 +89,51 @@ export const ContactForm: React.FC<ContactFormProps> = ({ categories }) => {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {serverError && (
-            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm">
+            <div role="alert" className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm">
               {serverError}
             </div>
           )}
           
           {/* Full Name */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-foreground">{t('nameLabel')}</label>
+            <label htmlFor="fullName" className="text-xs font-bold text-foreground">{t('nameLabel')}</label>
             <input
+              id="fullName"
               type="text"
               {...register('fullName')}
+              aria-invalid={Boolean(errors.fullName)}
+              aria-describedby={errors.fullName ? 'fullName-error' : undefined}
               className="w-full px-4 py-3 rounded-2xl bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan"
             />
             {errors.fullName && (
-              <p className="text-xs text-rose-500">{getErrorMessage(errors.fullName.message)}</p>
+              <p id="fullName-error" role="alert" className="text-xs text-rose-500">{getErrorMessage(errors.fullName.message)}</p>
             )}
           </div>
 
           {/* Email */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-foreground">{t('emailLabel')}</label>
+            <label htmlFor="email" className="text-xs font-bold text-foreground">{t('emailLabel')}</label>
             <input
+              id="email"
               type="email"
               {...register('email')}
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? 'email-error' : undefined}
               className="w-full px-4 py-3 rounded-2xl bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan"
             />
             {errors.email && (
-              <p className="text-xs text-rose-500">{getErrorMessage(errors.email.message)}</p>
+              <p id="email-error" role="alert" className="text-xs text-rose-500">{getErrorMessage(errors.email.message)}</p>
             )}
           </div>
 
           {/* Service Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-foreground">{t('serviceLabel')}</label>
+            <label htmlFor="serviceSlug" className="text-xs font-bold text-foreground">{t('serviceLabel')}</label>
             <select
+              id="serviceSlug"
               {...register('serviceSlug')}
+              aria-invalid={Boolean(errors.serviceSlug)}
+              aria-describedby={errors.serviceSlug ? 'serviceSlug-error' : undefined}
               className="w-full px-4 py-3 rounded-2xl bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan"
             >
               <option value="">{isArabic ? 'اختر الخدمة المطلوبة' : 'Select a service'}</option>
@@ -135,20 +144,23 @@ export const ContactForm: React.FC<ContactFormProps> = ({ categories }) => {
               ))}
             </select>
             {errors.serviceSlug && (
-              <p className="text-xs text-rose-500">{getErrorMessage(errors.serviceSlug.message)}</p>
+              <p id="serviceSlug-error" role="alert" className="text-xs text-rose-500">{getErrorMessage(errors.serviceSlug.message)}</p>
             )}
           </div>
 
           {/* Message */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-foreground">{t('messageLabel')}</label>
+            <label htmlFor="message" className="text-xs font-bold text-foreground">{t('messageLabel')}</label>
             <textarea
+              id="message"
               rows={4}
               {...register('message')}
+              aria-invalid={Boolean(errors.message)}
+              aria-describedby={errors.message ? 'message-error' : undefined}
               className="w-full px-4 py-3 rounded-2xl bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan"
             />
             {errors.message && (
-              <p className="text-xs text-rose-500">{getErrorMessage(errors.message.message)}</p>
+              <p id="message-error" role="alert" className="text-xs text-rose-500">{getErrorMessage(errors.message.message)}</p>
             )}
           </div>
 

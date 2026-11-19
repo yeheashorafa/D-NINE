@@ -16,6 +16,26 @@ import { generateThemeCss } from "@/sanity/mappers/theme.mapper";
 import "@/styles/globals.css";
 import { WhatsAppFloat } from '@/components/layout/whatsapp-float';
 
+const FALLBACK_SITE_URL = 'https://dnine9.com';
+
+function resolveSiteUrl(value?: string): URL {
+  const configuredFallback = process.env.NEXT_PUBLIC_SITE_URL || FALLBACK_SITE_URL;
+
+  for (const candidate of [value, configuredFallback, FALLBACK_SITE_URL]) {
+    if (!candidate) continue;
+    try {
+      const url = new URL(stegaClean(candidate));
+      if (url.protocol === 'https:' || url.hostname === 'localhost') {
+        return url;
+      }
+    } catch {
+      // Try the next trusted fallback.
+    }
+  }
+
+  return new URL(FALLBACK_SITE_URL);
+}
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -42,12 +62,12 @@ export async function generateMetadata({
   const description = stegaClean(settings.defaultSeo?.metaDescription?.[isArabic ? 'ar' : 'en'] || defaultDesc);
   const ogImageUrl = stegaClean(settings.defaultOgImage || "/media/seo/d-nine-og.jpg");
   
-  const siteUrl = stegaClean(settings.defaultSiteUrl || process.env.NEXT_PUBLIC_SITE_URL || "https://dnine.agency");
+  const siteUrl = resolveSiteUrl(settings.defaultSiteUrl);
 
   return {
     title,
     description,
-    metadataBase: new URL(siteUrl),
+    metadataBase: siteUrl,
     icons: {
       icon: [{ url: "/favicon.ico", sizes: "any" }],
       shortcut: ["/favicon.ico"],

@@ -12,10 +12,10 @@ This architecture keeps presentation, business operations, and content managemen
 
 ## Project Status
 
-* **Frontend:** Completed and approved.
-* **Backend API:** Planned for the next implementation phase.
-* **Sanity Studio:** Planned for the next implementation phase.
-* **Shared Contracts:** To be introduced during backend integration.
+* **Frontend:** Implemented with bilingual pages, production builds, and automated tests.
+* **Backend API:** Implemented with validated forms, PostgreSQL persistence, email delivery, and security middleware.
+* **Sanity Studio:** Implemented as the editorial dashboard and content source.
+* **Shared Contracts:** Implemented in `packages/contracts` and consumed by the frontend and backend.
 * **Production Content:** Final contact information, verified metrics, client media, and licensed assets must be provided before launch.
 
 ## Repository Structure
@@ -59,7 +59,7 @@ The frontend does not own business data and should not contain private credentia
 
 `d-nine-backend` is a separate Node.js, Express, and TypeScript application responsible for transactional and operational functionality.
 
-Its planned responsibilities include:
+Its responsibilities include:
 
 * Contact form submissions.
 * Book-a-call requests.
@@ -76,7 +76,7 @@ Its planned responsibilities include:
 * Health checks.
 * Sanity webhook processing when required.
 
-Planned initial endpoints:
+Implemented endpoints include:
 
 ```http
 GET  /api/v1/health
@@ -91,7 +91,7 @@ The backend will not contain frontend components or presentation logic.
 
 `d-nine-studio` is the editorial content management application.
 
-It will allow authorized D-NINE editors to manage:
+It allows authorized D-NINE editors to manage:
 
 * Content categories.
 * Primary services.
@@ -110,7 +110,7 @@ It will allow authorized D-NINE editors to manage:
 * Localized SEO fields.
 * Arabic and English content.
 
-Sanity Studio replaces the current static demonstration data without requiring a redesign of the approved frontend.
+Sanity Studio is the production content source, while static data remains available for deterministic local builds and fallback testing.
 
 Sanity’s built-in asset pipeline will manage images. Mux can be introduced later if managed video streaming, transcoding, thumbnails, and adaptive playback are required.
 

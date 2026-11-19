@@ -6,8 +6,8 @@ import { getMessage } from '../lib/messages.js';
 export const validateRequest = (schema: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await schema.parseAsync(req.body);
-      next();
+      req.body = await schema.parseAsync(req.body);
+      return next();
     } catch (error: any) {
       if (error && error.name === 'ZodError') {
         const locale = (req.headers['accept-language']?.startsWith('en') ? 'en' : 'ar') as 'en' | 'ar';

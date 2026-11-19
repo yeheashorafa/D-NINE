@@ -171,7 +171,6 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
             playsInline
             className="w-full h-full object-cover"
           >
-            <track kind="captions" src="" label="English" />
             Your browser does not support the video tag.
           </video>
         </div>

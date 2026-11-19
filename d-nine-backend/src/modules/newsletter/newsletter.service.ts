@@ -12,7 +12,18 @@ export class NewsletterService {
       return { subscription: existing, isNew: false };
     }
 
-    const subscription = await newsletterRepository.createSubscription(payload);
+    let subscription;
+    try {
+      subscription = await newsletterRepository.createSubscription(payload);
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002') {
+        const concurrentSubscription = await newsletterRepository.findByEmail(payload.email);
+        if (concurrentSubscription) {
+          return { subscription: concurrentSubscription, isNew: false };
+        }
+      }
+      throw error;
+    }
 
     if (env.CONTACT_NOTIFICATION_EMAIL) {
       try {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { Logo } from './logo';
 import { LanguageSwitcher } from './language-switcher';
@@ -17,6 +17,7 @@ export interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ settings }) => {
   const t = useTranslations('nav');
+  const locale = useLocale() as 'ar' | 'en';
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -78,7 +79,6 @@ export const Header: React.FC<HeaderProps> = ({ settings }) => {
     toggleBtnRef.current?.focus();
   };
 
-  const locale = (pathname.split('/')[1] || 'ar') as 'ar' | 'en';
   const isHomePage = pathname === '' || pathname === '/' || pathname === '/ar' || pathname === '/en';
   const isOverHero = isHomePage && !isScrolled;
   

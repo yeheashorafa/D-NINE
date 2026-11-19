@@ -8,6 +8,7 @@ import {
   projectBySlugQuery,
   allProjectSlugsQuery,
   featuredProjectsQuery,
+  projectsBySlugsQuery,
   paginatedProjectsQuery,
   countProjectsQuery,
 } from '@/sanity/queries/projects.queries';
@@ -132,6 +133,26 @@ export async function getFeaturedProjects(): Promise<ProjectItem[]> {
   }
 
   return PROJECTS_DATA.filter((p) => p.featured);
+}
+
+export async function getProjectsBySlugs(slugs: string[]): Promise<ProjectItem[]> {
+  if (slugs.length === 0) return [];
+
+  let projects: ProjectItem[];
+  if (contentSource === 'sanity') {
+    assertSanityConfig();
+    const data = await sanityFetch<SanityProjectDoc[]>({
+      query: projectsBySlugsQuery,
+      params: { slugs },
+      tags: ['projects'],
+    });
+    projects = (data || []).map(mapSanityProject);
+  } else {
+    projects = PROJECTS_DATA.filter((project) => slugs.includes(project.slug));
+  }
+
+  const bySlug = new Map(projects.map((project) => [project.slug, project]));
+  return slugs.map((slug) => bySlug.get(slug)).filter((project): project is ProjectItem => Boolean(project));
 }
 
 export async function getServiceRelatedProjects(

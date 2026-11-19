@@ -11,6 +11,7 @@ import { BlogCard } from './blog-card';
 import { useProgressiveGrid } from '@/hooks/use-progressive-grid';
 import { useIntersectionLoader } from '@/hooks/use-intersection-loader';
 import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
+import { useLocale } from 'next-intl';
 
 export interface BlogGridProps {
   initialPosts: BlogPost[];
@@ -20,7 +21,7 @@ export interface BlogGridProps {
 }
 
 export function BlogGrid({ initialPosts, categories, searchPlaceholder, allLabel }: BlogGridProps) {
-
+  const locale = useLocale();
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -97,7 +98,7 @@ export function BlogGrid({ initialPosts, categories, searchPlaceholder, allLabel
         </motion.div>
       ) : (
         <div className="py-16 text-center text-text-muted">
-          <p>No posts found.</p>
+          <p>{locale === 'ar' ? 'لا توجد مقالات مطابقة.' : 'No matching posts found.'}</p>
         </div>
       )}
 

@@ -17,10 +17,8 @@ export const allBlogPostsQuery = groq`
       "name": author->name,
       "role": author->role,
       "image": author->image.asset->url,
-      "bio": author->bio,
       "active": author->active
     },
-    body,
     featured,
     tags
   }
@@ -87,7 +85,10 @@ export const featuredBlogPostsQuery = groq`
 `;
 
 export const paginatedBlogPostsQuery = groq`
-  *[_type == "blogPost" && ($categorySlug == "all" || !defined($categorySlug) || category->slug.current == $categorySlug)]
+  *[_type == "blogPost"
+    && ($categorySlug == "all" || !defined($categorySlug) || category->slug.current == $categorySlug)
+    && (!defined($searchQuery) || $searchQuery == "" || title.ar match $searchPattern || title.en match $searchPattern || excerpt.ar match $searchPattern || excerpt.en match $searchPattern || count(tags.ar[@ match $searchPattern]) > 0 || count(tags.en[@ match $searchPattern]) > 0)
+  ]
   | order(publishedAt desc, _createdAt desc, _id asc) [$offset...$end] {
     _id,
     "id": _id,
@@ -113,5 +114,8 @@ export const paginatedBlogPostsQuery = groq`
 `;
 
 export const countBlogPostsQuery = groq`
-  count(*[_type == "blogPost" && ($categorySlug == "all" || !defined($categorySlug) || category->slug.current == $categorySlug)])
+  count(*[_type == "blogPost"
+    && ($categorySlug == "all" || !defined($categorySlug) || category->slug.current == $categorySlug)
+    && (!defined($searchQuery) || $searchQuery == "" || title.ar match $searchPattern || title.en match $searchPattern || excerpt.ar match $searchPattern || excerpt.en match $searchPattern || count(tags.ar[@ match $searchPattern]) > 0 || count(tags.en[@ match $searchPattern]) > 0)
+  ])
 `;
