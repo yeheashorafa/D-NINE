@@ -50,12 +50,16 @@ export async function getBlogPosts(
     assertSanityConfig();
     const offset = cursor ? parseInt(cursor, 10) : 0;
     const end = offset + limit;
+    const normalizedSearch = searchQuery?.trim() || '';
+    const searchPattern = normalizedSearch ? `*${normalizedSearch}*` : '';
 
     const [itemsData, total] = await Promise.all([
       sanityFetch<SanityBlogPostDoc[]>({
         query: paginatedBlogPostsQuery,
         params: {
           categorySlug: categorySlug || 'all',
+          searchQuery: normalizedSearch,
+          searchPattern,
           offset,
           end,
         },
@@ -65,23 +69,14 @@ export async function getBlogPosts(
         query: countBlogPostsQuery,
         params: {
           categorySlug: categorySlug || 'all',
+          searchQuery: normalizedSearch,
+          searchPattern,
         },
         tags: ['blog'],
       }),
     ]);
 
-    let items = (itemsData || []).map(mapSanityBlogPost);
-
-    if (searchQuery && searchQuery.trim() !== '') {
-      const q = searchQuery.toLowerCase().trim();
-      items = items.filter((post) => {
-        const matchTitle =
-          post.title.ar.toLowerCase().includes(q) || post.title.en.toLowerCase().includes(q);
-        const matchExcerpt =
-          post.excerpt.ar.toLowerCase().includes(q) || post.excerpt.en.toLowerCase().includes(q);
-        return matchTitle || matchExcerpt;
-      });
-    }
+    const items = (itemsData || []).map(mapSanityBlogPost);
 
     const hasMore = offset + limit < total;
 

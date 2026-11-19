@@ -8,7 +8,7 @@ import { PartnersSection } from './components/partners-section';
 import { TestimonialsSection } from './components/testimonials-section';
 import { FaqsSection } from './components/faqs-section';
 import { BookACallSection } from './components/book-a-call-section';
-import { getFeaturedProjects } from '@/services/content/projects.service';
+import { getFeaturedProjects, getProjectsBySlugs } from '@/services/content/projects.service';
 import { getServices } from '@/services/content/services.service';
 import { getHomePage } from '@/sanity/services/page.service';
 import { getTestimonials } from '@/services/content/testimonials.service';
@@ -28,9 +28,7 @@ export async function HomePage() {
 
   // Order featured projects strictly according to client's curated selection order
   const displayProjects = homeData?.featuredProjects?.length
-    ? homeData.featuredProjects
-        .map(slug => featuredProjects.find(p => p.slug === slug))
-        .filter((p): p is typeof featuredProjects[number] => Boolean(p))
+    ? await getProjectsBySlugs(homeData.featuredProjects)
     : featuredProjects.slice(0, 6);
     
   // Order featured services strictly according to client's curated selection order

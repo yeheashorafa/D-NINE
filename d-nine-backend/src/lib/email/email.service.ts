@@ -9,13 +9,21 @@ class EmailService {
   private adapter: EmailAdapter;
 
   constructor() {
-    if (env.SMTP_HOST && env.SMTP_USER) {
+    const smtpConfigured = Boolean(
+      env.SMTP_HOST &&
+      env.SMTP_USER &&
+      env.SMTP_PASSWORD &&
+      env.EMAIL_FROM
+    );
+
+    if (env.NODE_ENV === 'production' && !smtpConfigured) {
+      throw new Error('Production SMTP configuration is incomplete');
+    }
+
+    if (smtpConfigured) {
       this.adapter = new SmtpEmailAdapter();
     } else {
       this.adapter = new TestEmailAdapter();
-      if (env.NODE_ENV === 'production') {
-        logger.warn('EmailService initialized with TestEmailAdapter in production mode. Emails will NOT be sent.');
-      }
     }
   }
 
@@ -36,7 +44,10 @@ class EmailService {
         data: { status: 'SENT' },
       });
     } catch (error) {
-      logger.error({ error, options }, 'Failed to send email');
+      logger.error(
+        { error, referenceId: options.referenceId },
+        'Failed to send email'
+      );
       await prisma.emailDelivery.update({
         where: { id: delivery.id },
         data: { 

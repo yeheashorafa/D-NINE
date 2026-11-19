@@ -16,24 +16,6 @@ export const allProjectsQuery = groq`
     clientName,
     year,
     summary,
-    challenge,
-    strategy,
-    solution,
-    deliverables,
-    metrics,
-    "media": media[] {
-      _key,
-      type,
-      "src": select(
-        type == "image" => coalesce(imageAsset.asset->url, "/media/work/" + ^.slug.current + ".jpg"),
-        type == "video" => coalesce(videoUrl, "/media/video/showreel.mp4")
-      ),
-      "poster": coalesce(poster.asset->url, "/media/video/showreel-poster.jpg"),
-      alt,
-      caption,
-      aspectRatio
-    },
-    credits,
     featured,
     colorVariant
   }
@@ -113,6 +95,27 @@ export const featuredProjectsQuery = groq`
   }
 `;
 
+export const projectsBySlugsQuery = groq`
+  *[_type == "project" && slug.current in $slugs] {
+    _id,
+    "id": _id,
+    "slug": slug.current,
+    "primaryCategorySlug": primaryCategory->slug.current,
+    "categorySlugs": [primaryCategory->slug.current] + coalesce(categories[]->slug.current, []),
+    "serviceSlug": primaryCategory->slug.current,
+    "image": coalesce(coverImage.asset->url, "/media/work/" + slug.current + ".jpg"),
+    "coverImage": coalesce(coverImage.asset->url, "/media/work/" + slug.current + ".jpg"),
+    "thumbnail": coalesce(coverImage.asset->url, "/media/work/" + slug.current + ".jpg"),
+    "category": primaryCategory->title,
+    title,
+    clientName,
+    year,
+    summary,
+    featured,
+    colorVariant
+  }
+`;
+
 export const paginatedProjectsQuery = groq`
   *[_type == "project" && ($categorySlug == "all" || !defined($categorySlug) || primaryCategory->slug.current == $categorySlug || $categorySlug in categories[]->slug.current)]
   | order(order asc, _createdAt desc, _id asc) [$offset...$end] {
@@ -130,24 +133,6 @@ export const paginatedProjectsQuery = groq`
     clientName,
     year,
     summary,
-    challenge,
-    strategy,
-    solution,
-    deliverables,
-    metrics,
-    "media": media[] {
-      _key,
-      type,
-      "src": select(
-        type == "image" => coalesce(imageAsset.asset->url, "/media/work/" + ^.slug.current + ".jpg"),
-        type == "video" => coalesce(videoUrl, "/media/video/showreel.mp4")
-      ),
-      "poster": coalesce(poster.asset->url, "/media/video/showreel-poster.jpg"),
-      alt,
-      caption,
-      aspectRatio
-    },
-    credits,
     featured,
     colorVariant
   }

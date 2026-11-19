@@ -10,6 +10,7 @@ import { useProgressiveGrid } from '@/hooks/use-progressive-grid';
 import { useIntersectionLoader } from '@/hooks/use-intersection-loader';
 import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
 import { PORTFOLIO_GROUPS } from '@/features/sectors/sector-content';
+import { useLocale } from 'next-intl';
 
 export interface WorkGridProps {
   initialProjects: ProjectItem[];
@@ -17,6 +18,7 @@ export interface WorkGridProps {
 }
 
 export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
+  const locale = useLocale();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Derive effective active category: selected category or first available canonical category
@@ -77,7 +79,7 @@ export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
         </motion.div>
       ) : (
         <div className="py-16 text-center text-text-muted">
-          <p>لا توجد مشاريع متوفرة في هذا القسم حالياً.</p>
+          <p>{locale === 'ar' ? 'لا توجد مشاريع متوفرة في هذا القسم حالياً.' : 'No projects are currently available in this category.'}</p>
         </div>
       )}
 

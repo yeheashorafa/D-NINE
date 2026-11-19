@@ -30,8 +30,9 @@ export const siteSettings = defineType({
     defineField({
       name: 'defaultSiteUrl',
       title: 'Default Site URL',
-      type: 'string',
+      type: 'url',
       fieldset: 'general',
+      validation: (Rule) => Rule.uri({ scheme: ['https'] }),
     }),
     defineField({
       name: 'lightLogo',
