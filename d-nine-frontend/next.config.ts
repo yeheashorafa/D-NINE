@@ -17,7 +17,7 @@ const publicCsp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://cdn.sanity.io",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.sanity.io https://*.api.sanity.io wss://*.sanity.io",
+  "connect-src 'self' https://api.dnine9.com https://*.sanity.io https://*.api.sanity.io wss://*.sanity.io",
   "media-src 'self' data: blob: https://cdn.sanity.io",
   // Presentation Tool embeds public pages from the same-origin /dashboard Studio.
   // NOTE: frame-ancestors is ignored in Report-Only CSP; X-Frame-Options enforces framing.
@@ -44,8 +44,10 @@ const dashboardCsp = [
   "form-action 'self'",
 ].join('; ');
 
-const permissionsPolicy =
-  'camera=(), microphone=(), geolocation=(), browsing-topics=(), interest-cohort=()';
+// Keep this header to widely supported directives. Chromium removed/renamed the
+// experimental advertising directives, which made otherwise healthy pages emit
+// console errors in browsers that no longer recognise them.
+const permissionsPolicy = 'camera=(), microphone=(), geolocation=()';
 
 const hstsHeader = {
   key: 'Strict-Transport-Security',
