@@ -33,7 +33,10 @@ describe('Production Security Headers Configuration', () => {
     // SAMEORIGIN (not DENY): Presentation Tool frames public pages from same-origin /dashboard
     expect(xFrame?.value).toBe('SAMEORIGIN');
     expect(permissions?.value).toContain('camera=()');
+    expect(permissions?.value).not.toContain('browsing-topics');
+    expect(permissions?.value).not.toContain('interest-cohort');
     expect(csp?.value).toContain("default-src 'self'");
+    expect(csp?.value).toContain('https://api.dnine9.com');
     expect(csp?.value).not.toContain("'unsafe-eval'"); // No unsafe-eval on public pages
 
     // Check Dashboard Headers
