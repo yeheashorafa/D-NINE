@@ -34,15 +34,24 @@
     "node": ">=22.12.0"
   },
   "overrides": {
-    "next-sanity": {
-      "next": "$next",
-      "react": "$react",
-      "react-dom": "$react-dom"
+    "proxy-addr": "2.0.8",
+    "@sanity/cli": {
+      ".": "8.19.0"
     },
-    "proxy-addr": "2.0.8"
+    "@oclif/core": {
+      "minimatch": "11.0.9"
+    },
+    "@prisma/config": {
+      "effect": "$effect"
+    },
+    "@module-federation/dts-plugin": {
+      "undici": "7.30.1"
+    }
   },
   "devDependencies": {
     "cross-env": "^10.1.0",
+    "effect": "3.22.5",
+    "sanity": "6.19.0",
     "eslint": "9.39.5",
     "typescript": "5.9.3",
     "vite": "8.3.4"
