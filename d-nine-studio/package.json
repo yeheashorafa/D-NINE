@@ -18,6 +18,8 @@
     "content:validate": "tsx scripts/validate-migration.ts",
     "content:complete:dry": "tsx scripts/migrate-cms-completion.ts --dry-run",
     "content:complete": "tsx scripts/migrate-cms-completion.ts --execute",
+    "content:services:dry": "tsx scripts/migrate-service-taxonomy.ts --dry-run",
+    "content:services": "tsx scripts/migrate-service-taxonomy.ts --execute",
     "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {

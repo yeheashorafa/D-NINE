@@ -2,7 +2,7 @@ import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { Logo } from './logo';
-import { getServices } from '@/services/content/services.service';
+import { getSectors } from '@/sanity/services/sector.service';
 import { SiteSettings } from '@/services/content/settings.service';
 import { siteConfig } from '@/config/site.config';
 import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
@@ -15,7 +15,7 @@ export async function Footer({ settings }: FooterProps) {
   const t = await getTranslations();
   const locale = await getLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
-  const services = await getServices();
+  const sectors = await getSectors();
 
   const quickLinks = settings?.footerColumns && settings.footerColumns.length > 0
     ? settings.footerColumns[0].links.map(link => ({ href: link.href, label: link.label[locale] || link.label.en }))
@@ -178,13 +178,13 @@ export async function Footer({ settings }: FooterProps) {
                   {t('footer.services')}
                 </h3>
                 <ul className="space-y-3 text-sm">
-                  {services.map((service) => (
-                    <li key={service.slug}>
+                  {sectors.map((sector) => (
+                    <li key={sector.slug}>
                       <Link
-                        href={`/services/${service.slug}`}
+                        href={`/services/sectors/${sector.slug}`}
                         className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
                       >
-                        <span>{service.title[locale as 'ar' | 'en']}</span>
+                        <span>{sector.title[locale]}</span>
                       </Link>
                     </li>
                   ))}

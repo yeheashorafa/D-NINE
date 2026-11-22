@@ -5,7 +5,14 @@ export type PortfolioGroup = 'events' | 'identity-design' | 'media-production' |
 
 export interface SectorServiceGroup {
   title?: LocalizedText;
-  items: LocalizedText[];
+  items: SectorServiceItem[];
+}
+
+export interface SectorServiceItem {
+  slug: string;
+  title: LocalizedText;
+  description: LocalizedText;
+  iconName: string;
 }
 
 export interface SectorPackage {
@@ -44,12 +51,12 @@ export const DEFAULT_SECTORS: SectorContent[] = [
     },
     serviceGroups: [{
       items: [
-        { ar: 'تنظيم الملتقيات والمؤتمرات', en: 'Forums and conferences management' },
-        { ar: 'تنظيم المعارض والفعاليات', en: 'Exhibitions and events management' },
-        { ar: 'إعداد التصورات والبرامج التنفيذية', en: 'Concept and execution programme development' },
-        { ar: 'إدارة العمليات والتنسيق الميداني', en: 'Operations and on-site coordination' },
-        { ar: 'تطوير تجارب الحضور', en: 'Attendee experience development' },
-        { ar: 'إدارة الرعايات والشراكات ضمن نطاق المشروع', en: 'Sponsorship and partnership management within the project scope' },
+        { slug: 'forums-conferences', iconName: 'Presentation', title: { ar: 'تنظيم الملتقيات والمؤتمرات', en: 'Forums & Conferences' }, description: { ar: 'نحوّل أهداف اللقاء إلى برنامج منظم وتجربة متماسكة من التسجيل حتى الختام.', en: 'We turn event objectives into a coordinated programme and a cohesive attendee journey.' } },
+        { slug: 'exhibitions-events', iconName: 'PanelsTopLeft', title: { ar: 'تنظيم المعارض والفعاليات', en: 'Exhibitions & Events' }, description: { ar: 'نخطط المساحات والتجارب وننسق الموردين لإخراج فعالية واضحة الهوية.', en: 'We plan spaces, experiences, and suppliers to deliver an event with a clear identity.' } },
+        { slug: 'concepts-programmes', iconName: 'ClipboardList', title: { ar: 'إعداد التصورات والبرامج التنفيذية', en: 'Concepts & Execution Programmes' }, description: { ar: 'نطوّر التصور الإبداعي وخارطة التنفيذ والجداول والمسؤوليات قبل الانطلاق.', en: 'We develop the creative concept, delivery roadmap, schedules, and responsibilities.' } },
+        { slug: 'field-operations', iconName: 'RadioTower', title: { ar: 'إدارة العمليات والتنسيق الميداني', en: 'Field Operations' }, description: { ar: 'ندير فرق التنفيذ والتوقيتات والتنسيق الميداني لضمان سير العمل بسلاسة.', en: 'We manage crews, timing, and on-site coordination for reliable delivery.' } },
+        { slug: 'attendee-experience', iconName: 'UsersRound', title: { ar: 'تطوير تجارب الحضور', en: 'Attendee Experience' }, description: { ar: 'نصمم رحلة حضور مريحة وتفاعلية تعزز الانطباع وقيمة المشاركة.', en: 'We design an engaging attendee journey that strengthens participation and recall.' } },
+        { slug: 'sponsorships-partnerships', iconName: 'Handshake', title: { ar: 'إدارة الرعايات والشراكات ضمن نطاق المشروع', en: 'Sponsorships & Partnerships' }, description: { ar: 'ننسق فرص الرعاية والشراكات بما يخدم أهداف المشروع ويحفظ وضوح الأدوار.', en: 'We coordinate sponsorship opportunities and partnerships around clear project goals.' } },
       ],
     }],
     packages: [],
@@ -68,16 +75,24 @@ export const DEFAULT_SECTORS: SectorContent[] = [
     },
     serviceGroups: [
       { title: { ar: 'الاستراتيجية والمحتوى', en: 'Strategy & Content' }, items: [
-        { ar: 'الخطط التسويقية', en: 'Marketing plans' }, { ar: 'صناعة الأفكار وكتابة المحتوى', en: 'Concept development and content writing' }, { ar: 'إدارة حسابات التواصل', en: 'Social media management' },
+        { slug: 'marketing-plans', iconName: 'ChartNoAxesCombined', title: { ar: 'الخطط التسويقية', en: 'Marketing Plans' }, description: { ar: 'خطط عملية تربط الأهداف بالجمهور والقنوات ومؤشرات القياس.', en: 'Actionable plans connecting goals, audiences, channels, and measurement.' } },
+        { slug: 'ideas-content', iconName: 'Lightbulb', title: { ar: 'صناعة الأفكار وكتابة المحتوى', en: 'Ideas & Content Writing' }, description: { ar: 'أفكار ورسائل أصيلة تُصاغ بصوت العلامة وتناسب كل منصة.', en: 'Original ideas and messages shaped in the brand voice for every channel.' } },
+        { slug: 'social-management', iconName: 'MessagesSquare', title: { ar: 'إدارة حسابات التواصل', en: 'Social Media Management' }, description: { ar: 'إدارة منظمة للنشر والتفاعل والمتابعة وتحسين الأداء.', en: 'Structured publishing, community engagement, monitoring, and optimisation.' } },
       ] },
       { title: { ar: 'التصميم والإبداع', en: 'Design & Creativity' }, items: [
-        { ar: 'الهويات البصرية', en: 'Brand identities' }, { ar: 'التصميم الإبداعي', en: 'Creative design' }, { ar: 'الموشن جرافيك', en: 'Motion graphics' },
+        { slug: 'brand-identities', iconName: 'Fingerprint', title: { ar: 'الهويات البصرية', en: 'Brand Identities' }, description: { ar: 'أنظمة بصرية متكاملة تعبّر عن شخصية العلامة وتضمن اتساق حضورها.', en: 'Complete visual systems that express the brand and keep every touchpoint consistent.' } },
+        { slug: 'creative-design', iconName: 'Palette', title: { ar: 'التصميم الإبداعي', en: 'Creative Design' }, description: { ar: 'تصاميم مبتكرة للحملات والمحتوى والمطبوعات تخدم الرسالة بوضوح.', en: 'Distinctive campaign, content, and print design built around a clear message.' } },
+        { slug: 'motion-graphics', iconName: 'Clapperboard', title: { ar: 'الموشن جرافيك', en: 'Motion Graphics' }, description: { ar: 'حركة بصرية مدروسة تبسّط الأفكار وتزيد جاذبية المحتوى.', en: 'Purposeful motion that simplifies ideas and makes content more engaging.' } },
       ] },
       { title: { ar: 'الإنتاج الإعلامي', en: 'Media Production' }, items: [
-        { ar: 'التصوير والتغطيات', en: 'Photography and coverage' }, { ar: 'المونتاج', en: 'Video editing' }, { ar: 'إنتاج الفيديوهات التعريفية', en: 'Corporate and profile video production' },
+        { slug: 'photography-coverage', iconName: 'Camera', title: { ar: 'التصوير والتغطيات', en: 'Photography & Coverage' }, description: { ar: 'تغطية احترافية توثّق اللحظات وتنتج مادة جاهزة للنشر.', en: 'Professional coverage that captures key moments and delivers publish-ready assets.' } },
+        { slug: 'video-editing', iconName: 'Film', title: { ar: 'المونتاج', en: 'Video Editing' }, description: { ar: 'بناء إيقاع بصري وسرد واضح يرفع جودة المادة المصورة.', en: 'Clear visual storytelling and pacing that elevate every filmed asset.' } },
+        { slug: 'profile-videos', iconName: 'CirclePlay', title: { ar: 'إنتاج الفيديوهات التعريفية', en: 'Profile Videos' }, description: { ar: 'فيديوهات تعريفية متكاملة من الفكرة والسيناريو حتى النسخة النهائية.', en: 'End-to-end profile videos, from concept and script to final delivery.' } },
       ] },
       { title: { ar: 'التسويق الرقمي', en: 'Digital Marketing' }, items: [
-        { ar: 'إدارة الحملات الإعلانية', en: 'Advertising campaign management' }, { ar: 'التسويق بالأداء', en: 'Performance marketing' }, { ar: 'التسويق عبر المؤثرين وفق احتياج المشروع', en: 'Influencer marketing tailored to project needs' },
+        { slug: 'campaign-management', iconName: 'Megaphone', title: { ar: 'إدارة الحملات الإعلانية', en: 'Campaign Management' }, description: { ar: 'إعداد وتشغيل ومتابعة الحملات عبر القنوات المناسبة للهدف.', en: 'Planning, launching, and monitoring campaigns across the right channels.' } },
+        { slug: 'performance-marketing', iconName: 'Gauge', title: { ar: 'التسويق بالأداء', en: 'Performance Marketing' }, description: { ar: 'قرارات مبنية على البيانات لتحسين التكلفة والنتائج باستمرار.', en: 'Data-led optimisation focused on efficiency and measurable outcomes.' } },
+        { slug: 'influencer-marketing', iconName: 'Users', title: { ar: 'التسويق عبر المؤثرين وفق احتياج المشروع', en: 'Influencer Marketing' }, description: { ar: 'اختيار وإدارة التعاونات المؤثرة وفق الجمهور والهدف ونطاق المشروع.', en: 'Relevant creator partnerships selected and managed around audience and goals.' } },
       ] },
     ],
     packages: [

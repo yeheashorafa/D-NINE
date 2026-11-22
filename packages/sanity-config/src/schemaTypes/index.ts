@@ -19,6 +19,7 @@ import { footerColumn } from './objects/footer-column';
 import { contactMethod } from './objects/contact-method';
 import { office } from './objects/office';
 import { testimonialsSection } from './objects/testimonialsSection';
+import { sectorServiceItem } from './objects/sector-service-item';
 import { teamSection } from './objects/teamSection';
 import { lightThemePalette, darkThemePalette } from './objects/theme-palette';
 
@@ -66,6 +67,7 @@ export const schemaTypes = [
   contactMethod,
   office,
   testimonialsSection,
+  sectorServiceItem,
   teamSection,
   lightThemePalette,
   darkThemePalette,

@@ -33,8 +33,13 @@ export function mapAboutPage(doc: SanityAboutPageDoc | null) {
 
 export function mapServicesPage(doc: SanityServicesPageDoc | null) {
   if (!doc) return null;
+  const hasTestTitle = (value?: string) => /\b(edited|test|sample|lorem|placeholder)\b/i.test(value || '');
   return {
     ...doc,
+    heroTitle: {
+      ar: hasTestTitle(doc.heroTitle?.ar) ? 'حلول متكاملة من الفكرة إلى الأثر' : doc.heroTitle?.ar,
+      en: hasTestTitle(doc.heroTitle?.en) ? 'Integrated Solutions from Idea to Impact' : doc.heroTitle?.en,
+    },
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
   };
 }

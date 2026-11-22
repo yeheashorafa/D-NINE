@@ -22,7 +22,14 @@ export const sectorPage = defineType({
       description: 'يمكن الإضافة والحذف وإعادة الترتيب. يمكن ترك عنوان المجموعة فارغًا في القطاع الأول.',
       of: [defineArrayMember({ type: 'object', fields: [
         defineField({ name: 'title', title: 'عنوان المجموعة', type: 'localizedString' }),
-        defineField({ name: 'items', title: 'الخدمات', type: 'array', of: [defineArrayMember({ type: 'localizedString' })], validation: (Rule) => Rule.min(1) }),
+        defineField({
+          name: 'items',
+          title: 'الخدمات الفرعية',
+          description: 'أضف أو احذف أو أعد ترتيب الخدمات. كل خدمة تظهر كبطاقة في الموقع.',
+          type: 'array',
+          of: [defineArrayMember({ type: 'sectorServiceItem' })],
+          validation: (Rule) => Rule.required().min(1),
+        }),
       ] })],
     }),
     defineField({
