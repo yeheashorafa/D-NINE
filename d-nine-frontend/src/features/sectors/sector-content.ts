@@ -34,11 +34,21 @@ export interface SectorContent {
 }
 
 export const PORTFOLIO_GROUPS: Array<{ slug: PortfolioGroup; title: LocalizedText; categorySlugs: string[] }> = [
-  { slug: 'events', title: { ar: 'المعارض والملتقيات والمؤتمرات', en: 'Exhibitions, Forums & Conferences' }, categorySlugs: ['exhibitions', 'festivals'] },
-  { slug: 'identity-design', title: { ar: 'الهوية والتصاميم', en: 'Brand Identity & Design' }, categorySlugs: ['brand-identity', 'print-design', 'social-media-design'] },
-  { slug: 'media-production', title: { ar: 'الفيديو والإنتاج الإعلامي', en: 'Video & Media Production' }, categorySlugs: ['motion-graphics', 'video-editing', 'artificial-intelligence'] },
-  { slug: 'content-marketing', title: { ar: 'المحتوى والتسويق', en: 'Content & Marketing' }, categorySlugs: ['social-media-design'] },
+  { slug: 'events', title: { ar: 'المعارض والملتقيات والمؤتمرات', en: 'Exhibitions, Forums & Conferences' }, categorySlugs: ['events', 'exhibitions', 'festivals'] },
+  { slug: 'identity-design', title: { ar: 'الهوية والتصاميم', en: 'Brand Identity & Design' }, categorySlugs: ['identity-design', 'brand-identity', 'print-design', 'graphic-design'] },
+  { slug: 'media-production', title: { ar: 'الفيديو والإنتاج الإعلامي', en: 'Video & Media Production' }, categorySlugs: ['media-production', 'motion-graphics', 'video-editing', 'video-production', 'short-video-reels', 'artificial-intelligence'] },
+  { slug: 'content-marketing', title: { ar: 'المحتوى والتسويق', en: 'Content & Marketing' }, categorySlugs: ['content-marketing', 'social-media-design', 'social-content', 'social-management', 'integrated-marketing'] },
 ];
+
+export function projectMatchesPortfolioGroup(
+  project: { primaryCategorySlug: string; categorySlugs?: string[] },
+  groupSlug: PortfolioGroup,
+): boolean {
+  const group = PORTFOLIO_GROUPS.find((item) => item.slug === groupSlug);
+  if (!group) return false;
+  const slugs = [project.primaryCategorySlug, ...(project.categorySlugs || [])];
+  return slugs.some((slug) => group.categorySlugs.includes(slug));
+}
 
 export const DEFAULT_SECTORS: SectorContent[] = [
   {
@@ -60,7 +70,7 @@ export const DEFAULT_SECTORS: SectorContent[] = [
       ],
     }],
     packages: [],
-    relatedCategorySlugs: ['exhibitions', 'festivals'],
+    relatedCategorySlugs: ['events'],
     image: '/media/work/project-5.jpg',
     active: true,
     order: 1,
@@ -99,7 +109,7 @@ export const DEFAULT_SECTORS: SectorContent[] = [
       { title: { ar: 'باقة حضور D9', en: 'D9 Presence Package' }, description: { ar: 'منظومة الحضور الرقمي التي تجمع بين الاستراتيجية والمحتوى والتصميم والفيديو وإدارة الحسابات والتحليل.', en: 'A complete digital presence system combining strategy, content, design, video, account management, and analytics.' } },
       { title: { ar: 'باقة نمو D9', en: 'D9 Growth Package' }, description: { ar: 'منظومة الحضور الرقمي والتسويق بالأداء وإدارة الحملات وتحليل النتائج وتحسين الأداء، إضافة إلى خدمات باقة حضور.', en: 'A growth system combining digital presence, performance marketing, campaign management, results analysis, and continuous optimisation, in addition to all D9 Presence services.' } },
     ],
-    relatedCategorySlugs: ['motion-graphics', 'video-editing', 'social-media-design', 'print-design', 'brand-identity', 'artificial-intelligence'],
+    relatedCategorySlugs: ['identity-design', 'media-production', 'content-marketing'],
     image: '/media/services/integrated-marketing.jpg',
     active: true,
     order: 2,

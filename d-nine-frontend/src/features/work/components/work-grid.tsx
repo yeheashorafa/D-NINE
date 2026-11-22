@@ -9,7 +9,7 @@ import { WorkCard } from './work-card';
 import { useProgressiveGrid } from '@/hooks/use-progressive-grid';
 import { useIntersectionLoader } from '@/hooks/use-intersection-loader';
 import { ProgressiveGridLoader } from '@/components/ui/progressive-grid-loader';
-import { PORTFOLIO_GROUPS } from '@/features/sectors/sector-content';
+import { projectMatchesPortfolioGroup, type PortfolioGroup } from '@/features/sectors/sector-content';
 import { useLocale } from 'next-intl';
 
 export interface WorkGridProps {
@@ -22,18 +22,12 @@ export function WorkGrid({ initialProjects, categories }: WorkGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Derive effective active category: selected category or first available canonical category
-  const activeCategory = selectedCategory ?? PORTFOLIO_GROUPS[0].slug;
+  const activeCategory = selectedCategory ?? 'all';
 
 
   const filteredProjects = useMemo(() => {
-    const activeGroup = PORTFOLIO_GROUPS.find((group) => group.slug === activeCategory);
-    if (!activeGroup) return initialProjects;
-    return initialProjects.filter((p) => {
-      return (
-        activeGroup.categorySlugs.includes(p.primaryCategorySlug) ||
-        (p.categorySlugs && p.categorySlugs.some((slug) => activeGroup.categorySlugs.includes(slug)))
-      );
-    });
+    if (activeCategory === 'all') return initialProjects;
+    return initialProjects.filter((project) => projectMatchesPortfolioGroup(project, activeCategory as PortfolioGroup));
   }, [initialProjects, activeCategory]);
 
   const { visibleItems, hasMore, isLoadingMore, loadMore } = useProgressiveGrid({

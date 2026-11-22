@@ -20,6 +20,8 @@
     "content:complete": "tsx scripts/migrate-cms-completion.ts --execute",
     "content:services:dry": "tsx scripts/migrate-service-taxonomy.ts --dry-run",
     "content:services": "tsx scripts/migrate-service-taxonomy.ts --execute",
+    "content:portfolio:dry": "tsx scripts/migrate-portfolio-categories.ts --dry-run",
+    "content:portfolio": "tsx scripts/migrate-portfolio-categories.ts --execute",
     "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {

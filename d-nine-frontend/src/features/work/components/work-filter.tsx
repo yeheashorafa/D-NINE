@@ -12,7 +12,6 @@ export interface WorkFilterProps {
 }
 
 export const WorkFilter: React.FC<WorkFilterProps> = ({
-  categories,
   activeCategory,
   onSelectCategory,
 }) => {
@@ -23,7 +22,16 @@ export const WorkFilter: React.FC<WorkFilterProps> = ({
     <div className="w-full mb-10">
       {/* 4 columns x 2 rows on desktop, responsive on tablet/mobile */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5 max-w-5xl mx-auto">
-        {(categories || PORTFOLIO_GROUPS).map((group) => {
+        <button
+          type="button"
+          data-category-slug="all"
+          onClick={() => onSelectCategory('all')}
+          className={`min-h-[48px] rounded-2xl border px-3.5 py-2.5 text-xs font-bold transition-all sm:text-sm ${activeCategory === 'all' ? 'border-slate-950 bg-slate-950 text-white shadow-lg dark:border-white dark:bg-white dark:text-slate-950' : 'border-border bg-surface text-text-muted hover:border-brand-cyan/40 hover:text-foreground'}`}
+          aria-pressed={activeCategory === 'all'}
+        >
+          {isArabic ? 'الكل' : 'All'}
+        </button>
+        {PORTFOLIO_GROUPS.map((group) => {
           const isActive = activeCategory === group.slug;
           return (
             <button

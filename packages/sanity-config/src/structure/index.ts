@@ -45,20 +45,16 @@ export const structure: StructureResolver = (S) =>
             .items([
               S.documentTypeListItem('project').title('المشاريع والأعمال (Projects)').icon(CaseIcon),
               S.listItem()
-                .title('التصنيفات والتخصصات (Categories — 8 Canonical)')
+                .title('تصنيفات الأعمال (4 فقط)')
                 .icon(TagIcon)
                 .child(
                   S.list()
-                    .title('التصنيفات الثابتة المعتمدة (8 Canonical Categories)')
+                    .title('التصنيفات الثابتة المعتمدة')
                     .items([
-                      S.documentListItem().schemaType('contentCategory').id('cat-motion-graphics').title('1. الموشن جرافيك (Motion Graphics)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-video-editing').title('2. المونتاج وتحرير الفيديو (Video Editing)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-social-media-design').title('3. تصاميم السوشيال ميديا (Social Media Design)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-print-design').title('4. التصاميم والمطبوعات (Print Design)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-brand-identity').title('5. تصميم الشعارات والهويات البصرية (Brand Identity)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-artificial-intelligence').title('6. الذكاء الاصطناعي والإنتاج الرقمي (Artificial Intelligence)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-exhibitions').title('7. المعارض وتجهيز المساحات (Exhibitions)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-festivals').title('8. المهرجانات والفعاليات (Festivals)'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-events').title('1. المعارض والملتقيات والمؤتمرات'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-identity-design').title('2. الهوية والتصاميم'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-media-production').title('3. الفيديو والإنتاج الإعلامي'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-content-marketing').title('4. المحتوى والتسويق'),
                     ])
                 ),
             ])

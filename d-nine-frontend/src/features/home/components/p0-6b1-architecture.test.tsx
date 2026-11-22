@@ -66,26 +66,22 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
     expect(CANONICAL_CATEGORY_KEYS).not.toContain('all');
   });
 
-  // Requirement 3: Desktop layout supports 4x2 equal-sized grid controls
-  it('3. renders WorkFilter in 4x2 responsive grid without any "All" button', () => {
+  // Client taxonomy: one All control plus the four approved portfolio groups.
+  it('3. renders WorkFilter with All and the four approved categories', () => {
     const onSelect = vi.fn();
     const { container } = render(
       <WorkFilter
         categories={CANONICAL_CATEGORIES}
-        activeCategory="motion-graphics"
+        activeCategory="all"
         onSelectCategory={onSelect}
       />
     );
 
-    // Verify exactly 8 buttons are rendered
+    // Verify the one shared taxonomy is rendered regardless of legacy input.
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(8);
+    expect(buttons).toHaveLength(5);
 
-    // Verify "All" or "الكل" or "All Categories" does NOT exist
-    expect(screen.queryByText('الكل')).not.toBeInTheDocument();
-    expect(screen.queryByText('All')).not.toBeInTheDocument();
-    expect(screen.queryByText('All Categories')).not.toBeInTheDocument();
-    expect(screen.queryByText('كل الفئات')).not.toBeInTheDocument();
+    expect(screen.getByText('الكل')).toBeInTheDocument();
 
     // Verify 4x2 responsive grid class exists
     const gridEl = container.querySelector('.grid');
@@ -334,7 +330,7 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
 
   // Requirement 12: Empty / partial Sanity behavior
   it('12. verifies safe behavior under zero categories, partial subsets, and full canonical categories', async () => {
-    // Zero categories: WorkFilter does not crash, renders nothing or empty cleanly
+    // The canonical controls do not disappear when Sanity returns an empty or stale list.
     const { container: zeroContainer } = render(
       <WorkFilter
         categories={[]}
@@ -342,9 +338,9 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
         onSelectCategory={vi.fn()}
       />
     );
-    expect(zeroContainer.querySelectorAll('button')).toHaveLength(0);
+    expect(zeroContainer.querySelectorAll('button')).toHaveLength(5);
 
-    // Partial subset (e.g. 4 categories): Renders exactly the 4 without crash
+    // Partial legacy input still renders the one canonical taxonomy.
     const partialCategories = CANONICAL_CATEGORIES.slice(0, 4);
     const { container: partialContainer } = render(
       <WorkFilter
@@ -353,9 +349,9 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
         onSelectCategory={vi.fn()}
       />
     );
-    expect(partialContainer.querySelectorAll('button')).toHaveLength(4);
+    expect(partialContainer.querySelectorAll('button')).toHaveLength(5);
 
-    // Full 8 canonical categories: Renders all 8
+    // Full legacy input also renders All plus four approved categories.
     const { container: fullContainer } = render(
       <WorkFilter
         categories={CANONICAL_CATEGORIES}
@@ -363,6 +359,6 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
         onSelectCategory={vi.fn()}
       />
     );
-    expect(fullContainer.querySelectorAll('button')).toHaveLength(8);
+    expect(fullContainer.querySelectorAll('button')).toHaveLength(5);
   });
 });

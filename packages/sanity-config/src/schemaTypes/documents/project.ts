@@ -49,21 +49,17 @@ export const project = defineType({
     defineField({
       name: 'primaryCategory',
       title: 'التصنيف الأساسي المعتمد (Primary Canonical Category)',
-      description: 'اختر أحد التصنيفات الثمانية المعتمدة للوكالة. يحدد هذا التصنيف مسار الفلترة وظهور المشروع في الموقع.',
+      description: 'اختر تصنيفًا واحدًا من التصنيفات الأربعة المعتمدة. لا يمكن إدخال تصنيف حر.',
       type: 'reference',
       to: [{ type: 'contentCategory' }],
       options: {
         filter: 'slug.current in $canonicalKeys && active == true',
         filterParams: {
           canonicalKeys: [
-            'motion-graphics',
-            'video-editing',
-            'social-media-design',
-            'print-design',
-            'brand-identity',
-            'artificial-intelligence',
-            'exhibitions',
-            'festivals',
+            'events',
+            'identity-design',
+            'media-production',
+            'content-marketing',
           ],
         },
       },
