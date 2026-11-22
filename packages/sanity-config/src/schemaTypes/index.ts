@@ -20,13 +20,11 @@ import { contactMethod } from './objects/contact-method';
 import { office } from './objects/office';
 import { testimonialsSection } from './objects/testimonialsSection';
 import { sectorServiceItem } from './objects/sector-service-item';
-import { teamSection } from './objects/teamSection';
 import { lightThemePalette, darkThemePalette } from './objects/theme-palette';
 
 // Documents
 import { partner } from './documents/partner';
 import { testimonial } from './documents/testimonial';
-import { teamMember } from './documents/teamMember';
 import { contentCategory } from './documents/content-category';
 import { service } from './documents/service';
 import { serviceOffering } from './documents/service-offering';
@@ -68,14 +66,12 @@ export const schemaTypes = [
   office,
   testimonialsSection,
   sectorServiceItem,
-  teamSection,
   lightThemePalette,
   darkThemePalette,
 
   // Document Types
   partner,
   testimonial,
-  teamMember,
   contentCategory,
   service,
   serviceOffering,

@@ -135,19 +135,6 @@ export const locations = {
       return { locations: locs };
     },
   }),
-  teamMember: defineLocations({
-    select: {
-      title: 'name.en',
-    },
-    resolve: () => ({
-      locations: [
-        { title: 'Home (AR)', href: '/ar' },
-        { title: 'Home (EN)', href: '/en' },
-        { title: 'About (AR)', href: '/ar/about' },
-        { title: 'About (EN)', href: '/en/about' },
-      ],
-    }),
-  }),
 };
 
 export const mainDocuments: DocumentResolver[] = [

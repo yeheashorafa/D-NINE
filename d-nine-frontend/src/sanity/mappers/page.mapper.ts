@@ -10,7 +10,7 @@ import type {
   SanitySiteSettingsDoc
 } from '../types';
 
-import { mapTestimonialsSection, mapTeamSection, mapPartnersList } from './section.mapper';
+import { mapTestimonialsSection, mapPartnersList } from './section.mapper';
 
 export function mapHomePage(doc: SanityHomePageDoc | null) {
   if (!doc) return null;
@@ -18,7 +18,6 @@ export function mapHomePage(doc: SanityHomePageDoc | null) {
     ...doc,
     partnersList: mapPartnersList(doc.partners),
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
-    teamSection: mapTeamSection(doc.teamPreview),
   };
 }
 
@@ -26,7 +25,6 @@ export function mapAboutPage(doc: SanityAboutPageDoc | null) {
   if (!doc) return null;
   return {
     ...doc,
-    teamSection: mapTeamSection(doc.team),
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
   };
 }

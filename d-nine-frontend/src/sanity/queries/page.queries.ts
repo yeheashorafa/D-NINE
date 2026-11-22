@@ -28,20 +28,6 @@ export const testimonialFields = groq`
   relatedProject->{_id, "slug": slug.current}
 `;
 
-export const teamMemberFields = groq`
-  _id,
-  "id": _id,
-  name,
-  role,
-  bio,
-  "image": image.asset->url,
-  "imageAlt": image.alt,
-  socialLinks,
-  featured,
-  active,
-  order
-`;
-
 export const basePageFields = groq`
   _id,
   "id": _id,
@@ -165,18 +151,6 @@ export const aboutPageQuery = groq`
       "buttonText": coalesce(label, buttonText),
       "buttonLink": coalesce(url, buttonLink),
       variant
-    },
-    team {
-      enabled,
-      badge,
-      title,
-      subtitle,
-      maxItems,
-      ctaLabel,
-      ctaPath,
-      selectedTeamMembers[]-> {
-        ${teamMemberFields}
-      }
     },
     testimonials {
       enabled,

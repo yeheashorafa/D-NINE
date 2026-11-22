@@ -6,7 +6,6 @@ const TARGET_CONTENT_TYPES = [
   'serviceOffering',
   'project',
   'testimonial',
-  'teamMember',
   'blogPost',
   'author',
   'homePage',
@@ -84,8 +83,6 @@ async function validate() {
       role,
       company,
       quote,
-      teamPreview,
-      team,
       testimonials
     }`,
     { types: TARGET_CONTENT_TYPES }
@@ -121,7 +118,7 @@ async function validate() {
     termsPage: 1,
   };
 
-  const dynamicTypes = ['testimonial', 'teamMember'];
+  const dynamicTypes = ['testimonial'];
 
   const untrackedDocs = allPublishedDocs.filter(d => !TARGET_CONTENT_TYPES.includes(d._type));
 
@@ -179,7 +176,7 @@ async function validate() {
     }
 
     // Bilingual Titles (for non-singletons)
-    if (!SINGLETON_TYPES.includes(doc._type) && doc._type !== 'contentCategory' && doc._type !== 'author' && doc._type !== 'testimonial' && doc._type !== 'teamMember') {
+    if (!SINGLETON_TYPES.includes(doc._type) && doc._type !== 'contentCategory' && doc._type !== 'author' && doc._type !== 'testimonial') {
       if (!isLocalized(doc.title)) {
         validationErrors.push(`Missing or invalid bilingual title in doc [${doc._id}] (${doc._type})`);
       }
@@ -194,12 +191,6 @@ async function validate() {
     if (doc._type === 'testimonial') {
       if (!isLocalized(doc.personName) || !isLocalized(doc.role) || !isLocalized(doc.company) || !isLocalized(doc.quote)) {
         validationErrors.push(`Missing or invalid bilingual fields (personName, role, company, quote) in doc [${doc._id}] (${doc._type})`);
-      }
-    }
-
-    if (doc._type === 'teamMember') {
-      if (!isLocalized(doc.name) || !isLocalized(doc.role)) {
-        validationErrors.push(`Missing or invalid bilingual fields (name, role) in doc [${doc._id}] (${doc._type})`);
       }
     }
 
@@ -285,7 +276,6 @@ async function validate() {
     const validateSection = (section: any, sectionName: string) => {
       if (section && section.enabled !== false) {
         let refs: any[] = [];
-        if (section.selectedTeamMembers) refs = section.selectedTeamMembers;
         if (section.selectedTestimonials) refs = section.selectedTestimonials;
         if (refs.length === 0) {
           validationErrors.push(`Enabled section '${sectionName}' on ${doc._id} has zero references`);
@@ -297,14 +287,9 @@ async function validate() {
       }
     };
 
-    if (doc.teamPreview) validateSection(doc.teamPreview, 'teamPreview');
-    if (doc.team) validateSection(doc.team, 'team');
     if (doc.testimonials) validateSection(doc.testimonials, 'testimonials');
   }
 
-  if (!counts['teamMember'] || counts['teamMember'] === 0) {
-    validationErrors.push("No published team members exist");
-  }
   if (!counts['testimonial'] || counts['testimonial'] === 0) {
     validationErrors.push("No published testimonials exist");
   }

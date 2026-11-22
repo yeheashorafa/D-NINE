@@ -36,20 +36,6 @@ export interface SanityTestimonialDoc {
   relatedProject?: { _id: string; slug?: string };
 }
 
-export interface SanityTeamMemberDoc {
-  _id: string;
-  id?: string;
-  name: SanityLocalizedString;
-  role: SanityLocalizedString;
-  bio?: SanityLocalizedPortableText;
-  image?: string;
-  imageAlt?: SanityLocalizedString;
-  socialLinks?: { platform: string; url: string }[];
-  featured?: boolean;
-  active?: boolean;
-  order?: number;
-}
-
 export interface SanityTestimonialsSection {
   enabled?: boolean;
   badge?: SanityLocalizedString;
@@ -57,17 +43,6 @@ export interface SanityTestimonialsSection {
   subtitle?: SanityLocalizedString;
   selectedTestimonials?: SanityTestimonialDoc[];
   maxItems?: number;
-}
-
-export interface SanityTeamSection {
-  enabled?: boolean;
-  badge?: SanityLocalizedString;
-  title?: SanityLocalizedString;
-  subtitle?: SanityLocalizedString;
-  selectedTeamMembers?: SanityTeamMemberDoc[];
-  maxItems?: number;
-  ctaLabel?: SanityLocalizedString;
-  ctaPath?: string;
 }
 
 export interface SanityContactMethod {
@@ -316,7 +291,6 @@ export interface SanityHomePageDoc {
   };
   processTimeline?: SanityTimelineItemDoc[];
   testimonials?: SanityTestimonialsSection;
-  teamPreview?: SanityTeamSection;
   faqsHeader?: {
     badge?: SanityLocalizedString;
     title?: SanityLocalizedString;
@@ -352,7 +326,6 @@ export interface SanityAboutPageDoc {
   }[];
   media?: string[];
   cta?: SanityCta;
-  team?: SanityTeamSection;
   testimonials?: SanityTestimonialsSection;
   seo?: SanitySeo;
 }

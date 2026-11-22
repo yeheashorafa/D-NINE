@@ -8,7 +8,6 @@ import { SERVICE_OFFERINGS } from './data/service-offerings.data.js';
 import { PROJECTS_DATA } from './data/projects.data.js';
 import { BLOG_POSTS_DATA } from './data/blog-posts.data.js';
 import { PROCESS_TIMELINE_STEPS } from './data/agency.data.js';
-import { STATIC_TEAM_MEMBERS } from '../../d-nine-frontend/src/features/home/data/team.data.js';
 import { STATIC_TESTIMONIALS } from '../../d-nine-frontend/src/features/home/data/testimonials.data.js';
 import { AssetRegistry } from './upload-assets.js';
 import { buildGranularSetIfMissing, resolveDeterministicId, convertTextToPortableText, convertBlogSectionsToPortableText, validateBilingualField } from './utils/migration-utils.js';
@@ -117,7 +116,6 @@ const TARGET_CONTENT_TYPES = [
   'author',
   'homePage',
   'siteSettings',
-  'teamMember',
   'testimonial',
 ];
 
@@ -522,26 +520,6 @@ export async function runMigration(isDryRun: boolean = true) {
     });
   }
 
-  // Team Members
-  const teamDocs: any[] = [];
-  for (const member of STATIC_TEAM_MEMBERS) {
-    const docId = resolveDeterministicId('team', member.id, member.name.en);
-    checkDuplicateId(docId, 'teamMember');
-
-    teamDocs.push({
-      _id: docId,
-      _type: 'teamMember',
-      name: member.name,
-      role: member.role,
-      bio: member.bio,
-      image: member.image ? makeImageObject(member.image) : undefined,
-      socialLinks: member.socialLinks,
-      featured: member.featured,
-      active: true,
-      order: STATIC_TEAM_MEMBERS.indexOf(member) + 1,
-    });
-  }
-
   // Testimonials
   const testimonialDocs: any[] = [];
   for (const t of STATIC_TESTIMONIALS) {
@@ -592,12 +570,6 @@ export async function runMigration(isDryRun: boolean = true) {
       title: step.title,
       description: step.description,
     })),
-    teamPreview: {
-      enabled: teamDocs.length > 0,
-      title: { ar: 'فريق العمل', en: 'Our Team' },
-      selectedTeamMembers: teamDocs.map(t => ({ _key: `team_${t._id}`, _type: 'reference', _ref: t._id })),
-      maxItems: 8,
-    },
     testimonials: {
       enabled: testimonialDocs.length > 0,
       title: { ar: 'اراء العملاء', en: 'Testimonials' },
@@ -610,12 +582,6 @@ export async function runMigration(isDryRun: boolean = true) {
   const aboutPageDoc = {
     _id: 'aboutPage',
     _type: 'aboutPage',
-    team: {
-      enabled: teamDocs.length > 0,
-      title: { ar: 'فريق العمل', en: 'Our Team' },
-      selectedTeamMembers: teamDocs.map(t => ({ _key: `team_${t._id}`, _type: 'reference', _ref: t._id })),
-      maxItems: 8,
-    },
     testimonials: {
       enabled: testimonialDocs.length > 0,
       title: { ar: 'اراء العملاء', en: 'Testimonials' },
@@ -684,7 +650,6 @@ export async function runMigration(isDryRun: boolean = true) {
     ...offeringDocs,
     ...projectDocs,
     ...blogDocs,
-    ...teamDocs,
     ...testimonialDocs,
     homePageDoc,
     aboutPageDoc,
@@ -779,7 +744,6 @@ export async function runMigration(isDryRun: boolean = true) {
       { name: 'Service Offerings', docs: offeringDocs },
       { name: 'Projects', docs: projectDocs },
       { name: 'Blog Posts', docs: blogDocs },
-      { name: 'Team Members', docs: teamDocs },
       { name: 'Testimonials', docs: testimonialDocs },
       { name: 'Singletons', docs: [homePageDoc, aboutPageDoc, servicesPageDoc, siteSettingsDoc] },
     ];
@@ -794,7 +758,7 @@ export async function runMigration(isDryRun: boolean = true) {
           if (doc._type === 'homePage') {
             try {
               await client.patch(doc._id)
-                .setIfMissing({ teamPreview: doc.teamPreview, testimonials: doc.testimonials })
+                .setIfMissing({ testimonials: doc.testimonials })
                 .commit();
             } catch (err: any) {
               console.error(`⚠️ Failed to patch existing singleton '${doc._id}':`, err?.message || err);
@@ -802,7 +766,7 @@ export async function runMigration(isDryRun: boolean = true) {
           } else if (doc._type === 'aboutPage') {
             try {
               await client.patch(doc._id)
-                .setIfMissing({ team: doc.team, testimonials: doc.testimonials })
+                .setIfMissing({ testimonials: doc.testimonials })
                 .commit();
             } catch (err: any) {
               console.error(`⚠️ Failed to patch existing singleton '${doc._id}':`, err?.message || err);

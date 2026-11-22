@@ -6,15 +6,6 @@ export interface TimelineItem {
   description: LocalizedText;
 }
 
-export interface TeamMember {
-  id: string;
-  image: string;
-  name: LocalizedText;
-  role: LocalizedText;
-  bio: LocalizedText;
-  colorVariant: string;
-}
-
 export interface TestimonialItem {
   id: string;
   quote: LocalizedText;

@@ -2,10 +2,9 @@ import { vi } from 'vitest';
 vi.mock('server-only', () => ({}));
 vi.mock('../client', () => ({ client: {}, sanityFetch: vi.fn() }));
 import { describe, it, expect } from 'vitest';
-import { mapTestimonialsSection, mapTeamSection } from './section.mapper';
+import { mapTestimonialsSection } from './section.mapper';
 import { mapSanityTestimonial } from '../../services/content/testimonials.service';
-import { mapSanityTeamMember } from '../../services/content/team.service';
-import { SanityTestimonialsSection, SanityTeamSection, SanityTestimonialDoc, SanityTeamMemberDoc } from '../types';
+import { SanityTestimonialsSection, SanityTestimonialDoc } from '../types';
 
 describe('section.mapper', () => {
   describe('Testimonials Mapping', () => {
@@ -65,53 +64,4 @@ describe('section.mapper', () => {
     });
   });
 
-  describe('Team Mapping', () => {
-    const mockMember: SanityTeamMemberDoc = {
-      _id: 'm1',
-      name: { en: 'Jane Doe', ar: 'جين دو' },
-      role: { en: 'Designer', ar: 'مصممة' },
-    };
-
-    it('should map Arabic/English fields correctly', () => {
-      const mapped = mapSanityTeamMember(mockMember);
-      expect(mapped.id).toBe('m1');
-      expect(mapped.name).toEqual({ en: 'Jane Doe', ar: 'جين دو' });
-      expect(mapped.role).toEqual({ en: 'Designer', ar: 'مصممة' });
-    });
-
-    it('should return undefined when enabled is false', () => {
-      const section: SanityTeamSection = { enabled: false, selectedTeamMembers: [mockMember] };
-      expect(mapTeamSection(section)).toBeUndefined();
-    });
-
-    it('should return undefined when section is empty', () => {
-      expect(mapTeamSection({ enabled: true })).toBeUndefined();
-    });
-
-    it('should filter invalid/inactive items and preserve reference-array order (ignoring document order)', () => {
-      const section: SanityTeamSection = {
-        enabled: true,
-        selectedTeamMembers: [
-          { ...mockMember, _id: 'm3', order: 99 },
-          undefined as unknown as SanityTeamMemberDoc,
-          { ...mockMember, _id: 'm2', active: false },
-          { ...mockMember, _id: 'm1', order: 1 }
-        ]
-      };
-      const result = mapTeamSection(section);
-      expect(result?.selectedTeamMembers).toHaveLength(2);
-      expect(result?.selectedTeamMembers?.[0].id).toBe('m3'); // First valid item
-      expect(result?.selectedTeamMembers?.[1].id).toBe('m1'); // Second valid item
-    });
-
-    it('should respect maxItems', () => {
-      const section: SanityTeamSection = {
-        enabled: true,
-        maxItems: 1,
-        selectedTeamMembers: [mockMember, { ...mockMember, _id: 'm2' }]
-      };
-      const result = mapTeamSection(section);
-      expect(result?.selectedTeamMembers).toHaveLength(1);
-    });
-  });
 });

@@ -2,11 +2,9 @@
 import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getAboutPage } from '@/sanity/services/page.service';
-import { getTeamMembers } from '@/services/content/team.service';
 import { Sparkles, Palette, Award, ShieldCheck, HeartHandshake, Code, Camera, Video, PenTool, Layers3, Route, Puzzle, Handshake, Target } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 import { CustomPortableText } from '@/sanity/components/portable-text';
-import { TeamSection } from '../home/components/team-section';
 import { TestimonialsSection } from '../home/components/testimonials-section';
 import { ABOUT_COPY } from '../sectors/sector-content';
 
@@ -21,10 +19,7 @@ const getIconComponent = (iconName: string) => {
 export async function AboutPage() {
   const t = await getTranslations('about');
   const locale = await getLocale() as 'ar' | 'en';
-  const [pageData, allTeamMembers] = await Promise.all([
-    getAboutPage(),
-    getTeamMembers(),
-  ]);
+  const pageData = await getAboutPage();
 
   const isArabic = locale === 'ar';
 
@@ -167,15 +162,6 @@ export async function AboutPage() {
             })}
           </div>
         </div>
-
-        {/* Team Section */}
-        <TeamSection data={{
-          ...pageData?.teamSection,
-          enabled: pageData?.teamSection?.enabled !== false,
-          selectedTeamMembers: pageData?.teamSection?.selectedTeamMembers?.length
-            ? pageData.teamSection.selectedTeamMembers
-            : allTeamMembers,
-        }} />
 
         {/* Testimonials Section */}
         {pageData?.testimonialsSection?.enabled !== false && (

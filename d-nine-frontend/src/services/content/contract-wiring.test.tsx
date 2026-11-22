@@ -36,7 +36,6 @@ vi.mock('@/services/content/services.service', () => ({
 }));
 
 vi.mock('@/services/content/team.service', () => ({
-  getTeamMembers: async () => [],
 }));
 
 vi.mock('@/i18n/navigation', () => ({

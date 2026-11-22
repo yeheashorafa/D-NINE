@@ -24,7 +24,6 @@ const ALLOWED_DOCUMENT_TYPES: Record<string, readonly string[]> = Object.freeze(
   sectorPage: ['sectorPage', 'sectors', 'services'],
   project: ['projects'],
   testimonial: ['testimonials'],
-  teamMember: ['team-members'],
   blogPost: ['blog'],
   author: ['blog'],
   homePage: ['home-page', 'homePage', 'agency', 'projects', 'services', 'blog'],
@@ -79,7 +78,6 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
     '/ar/work',
     '/en/work',
   ],
-  teamMember: ['/ar', '/en', '/ar/about', '/en/about'],
   blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
   author: ['/ar/blog', '/en/blog'],
   themeSettings: [

@@ -119,9 +119,9 @@ export const structure: StructureResolver = (S) =>
       // 9. إعدادات الموقع (Site Settings)
       singletonListItem(S, 'siteSettings', 'إعدادات الموقع', CogIcon),
 
-      // Filter out singletons, teamMember (hidden from client), and manually organized types from fallback root list
+      // Filter out singletons and manually organized types from fallback root list
       ...S.documentTypeListItems().filter(
         (listItem) => !SINGLETON_DOCUMENT_TYPES.includes(listItem.getId() || '') &&
-          !['contentCategory', 'service', 'serviceOffering', 'sectorPage', 'project', 'partner', 'blogPost', 'author', 'testimonial', 'teamMember'].includes(listItem.getId() || '')
+          !['contentCategory', 'service', 'serviceOffering', 'sectorPage', 'project', 'partner', 'blogPost', 'author', 'testimonial'].includes(listItem.getId() || '')
       ),
     ]);

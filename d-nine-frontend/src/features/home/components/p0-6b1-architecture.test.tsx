@@ -9,7 +9,6 @@ import { CreativeSnapshotSection } from '@/features/home/components/creative-sna
 import { HeroSlider } from '@/features/home/components/hero-slider';
 import { PartnersSection } from '@/features/home/components/partners-section';
 import { contentCategory } from '@d-nine/sanity-config/src/schemaTypes/documents/content-category';
-import { structure } from '@d-nine/sanity-config/src/structure/index';
 
 // Mocks
 vi.mock('next-intl', () => ({
@@ -173,73 +172,6 @@ describe('P0.6B1 — Architecture, Dashboard, Homepage, and Work Categories Requ
     const hasLegacyMobile = fallbackSources.some((s) => s?.includes('legacy-mobile.jpg'));
     expect(hasLegacyDesktop).toBe(true);
     expect(hasLegacyMobile).toBe(true);
-  });
-
-  // Requirement 8: Team is absent from client Studio navigation
-  it('8. verifies Team (teamMember) is hidden from top-level client Studio navigation', () => {
-    const mockContext = {
-      list: () => {
-        const builder: any = {
-          title: () => builder,
-          items: (items: any[]) => items,
-        };
-        return builder;
-      },
-      listItem: () => {
-        const builder: any = {
-          title: (t: string) => {
-            builder.title = t;
-            return builder;
-          },
-          id: (id: string) => {
-            builder.id = id;
-            return builder;
-          },
-          icon: () => builder,
-          child: (child: any) => {
-            builder.child = child;
-            return builder;
-          },
-        };
-        return builder;
-      },
-      divider: () => ({ type: 'divider' }),
-      documentTypeListItem: (type: string) => {
-        const item: any = {
-          type: 'documentTypeListItem',
-          id: type,
-          title: (t: string) => {
-            item.title = t;
-            return item;
-          },
-          icon: () => item,
-        };
-        return item;
-      },
-      documentTypeListItems: () => [],
-      documentListItem: () => {
-        const item: any = {
-          schemaType: () => item,
-          id: () => item,
-          title: () => item,
-        };
-        return item;
-      },
-      document: () => ({
-        schemaType: () => ({
-          documentId: () => ({
-            title: () => ({}),
-          }),
-        }),
-      }),
-    };
-
-    const deskItems = (structure as any)(mockContext);
-    const topLevelTitles = deskItems.map((item: any) => item?.title || item?.id || '');
-
-    // Verify teamMember is NOT in top-level items
-    expect(topLevelTitles).not.toContain('teamMember');
-    expect(topLevelTitles).not.toContain('أعضاء الفريق (Team Members)');
   });
 
   // Requirement 9: Partners render in selected order and hide cleanly when empty

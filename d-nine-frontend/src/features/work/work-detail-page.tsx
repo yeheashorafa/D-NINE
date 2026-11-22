@@ -155,7 +155,7 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
           {credits && (
             <div className="p-8 rounded-3xl bg-surface/80 dark:bg-card border border-border space-y-3">
               <h2 className="text-xl font-bold text-foreground">
-                {isArabic ? 'الحقوق / فريق العمل' : 'Credits / Team'}
+                {isArabic ? 'اعتمادات الإنتاج' : 'Production Credits'}
               </h2>
               <p className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">{credits}</p>
             </div>

@@ -22,6 +22,8 @@
     "content:services": "tsx scripts/migrate-service-taxonomy.ts --execute",
     "content:portfolio:dry": "tsx scripts/migrate-portfolio-categories.ts --dry-run",
     "content:portfolio": "tsx scripts/migrate-portfolio-categories.ts --execute",
+    "content:remove-team:dry": "tsx scripts/remove-team-content.ts --dry-run",
+    "content:remove-team": "tsx scripts/remove-team-content.ts --execute",
     "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {

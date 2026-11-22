@@ -1,6 +1,5 @@
-import type { SanityTestimonialsSection, SanityTeamSection, SanityPartnerDoc } from '../types';
+import type { SanityTestimonialsSection, SanityPartnerDoc } from '../types';
 import { mapSanityTestimonial } from '../../services/content/testimonials.service';
-import { mapSanityTeamMember } from '../../services/content/team.service';
 import { PartnerItem } from '@/types/partner';
 
 export function mapSanityPartner(doc: SanityPartnerDoc): PartnerItem {
@@ -24,7 +23,6 @@ export function mapSanityPartner(doc: SanityPartnerDoc): PartnerItem {
     active: doc.active ?? true,
   };
 }
-
 export function mapPartnersList(partners?: SanityPartnerDoc[]): PartnerItem[] {
   if (!partners || partners.length === 0) return [];
   return partners
@@ -49,24 +47,5 @@ export function mapTestimonialsSection(section?: SanityTestimonialsSection) {
   return {
     ...section,
     selectedTestimonials: validTestimonials,
-  };
-}
-
-export function mapTeamSection(section?: SanityTeamSection) {
-  if (!section) return undefined;
-  if (section.enabled === false) return undefined;
-
-  const maxItems = section.maxItems || 8;
-  const rawMembers = section.selectedTeamMembers || [];
-  const validMembers = rawMembers
-    .filter((m): m is NonNullable<typeof m> => !!m && m.active !== false)
-    .slice(0, maxItems)
-    .map(mapSanityTeamMember);
-
-  if (validMembers.length === 0) return undefined;
-
-  return {
-    ...section,
-    selectedTeamMembers: validMembers,
   };
 }

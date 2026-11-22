@@ -9,7 +9,7 @@ export const aboutPage = defineType({
   fieldsets: [
     { name: 'hero', title: 'مقدمة الصفحة (Hero Section)' },
     { name: 'content', title: 'قصة وهوية الوكالة والقيم (Agency Story, Values & Media)' },
-    { name: 'sections', title: 'الأقسام الإضافية (Team, Testimonials & CTA)' },
+    { name: 'sections', title: 'الأقسام الإضافية (Testimonials & CTA)' },
     { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
@@ -91,12 +91,6 @@ export const aboutPage = defineType({
       name: 'cta',
       title: 'Call to Action',
       type: 'cta',
-      fieldset: 'sections',
-    }),
-    defineField({
-      name: 'team',
-      title: 'Our Team Section',
-      type: 'teamSection',
       fieldset: 'sections',
     }),
     defineField({

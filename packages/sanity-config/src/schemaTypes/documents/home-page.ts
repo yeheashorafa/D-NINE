@@ -175,12 +175,6 @@ export const homePage = defineType({
 
     // Legacy Fields (Hidden to preserve existing data safely)
     defineField({
-      name: 'teamPreview',
-      title: 'Legacy Team Preview',
-      type: 'teamSection',
-      hidden: true,
-    }),
-    defineField({
       name: 'latestNews',
       title: 'Legacy Latest News',
       type: 'array',

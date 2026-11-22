@@ -8,7 +8,6 @@ import type {
 } from '@sanity/client';
 import { AssetRegistry } from './upload-assets.js';
 import { buildGranularSetIfMissing, resolveDeterministicId } from './utils/migration-utils.js';
-import { STATIC_TEAM_MEMBERS } from '../../d-nine-frontend/src/features/home/data/team.data.js';
 import { STATIC_TESTIMONIALS } from '../../d-nine-frontend/src/features/home/data/testimonials.data.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -177,22 +176,6 @@ export async function runMigration(
     },
   ];
 
-  const teamDocs = STATIC_TEAM_MEMBERS.map(m => {
-    const docId = resolveDeterministicId('team', m.id, m.name.en);
-    return {
-      _id: docId,
-      _type: 'teamMember',
-      name: m.name,
-      role: m.role,
-      bio: m.bio,
-      featured: m.featured,
-    };
-  });
-
-  const teamRefs = teamDocs.map(doc => {
-    return { _key: `team_${doc._id}`, _type: 'reference', _ref: doc._id };
-  });
-
   const testimonialDocs = STATIC_TESTIMONIALS.map(t => {
     const docId = resolveDeterministicId('testimonial', t.id, t.personName.en);
     return {
@@ -277,12 +260,6 @@ export async function runMigration(
         metaTitle: { ar: 'من نحن | دي ناين', en: 'About | D-NINE' },
         metaDescription: { ar: 'تعرف على قصة وكالة دي ناين.', en: 'Learn about D-NINE agency story.' },
       },
-      team: {
-        enabled: teamRefs.length > 0,
-        title: { ar: 'فريق العمل', en: 'Our Team' },
-        selectedTeamMembers: teamRefs,
-        maxItems: 8,
-      },
       testimonials: {
         enabled: testimonialRefs.length > 0,
         title: { ar: 'اراء العملاء', en: 'Testimonials' },
@@ -344,12 +321,6 @@ export async function runMigration(
     homePage: {
       _type: 'homePage',
       heroSlides,
-      teamPreview: {
-        enabled: teamRefs.length > 0,
-        title: { ar: 'فريق العمل', en: 'Our Team' },
-        selectedTeamMembers: teamRefs,
-        maxItems: 8,
-      },
       testimonials: {
         enabled: testimonialRefs.length > 0,
         title: { ar: 'اراء العملاء', en: 'Testimonials' },
@@ -363,9 +334,6 @@ export async function runMigration(
     }
   };
 
-  for (const doc of teamDocs) {
-    singletons[doc._id] = doc as SanityDocumentStub;
-  }
   for (const doc of testimonialDocs) {
     singletons[doc._id] = doc as SanityDocumentStub;
   }
