@@ -6,6 +6,7 @@ import { ContactForm } from './components/contact-form';
 import { Sparkles, Mail, Phone, MapPin } from 'lucide-react';
 import { RevealSection } from '@/components/motion/reveal-section';
 import { CustomPortableText } from '@/sanity/components/portable-text';
+import { getSiteSettings } from '@/services/content/settings.service';
 
 const getIconComponent = (type: string) => {
   if (type === 'email') return Mail;
@@ -19,10 +20,34 @@ export async function ContactPage() {
   const locale = await getLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
   
-  const [categories, pageData] = await Promise.all([
+  const [categories, pageData, settings] = await Promise.all([
     getCategories({ stega: false }),
     getContactPage(),
+    getSiteSettings({ stega: false }),
   ]);
+
+  const contactMethods = [
+    {
+      type: 'email',
+      title: { ar: 'البريد الإلكتروني', en: 'Email' },
+      value: settings.email,
+      link: `mailto:${settings.email}`,
+    },
+    {
+      type: 'phone',
+      title: { ar: 'الهاتف', en: 'Phone' },
+      value: settings.phoneDisplay,
+      link: settings.phoneHref,
+    },
+    ...(settings.whatsapp ? [{
+      type: 'whatsapp',
+      title: { ar: 'واتساب', en: 'WhatsApp' },
+      value: settings.phoneDisplay,
+      link: settings.whatsapp.startsWith('http')
+        ? settings.whatsapp
+        : `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}`,
+    }] : []),
+  ];
 
   return (
     <main className="pt-28 sm:pt-36 pb-16 bg-background min-h-screen">
@@ -67,17 +92,13 @@ export async function ContactPage() {
                       <p className="text-xs mt-1 whitespace-pre-wrap">
                         {office.address?.[locale] || office.address?.en}
                       </p>
-                      {office.phone && (
-                        <p className="text-xs mt-1" dir="ltr">{office.phone}</p>
-                      )}
-                      {office.email && (
-                        <p className="text-xs mt-1">{office.email}</p>
-                      )}
+                      <p className="text-xs mt-1" dir="ltr">{settings.phoneDisplay}</p>
+                      <p className="text-xs mt-1">{settings.email}</p>
                     </div>
                   </div>
                 ))}
 
-                {pageData?.contactMethods?.map((method, idx: number) => {
+                {contactMethods.map((method, idx: number) => {
                   const Icon = getIconComponent(method.type || 'email');
                   const isLink = !!method.link;
                   return (

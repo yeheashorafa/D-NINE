@@ -47,8 +47,10 @@ const envSchema = z.object({
     .transform((value) => value === 'true'),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
   CONTACT_NOTIFICATION_EMAIL: z.string().email().optional(),
+  CONTACT_RECEIVER_EMAIL: z.string().email().optional(),
 
   IP_HASH_SALT: z.string().min(16).default('development-secret-salt-do-not-use-in-prod')
 });
@@ -64,4 +66,9 @@ if (!parsed.success) {
   throw new Error('Invalid backend environment configuration');
 }
 
-export const env = parsed.data;
+export const env = {
+  ...parsed.data,
+  SMTP_PASSWORD: parsed.data.SMTP_PASSWORD || parsed.data.SMTP_PASS,
+  CONTACT_NOTIFICATION_EMAIL:
+    parsed.data.CONTACT_NOTIFICATION_EMAIL || parsed.data.CONTACT_RECEIVER_EMAIL,
+};

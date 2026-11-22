@@ -349,9 +349,10 @@ describe('Email Adapter Failure', () => {
     };
 
     // processSubmission should not throw even when email fails
-    const submission = await contactService.processSubmission(payload);
+    const { submission, notificationSent } = await contactService.processSubmission(payload);
     expect(submission).toBeDefined();
     expect(submission.id).toBeDefined();
+    expect(notificationSent).toBe(false);
 
     // Verify DB record exists
     const record = await prisma.contactSubmission.findUnique({

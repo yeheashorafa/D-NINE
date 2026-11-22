@@ -326,18 +326,18 @@ export const BLOG_POSTS_DATA: BlogPost[] = RAW_BLOG_POSTS.map((post) => {
   return {
     ...rest,
     body: {
-      ar: (sections || []).map((sec) => ({
+      ar: (sections || []).map((sec, index) => ({
         _type: 'block',
-        _key: Math.random().toString(36).substring(7),
+        _key: `${post.slug}-ar-${index}`,
         style: 'normal',
         children: [
           { _type: 'span', marks: ['strong'], text: sec.heading.ar + '\n' },
           { _type: 'span', marks: [], text: sec.body.ar },
         ],
       })),
-      en: (sections || []).map((sec) => ({
+      en: (sections || []).map((sec, index) => ({
         _type: 'block',
-        _key: Math.random().toString(36).substring(7),
+        _key: `${post.slug}-en-${index}`,
         style: 'normal',
         children: [
           { _type: 'span', marks: ['strong'], text: sec.heading.en + '\n' },

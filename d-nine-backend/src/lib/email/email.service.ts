@@ -1,5 +1,5 @@
 import { env } from '../../config/env.js';
-import { EmailAdapter, EmailOptions } from './email.types.js';
+import { EmailAdapter, EmailDeliveryResult, EmailOptions } from './email.types.js';
 import { SmtpEmailAdapter } from './smtp-email.adapter.js';
 import { TestEmailAdapter } from './test-email.adapter.js';
 import { prisma } from '../prisma.js';
@@ -27,7 +27,7 @@ class EmailService {
     }
   }
 
-  async sendEmail(options: EmailOptions): Promise<void> {
+  async sendEmail(options: EmailOptions): Promise<EmailDeliveryResult> {
     const delivery = await prisma.emailDelivery.create({
       data: {
         to: options.to,
@@ -43,6 +43,7 @@ class EmailService {
         where: { id: delivery.id },
         data: { status: 'SENT' },
       });
+      return 'SENT';
     } catch (error) {
       logger.error(
         { error, referenceId: options.referenceId },
@@ -55,9 +56,7 @@ class EmailService {
           error: error instanceof Error ? error.message : String(error)
         },
       });
-      // Rethrow to let caller handle it, or we could swallow it so caller doesn't fail.
-      // Requirements: "Ensure a saved submission remains successful if notification delivery fails."
-      // So we swallow the error here but log it.
+      return 'FAILED';
     }
   }
 }

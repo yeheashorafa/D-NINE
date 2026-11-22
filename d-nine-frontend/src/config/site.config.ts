@@ -24,16 +24,16 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   name: 'D-NINE',
   legalName: 'D-NINE Creative Agency & Media Production',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://dnine.agency',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://dnine9.com',
   contact: {
-    email: 'hello@dnine.agency',
+    email: 'ninedim.d9@gmail.com',
     phone: {
-      display: '+966 50 000 0000',
-      href: 'tel:+966500000000',
+      display: '+966 50 273 2528',
+      href: 'tel:+966502732528',
     },
     locations: {
-      ar: 'الرياض، المملكة العربية السعودية / دبي، الإمارات العربية المتحدة',
-      en: 'Riyadh, Saudi Arabia / Dubai, United Arab Emirates',
+      ar: 'القصيم، بريدة، المملكة العربية السعودية',
+      en: 'Al-Qassim, Buraydah, Saudi Arabia',
     },
   },
   socials: {
@@ -45,7 +45,6 @@ export const siteConfig: SiteConfig = {
     phone: 'PENDING_OFFICIAL_PHONE',
     address: 'PENDING_OFFICIAL_ADDRESS',
     metrics: 'PENDING_VERIFIED_METRICS',
-    team: 'PENDING_OFFICIAL_TEAM_DATA',
     clientLogos: 'PENDING_REAL_CLIENT_LOGOS',
     backendApi: 'PENDING_BACKEND_API',
     licensedSlider: 'PENDING_LICENSED_DNINE_SLIDER_EXPORTS',
