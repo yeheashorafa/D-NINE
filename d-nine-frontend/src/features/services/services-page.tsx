@@ -4,11 +4,13 @@ import { TestimonialsSection } from '../home/components/testimonials-section';
 import { getServicesPage } from '@/sanity/services/page.service';
 import { getSectors } from '@/sanity/services/sector.service';
 import { SectorServicesTabs } from '@/features/sectors/sector-services-tabs';
+import { getTestimonials } from '@/services/content/testimonials.service';
 
 export async function ServicesPage() {
-  const [sectors, pageData] = await Promise.all([
+  const [sectors, pageData, testimonials] = await Promise.all([
     getSectors(),
     getServicesPage(),
+    getTestimonials(),
   ]);
 
   return (
@@ -26,7 +28,7 @@ export async function ServicesPage() {
         />
 
         {/* Testimonials Section */}
-        <TestimonialsSection data={pageData?.testimonialsSection} />
+        <TestimonialsSection data={{ ...pageData?.testimonialsSection, selectedTestimonials: testimonials }} />
       </div>
     </main>
   );

@@ -74,12 +74,12 @@ describe('TestimonialsSection', () => {
     expect(slides[1]).toHaveTextContent('Jane Smith');
   });
 
-  it('respects maxItems', () => {
-    renderWithIntl(<TestimonialsSection data={{ enabled: true, selectedTestimonials: mockTestimonials, maxItems: 1 }} />);
+  it('renders every published testimonial', () => {
+    renderWithIntl(<TestimonialsSection data={{ enabled: true, selectedTestimonials: mockTestimonials }} />);
     const slides = screen.getAllByTestId('swiper-slide-mock');
-    expect(slides).toHaveLength(1);
+    expect(slides).toHaveLength(2);
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
   });
 
   it('renders correctly in Arabic (RTL)', () => {

@@ -39,13 +39,5 @@ export const testimonialsSection = defineType({
       description: 'Manually select testimonials to display. The drag-and-drop order here defines the exact order shown on the website carousel.',
       validation: (Rule) => Rule.unique(),
     }),
-    defineField({
-      name: 'maxItems',
-      title: 'Maximum Items',
-      type: 'number',
-      description: 'Maximum number of testimonials to show in the carousel (defaults to 6).',
-      validation: (Rule) => Rule.min(1).max(20).integer(),
-      initialValue: 6,
-    }),
   ],
 });

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getProjectBySlug, getAllProjects } from '@/services/content/projects.service';
-import { getTestimonialsForProject } from '@/services/content/testimonials.service';
+import { getTestimonials } from '@/services/content/testimonials.service';
 import { ProjectGallery } from './components/project-gallery';
 import { RelatedProjects } from './components/related-projects';
 import { Link } from '@/i18n/navigation';
@@ -22,7 +22,7 @@ export async function WorkDetailPage({ slug }: WorkDetailPageProps) {
   const [project, allProjects, testimonials] = await Promise.all([
     getProjectBySlug(slug),
     getAllProjects(),
-    getTestimonialsForProject(slug),
+    getTestimonials(),
   ]);
 
   if (!project) {

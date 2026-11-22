@@ -77,9 +77,7 @@ export async function HomePage() {
       <TestimonialsSection data={{
         ...homeData?.testimonialsSection,
         enabled: homeData?.testimonialsSection?.enabled !== false,
-        selectedTestimonials: homeData?.testimonialsSection?.selectedTestimonials?.length
-          ? homeData.testimonialsSection.selectedTestimonials
-          : allTestimonials,
+        selectedTestimonials: allTestimonials,
       }} />
 
       {/* 8. FAQs */}

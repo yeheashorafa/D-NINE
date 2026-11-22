@@ -7,6 +7,7 @@ import { RevealSection } from '@/components/motion/reveal-section';
 import { CustomPortableText } from '@/sanity/components/portable-text';
 import { TestimonialsSection } from '../home/components/testimonials-section';
 import { ABOUT_COPY } from '../sectors/sector-content';
+import { getTestimonials } from '@/services/content/testimonials.service';
 
 // Helper to map string icon names to Lucide components safely
 const getIconComponent = (iconName: string) => {
@@ -19,7 +20,7 @@ const getIconComponent = (iconName: string) => {
 export async function AboutPage() {
   const t = await getTranslations('about');
   const locale = await getLocale() as 'ar' | 'en';
-  const pageData = await getAboutPage();
+  const [pageData, testimonials] = await Promise.all([getAboutPage(), getTestimonials()]);
 
   const isArabic = locale === 'ar';
 
@@ -165,7 +166,7 @@ export async function AboutPage() {
 
         {/* Testimonials Section */}
         {pageData?.testimonialsSection?.enabled !== false && (
-          <TestimonialsSection data={pageData?.testimonialsSection} />
+          <TestimonialsSection data={{ ...pageData?.testimonialsSection, selectedTestimonials: testimonials }} />
         )}
 
         {/* Call to Action Section */}

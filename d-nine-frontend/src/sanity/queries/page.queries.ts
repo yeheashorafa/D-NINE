@@ -96,7 +96,6 @@ export const homePageQuery = groq`
       badge,
       title,
       subtitle,
-      maxItems,
       selectedTestimonials[]-> {
         ${testimonialFields}
       }
@@ -157,7 +156,6 @@ export const aboutPageQuery = groq`
       badge,
       title,
       subtitle,
-      maxItems,
       selectedTestimonials[]-> {
         ${testimonialFields}
       }
@@ -183,7 +181,6 @@ export const servicesPageQuery = groq`
       badge,
       title,
       subtitle,
-      maxItems,
       selectedTestimonials[]-> {
         ${testimonialFields}
       }

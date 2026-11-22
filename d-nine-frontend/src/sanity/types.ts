@@ -42,7 +42,6 @@ export interface SanityTestimonialsSection {
   title?: SanityLocalizedString;
   subtitle?: SanityLocalizedString;
   selectedTestimonials?: SanityTestimonialDoc[];
-  maxItems?: number;
 }
 
 export interface SanityContactMethod {

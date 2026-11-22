@@ -23,8 +23,6 @@ interface TestimonialsSectionProps {
     title?: { ar?: string; en?: string };
     subtitle?: { ar?: string; en?: string };
     selectedTestimonials?: TestimonialItem[];
-    maxItems?: number;
-    maxCount?: number;
   };
 }
 
@@ -87,8 +85,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
 
   if (data?.enabled === false) return null;
   const allItems = data?.selectedTestimonials || [];
-  const max = data?.maxCount || data?.maxItems || allItems.length;
-  const items = allItems.slice(0, max);
+  const items = allItems;
   if (items.length === 0) return null;
 
   const isSingle = items.length === 1;
@@ -187,9 +184,13 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ data }
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
-                    {item.image && (
+                    {item.image ? (
                       <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
                         <Image src={item.image} alt={item.imageAlt?.[isArabic ? 'ar' : 'en'] || item.personName?.[isArabic ? 'ar' : 'en'] || (isArabic ? 'صورة العميل' : 'Client photo')} fill className="object-cover" sizes="48px" />
+                      </div>
+                    ) : (
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-brand text-sm font-extrabold text-white" aria-label={isArabic ? 'صورة بديلة للعميل' : 'Client avatar'}>
+                        {(item.personName?.[locale] || item.company?.[locale] || 'D9').trim().slice(0, 2).toUpperCase()}
                       </div>
                     )}
                     <div>

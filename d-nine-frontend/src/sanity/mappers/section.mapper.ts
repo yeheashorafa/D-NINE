@@ -35,11 +35,9 @@ export function mapTestimonialsSection(section?: SanityTestimonialsSection) {
   if (!section) return undefined;
   if (section.enabled === false) return undefined;
 
-  const maxItems = section.maxItems || 6;
   const rawTestimonials = section.selectedTestimonials || [];
   const validTestimonials = rawTestimonials
     .filter((t): t is NonNullable<typeof t> => !!t && t.active !== false)
-    .slice(0, maxItems)
     .map(mapSanityTestimonial);
 
   if (validTestimonials.length === 0) return undefined;

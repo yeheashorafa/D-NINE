@@ -53,14 +53,13 @@ describe('section.mapper', () => {
       expect(result?.selectedTestimonials?.[1].id).toBe('t1'); // Second valid item
     });
 
-    it('should respect maxItems', () => {
+    it('should keep all active testimonials', () => {
       const section: SanityTestimonialsSection = {
         enabled: true,
-        maxItems: 1,
         selectedTestimonials: [mockTestimonial, { ...mockTestimonial, _id: 't2' }]
       };
       const result = mapTestimonialsSection(section);
-      expect(result?.selectedTestimonials).toHaveLength(1);
+      expect(result?.selectedTestimonials).toHaveLength(2);
     });
   });
 
