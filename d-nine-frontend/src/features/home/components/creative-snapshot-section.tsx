@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
@@ -34,6 +34,16 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
   const isArabic = locale === 'ar';
   const t = useTranslations('home.creativeSnapshot');
   const [showreelOpen, setShowreelOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const closeShowreel = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+    setShowreelOpen(false);
+  };
 
   return (
     <section className="py-16 sm:py-24 relative overflow-hidden bg-background transition-colors duration-300">
@@ -158,18 +168,19 @@ export const CreativeSnapshotSection: React.FC<CreativeSnapshotSectionProps> = (
       {/* Accessible Showreel Modal */}
       <Modal
         isOpen={showreelOpen}
-        onClose={() => setShowreelOpen(false)}
+        onClose={closeShowreel}
         title="D-NINE Showreel"
         maxWidth="4xl"
       >
-        <div className="relative aspect-[16/9] w-full bg-black rounded-2xl overflow-hidden shadow-2xl">
+        <div className="relative mx-auto aspect-video max-h-[78dvh] w-full overflow-hidden rounded-2xl bg-black shadow-2xl">
           <video
+            ref={videoRef}
             src={data?.videoUrl || '/media/video/showreel.mp4'}
             poster={data?.videoThumbnail || '/media/video/showreel-poster.jpg'}
             controls
             autoPlay
             playsInline
-            className="w-full h-full object-cover"
+            className="h-full w-full object-contain"
           >
             Your browser does not support the video tag.
           </video>
