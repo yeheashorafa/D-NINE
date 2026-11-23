@@ -12,12 +12,6 @@
     "typegen": "sanity typegen generate",
     "documents:validate": "sanity documents validate",
     "typecheck": "tsc --noEmit",
-    "test:dry-run": "tsx scripts/test-dry-run.ts",
-    "content:migrate:dry": "tsx scripts/migrate-static-content.ts --dry-run",
-    "content:migrate": "tsx scripts/migrate-static-content.ts --execute",
-    "content:validate": "tsx scripts/validate-migration.ts",
-    "content:complete:dry": "tsx scripts/migrate-cms-completion.ts --dry-run",
-    "content:complete": "tsx scripts/migrate-cms-completion.ts --execute",
     "content:services:dry": "tsx scripts/migrate-service-taxonomy.ts --dry-run",
     "content:services": "tsx scripts/migrate-service-taxonomy.ts --execute",
     "content:portfolio:dry": "tsx scripts/migrate-portfolio-categories.ts --dry-run",
@@ -26,6 +20,8 @@
     "content:remove-team": "tsx scripts/remove-team-content.ts --execute",
     "content:remove-unverified-testimonials:dry": "tsx scripts/remove-unverified-testimonials.ts --dry-run",
     "content:remove-unverified-testimonials": "tsx scripts/remove-unverified-testimonials.ts --execute",
+    "content:remove-legacy-services:dry": "tsx scripts/remove-legacy-services.ts --dry-run",
+    "content:remove-legacy-services": "tsx scripts/remove-legacy-services.ts --execute",
     "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {

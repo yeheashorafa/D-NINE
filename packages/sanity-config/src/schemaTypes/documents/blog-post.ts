@@ -39,13 +39,6 @@ export const blogPost = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'relatedServices',
-      title: 'Related Services',
-      type: 'array',
-      of: [defineArrayMember({ type: 'reference', to: [{ type: 'service' }] })],
-      fieldset: 'general',
-    }),
-    defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',

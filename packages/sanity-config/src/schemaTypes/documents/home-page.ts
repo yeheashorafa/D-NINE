@@ -80,15 +80,6 @@ export const homePage = defineType({
         defineField({ name: 'subtitle', title: 'الوصف (Subtitle)', type: 'localizedText' }),
       ],
     }),
-    defineField({
-      name: 'featuredServices',
-      title: 'الخدمات المعروضة في الرئيسية (Featured Services)',
-      type: 'array',
-      of: [defineArrayMember({ type: 'reference', to: [{ type: 'service' }] })],
-      group: 'featuredWork',
-      description: 'اختر الخدمات التي تظهر في الصفحة الرئيسية ورتبها بالسحب والإفلات. إذا تركت فارغة يتم عرض الخدمات النشطة تلقائياً.',
-    }),
-
     // 4. Partners
     defineField({
       name: 'partnersHeader',

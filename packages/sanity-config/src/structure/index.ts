@@ -12,6 +12,7 @@ import {
   UserIcon,
   DropIcon,
 } from '@sanity/icons';
+import { InboundMessagesPanel } from '../components/InboundMessagesPanel';
 
 const SINGLETON_DOCUMENT_TYPES = [
   'homePage',
@@ -68,9 +69,7 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('الخدمات')
             .items([
-              S.documentTypeListItem('service').title('قائمة الخدمات (Services)').icon(SparklesIcon),
-              S.documentTypeListItem('serviceOffering').title('الخدمات الفرعية (Service Offerings)').icon(SparklesIcon),
-              S.documentTypeListItem('sectorPage').title('القطاعات الرئيسية (Main Sectors)').icon(DocumentTextIcon),
+              S.documentTypeListItem('sectorPage').title('القطاعان والخدمات الفرعية').icon(DocumentTextIcon),
             ])
         ),
 
@@ -79,6 +78,11 @@ export const structure: StructureResolver = (S) =>
 
       // 5. آراء العملاء (Testimonials)
       S.documentTypeListItem('testimonial').title('آراء العملاء').icon(StarIcon),
+
+      S.listItem()
+        .title('الرسائل الواردة')
+        .icon(DocumentTextIcon)
+        .child(S.component(InboundMessagesPanel).title('الرسائل الواردة')),
 
       // 6. المدونة والمقالات (Blog)
       S.listItem()
@@ -122,6 +126,6 @@ export const structure: StructureResolver = (S) =>
       // Filter out singletons and manually organized types from fallback root list
       ...S.documentTypeListItems().filter(
         (listItem) => !SINGLETON_DOCUMENT_TYPES.includes(listItem.getId() || '') &&
-          !['contentCategory', 'service', 'serviceOffering', 'sectorPage', 'project', 'partner', 'blogPost', 'author', 'testimonial'].includes(listItem.getId() || '')
+          !['contentCategory', 'sectorPage', 'project', 'partner', 'blogPost', 'author', 'testimonial'].includes(listItem.getId() || '')
       ),
     ]);

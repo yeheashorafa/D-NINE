@@ -24,7 +24,6 @@ export const testimonialFields = groq`
   featured,
   active,
   order,
-  relatedService->{_id, "slug": slug.current},
   relatedProject->{_id, "slug": slug.current}
 `;
 
@@ -80,7 +79,6 @@ export const homePageQuery = groq`
       subtitle
     },
     "featuredProjects": featuredProjects[]->slug.current,
-    "featuredServices": featuredServices[]->slug.current,
     partnersHeader {
       badge,
       title,

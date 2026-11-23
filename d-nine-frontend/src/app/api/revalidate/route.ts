@@ -20,7 +20,6 @@ const MAX_PAYLOAD_BYTES = 64 * 1024;
 const ALLOWED_DOCUMENT_TYPES: Record<string, readonly string[]> = Object.freeze({
   contentCategory: ['categories'],
   service: ['services'],
-  serviceOffering: ['service-offerings', 'services'],
   sectorPage: ['sectorPage', 'sectors', 'services'],
   project: ['projects'],
   testimonial: ['testimonials'],
@@ -65,7 +64,6 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   ],
   contentCategory: ['/ar/work', '/en/work', '/ar', '/en'],
   service: ['/ar/services', '/en/services'],
-  serviceOffering: ['/ar/services', '/en/services'],
   sectorPage: ['/ar/services', '/en/services', '/ar', '/en'],
   project: ['/ar/work', '/en/work', '/ar', '/en'],
   testimonial: [

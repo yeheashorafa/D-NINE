@@ -76,13 +76,6 @@ export const project = defineType({
       hidden: true,
     }),
     defineField({
-      name: 'relatedServices',
-      title: 'Related Services',
-      type: 'array',
-      of: [defineArrayMember({ type: 'reference', to: [{ type: 'service' }] })],
-      fieldset: 'general',
-    }),
-    defineField({
       name: 'featured',
       title: 'Featured Portfolio Project',
       type: 'boolean',

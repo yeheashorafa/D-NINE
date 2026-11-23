@@ -5,7 +5,6 @@ import { localizedPortableText } from './objects/localized-portable-text';
 import { localizedStringArray } from './objects/localized-string-array';
 import { seo } from './objects/seo';
 import { projectMedia } from './objects/project-media';
-import { serviceDeliverable } from './objects/service-deliverable';
 import { serviceProcessStep } from './objects/service-process-step';
 import { serviceFaq } from './objects/service-faq';
 import { projectMetric } from './objects/project-metric';
@@ -26,8 +25,6 @@ import { lightThemePalette, darkThemePalette } from './objects/theme-palette';
 import { partner } from './documents/partner';
 import { testimonial } from './documents/testimonial';
 import { contentCategory } from './documents/content-category';
-import { service } from './documents/service';
-import { serviceOffering } from './documents/service-offering';
 import { project } from './documents/project';
 import { blogPost } from './documents/blog-post';
 import { author } from './documents/author';
@@ -51,7 +48,6 @@ export const schemaTypes = [
   localizedStringArray,
   seo,
   projectMedia,
-  serviceDeliverable,
   serviceProcessStep,
   serviceFaq,
   projectMetric,
@@ -73,8 +69,6 @@ export const schemaTypes = [
   partner,
   testimonial,
   contentCategory,
-  service,
-  serviceOffering,
   project,
   blogPost,
   author,

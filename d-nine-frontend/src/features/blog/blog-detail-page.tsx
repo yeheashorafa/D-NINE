@@ -134,25 +134,6 @@ export async function BlogDetailPage({ slug }: BlogDetailPageProps) {
           {/* Related Articles */}
           <RelatedPosts currentPost={post} allPosts={allPosts} />
 
-          {/* Related Services */}
-          {post.relatedServiceSlugs && post.relatedServiceSlugs.length > 0 && (
-            <div className="pt-6 border-t border-border mt-8">
-              <h3 className="text-lg font-bold text-foreground mb-4">
-                {isArabic ? 'خدمات ذات صلة' : 'Related Services'}
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {post.relatedServiceSlugs.map((slug) => (
-                  <Link
-                    key={slug}
-                    href={`/services/${slug}`}
-                    className="px-4 py-2 rounded-xl bg-surface border border-border text-sm font-medium text-foreground hover:border-brand-cyan hover:text-brand-cyan transition-colors"
-                  >
-                    {isArabic ? 'عرض الخدمة' : 'View Service'} →
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
       </div>
     </main>
   );

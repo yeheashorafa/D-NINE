@@ -465,7 +465,7 @@ describe('Section J & Contract Wiring Verification', () => {
     expect(screen.queryByText('شريك 1')).toBeNull();
     expect(screen.queryByText('شريك 2')).toBeNull();
 
-    const hoverTarget = partnersSection?.querySelector('.group.px-1');
+    const hoverTarget = partnersSection?.querySelector('.partners-carousel');
     expect(hoverTarget).toBeTruthy();
 
     if (hoverTarget) {

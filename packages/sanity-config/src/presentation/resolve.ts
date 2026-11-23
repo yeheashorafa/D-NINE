@@ -55,24 +55,6 @@ export const locations = {
       { title: 'Global (English)', href: '/en' },
     ],
   }),
-  service: defineLocations({
-    select: {
-      slug: 'slug.current',
-      title: 'title.en',
-    },
-    resolve: (doc) => ({
-      locations: [
-        {
-          title: doc?.title ? `${doc.title} (AR)` : 'Service (AR)',
-          href: `/ar/services/${doc?.slug}`,
-        },
-        {
-          title: doc?.title ? `${doc.title} (EN)` : 'Service (EN)',
-          href: `/en/services/${doc?.slug}`,
-        },
-      ],
-    }),
-  }),
   project: defineLocations({
     select: {
       slug: 'slug.current',
@@ -112,7 +94,6 @@ export const locations = {
   testimonial: defineLocations({
     select: {
       title: 'personName.en',
-      serviceSlug: 'relatedService.slug.current',
       projectSlug: 'relatedProject.slug.current',
     },
     resolve: (doc) => {
@@ -124,10 +105,6 @@ export const locations = {
         { title: 'Services (AR)', href: '/ar/services' },
         { title: 'Services (EN)', href: '/en/services' },
       ];
-      if (doc?.serviceSlug) {
-        locs.push({ title: 'Related Service (AR)', href: `/ar/services/${doc.serviceSlug}` });
-        locs.push({ title: 'Related Service (EN)', href: `/en/services/${doc.serviceSlug}` });
-      }
       if (doc?.projectSlug) {
         locs.push({ title: 'Related Project (AR)', href: `/ar/work/${doc.projectSlug}` });
         locs.push({ title: 'Related Project (EN)', href: `/en/work/${doc.projectSlug}` });
@@ -138,10 +115,6 @@ export const locations = {
 };
 
 export const mainDocuments: DocumentResolver[] = [
-  {
-    route: '/:locale/services/:slug',
-    filter: `_type == "service" && slug.current == $slug`,
-  },
   {
     route: '/:locale/work/:slug',
     filter: `_type == "project" && slug.current == $slug`,
