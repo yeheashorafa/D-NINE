@@ -18,7 +18,6 @@ export interface SiteConfig {
     linkedin: string;
     twitter: string;
   };
-  internalMarkers: Record<string, string>;
 }
 
 export const siteConfig: SiteConfig = {
@@ -40,14 +39,5 @@ export const siteConfig: SiteConfig = {
     instagram: 'https://instagram.com/dnine.agency',
     linkedin: 'https://linkedin.com/company/dnine-agency',
     twitter: 'https://twitter.com/dnineagency',
-  },
-  internalMarkers: {
-    phone: 'PENDING_OFFICIAL_PHONE',
-    address: 'PENDING_OFFICIAL_ADDRESS',
-    metrics: 'PENDING_VERIFIED_METRICS',
-    clientLogos: 'PENDING_REAL_CLIENT_LOGOS',
-    backendApi: 'PENDING_BACKEND_API',
-    licensedSlider: 'PENDING_LICENSED_DNINE_SLIDER_EXPORTS',
-    realMedia: 'PENDING_REAL_MEDIA',
   },
 };

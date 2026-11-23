@@ -24,6 +24,8 @@
     "content:portfolio": "tsx scripts/migrate-portfolio-categories.ts --execute",
     "content:remove-team:dry": "tsx scripts/remove-team-content.ts --dry-run",
     "content:remove-team": "tsx scripts/remove-team-content.ts --execute",
+    "content:remove-unverified-testimonials:dry": "tsx scripts/remove-unverified-testimonials.ts --dry-run",
+    "content:remove-unverified-testimonials": "tsx scripts/remove-unverified-testimonials.ts --execute",
     "test:migration": "tsx scripts/test-migration-utils.ts"
   },
   "dependencies": {

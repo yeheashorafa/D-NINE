@@ -278,7 +278,7 @@ export async function runMigration(
       },
       contactMethods: [
         { _key: 'm1', type: 'email', title: { ar: 'البريد الإلكتروني', en: 'Email' }, value: 'hello@d-nine.agency', link: 'mailto:hello@d-nine.agency' },
-        { _key: 'm2', type: 'phone', title: { ar: 'رقم الهاتف', en: 'Phone' }, value: '+966 50 123 4567', link: 'tel:+966501234567' }
+        { _key: 'm2', type: 'phone', title: { ar: 'رقم الهاتف', en: 'Phone' }, value: '+966 50 273 2528', link: 'tel:+966502732528' }
       ],
       offices: [{ _key: 'o1', title: { ar: 'المقر الرئيسي - الرياض', en: 'Headquarters - Riyadh' }, address: { ar: 'شارع التحلية، الرياض، المملكة العربية السعودية', en: 'Tahlia Street, Riyadh, Saudi Arabia' }, email: 'hq@d-nine.agency', phone: '+966 50 123 4567' }],
       seo: {

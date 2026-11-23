@@ -55,8 +55,8 @@ export async function generateMetadata({
     ? settings.companyName.ar + " | وكالة إبداعية وإنتاج إعلامي وتصميم الهوية"
     : settings.companyName.en + " | Creative Agency, Media Production & Brand Identity";
   const defaultDesc = isArabic
-    ? "وكالة دي ناين للإنتاج الإعلامي، الهوية البصرية، تصميم الجرافيك، وصناعة الفيديوهات القصيرة في الرياض ودبي."
-    : "D-NINE Creative Agency in Riyadh & Dubai. Video production, brand identity, graphic design, and short-form video reels.";
+    ? "دي ناين لتنظيم المؤتمرات والمعارض والإنتاج الإعلامي والتسويق الرقمي في المملكة العربية السعودية. نخطط التجربة ونصنع المحتوى وننفذ باحتراف."
+    : "D-NINE plans conferences and exhibitions and delivers media production and digital marketing across Saudi Arabia—from strategy through execution.";
 
   const title = stegaClean(settings.defaultSeo?.metaTitle?.[isArabic ? 'ar' : 'en'] || defaultTitle);
   const description = stegaClean(settings.defaultSeo?.metaDescription?.[isArabic ? 'ar' : 'en'] || defaultDesc);

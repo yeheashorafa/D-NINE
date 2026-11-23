@@ -615,7 +615,7 @@ export async function runMigration(isDryRun: boolean = true) {
       en: 'D-NINE Advertising & Media Production Est.',
     },
     email: 'info@dnine.agency',
-    phone: '+966 50 000 0000 [PENDING_OFFICIAL_NUMBER]',
+    phone: '+966 50 273 2528',
     locations: {
       ar: ['الرياض — المملكة العربية السعودية', 'دبي — الإمارات العربية المتحدة'],
       en: ['Riyadh, Kingdom of Saudi Arabia', 'Dubai, United Arab Emirates'],
