@@ -76,6 +76,8 @@ export const structure: StructureResolver = (S) =>
       // 4. الشركاء (Partners)
       S.documentTypeListItem('partner').title('الشركاء').icon(UsersIcon),
 
+      singletonListItem(S, 'contactPage', 'تواصل معنا', DocumentTextIcon),
+
       // 5. آراء العملاء (Testimonials)
       S.documentTypeListItem('testimonial').title('آراء العملاء').icon(StarIcon),
 
@@ -111,7 +113,7 @@ export const structure: StructureResolver = (S) =>
               singletonListItem(S, 'servicesPage', 'صفحة الخدمات العامة (Services Page)', DocumentTextIcon),
               singletonListItem(S, 'workPage', 'صفحة الأعمال العامة (Work Page)', DocumentTextIcon),
               singletonListItem(S, 'blogPage', 'صفحة المدونة العامة (Blog Page)', DocumentTextIcon),
-              singletonListItem(S, 'contactPage', 'تواصل معنا (Contact Us)', DocumentTextIcon),
+
               singletonListItem(S, 'privacyPage', 'سياسة الخصوصية (Privacy Policy)', DocumentTextIcon),
               singletonListItem(S, 'termsPage', 'الشروط والأحكام (Terms & Conditions)', DocumentTextIcon),
             ])

@@ -12,6 +12,8 @@ export const contactPage = defineType({
     { name: 'seo', title: 'تحسين محركات البحث (SEO & Metadata)', options: { collapsible: true, collapsed: true } },
   ],
   fields: [
+    defineField({ name: 'formTitle', title: 'عنوان نموذج الرسالة', type: 'localizedString' }),
+    defineField({ name: 'successMessage', title: 'النص بعد استلام الرسالة', type: 'localizedString' }),
     defineField({
       name: 'heroBadge',
       title: 'الشارة التمهيدية (Hero Badge)',

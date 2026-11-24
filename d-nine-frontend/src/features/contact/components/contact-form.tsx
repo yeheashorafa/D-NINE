@@ -10,9 +10,11 @@ import { ContentCategory } from '@/types/category';
 
 export interface ContactFormProps {
   categories: ContentCategory[];
+  formTitle?: string;
+  successMessage?: string;
 }
 
-export const ContactForm: React.FC<ContactFormProps> = ({ categories }) => {
+export const ContactForm: React.FC<ContactFormProps> = ({ categories, formTitle, successMessage }) => {
   const locale = useLocale();
   const isArabic = locale === 'ar';
   const t = useTranslations('contactPage');
@@ -70,14 +72,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({ categories }) => {
 
   return (
     <div className="p-8 sm:p-10 rounded-3xl bg-surface/90 dark:bg-card border border-border shadow-xl">
-      <h2 className="text-2xl font-bold text-foreground mb-6">{t('formTitle')}</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-6">{formTitle || t('formTitle')}</h2>
 
       {isSubmitted ? (
         <div className="py-12 text-center space-y-4">
           <div className="w-14 h-14 rounded-full bg-brand-cyan/10 text-brand-cyan mx-auto flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <p className="text-lg font-bold text-foreground">{t('successMessage')}</p>
+          <p className="text-lg font-bold text-foreground">{successMessage || t('successMessage')}</p>
           <button
             type="button"
             onClick={() => setIsSubmitted(false)}

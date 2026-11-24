@@ -367,6 +367,8 @@ export interface SanityBlogPageDoc {
 }
 
 export interface SanityContactPageDoc {
+  formTitle?: SanityLocalizedString;
+  successMessage?: SanityLocalizedString;
   _id: string;
   id?: string;
   heroBadge?: SanityLocalizedString;

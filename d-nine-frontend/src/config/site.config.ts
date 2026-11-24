@@ -31,7 +31,7 @@ export const siteConfig: SiteConfig = {
       href: 'tel:+966502732528',
     },
     locations: {
-      ar: 'القصيم، بريدة، المملكة العربية السعودية',
+      ar: 'القصيم — بريدة - المملكة العربية السعودية',
       en: 'Al-Qassim, Buraydah, Saudi Arabia',
     },
   },

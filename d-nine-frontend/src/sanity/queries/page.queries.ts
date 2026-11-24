@@ -225,6 +225,7 @@ export const blogPageQuery = groq`
 
 export const contactPageQuery = groq`
   *[_type == "contactPage"][0] {
+    formTitle, successMessage,
     _id,
     "id": _id,
     heroBadge,
