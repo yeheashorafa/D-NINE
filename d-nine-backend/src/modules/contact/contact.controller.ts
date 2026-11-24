@@ -15,7 +15,17 @@ export class ContactController {
         return sendFailure(req, res, 400, 'HONEYPOT_REJECTED', getMessage('HONEYPOT_REJECTED', locale));
       }
 
-      const submission = await contactService.processSubmission(payload);
+      const { submission, notificationSent } = await contactService.processSubmission(payload);
+
+      if (!notificationSent) {
+        return sendFailure(
+          req,
+          res,
+          502,
+          'EMAIL_DELIVERY_FAILED',
+          getMessage('CONTACT_SAVED_EMAIL_FAILED', locale),
+        );
+      }
 
       return sendSuccess(req, res, 201, 'CONTACT_SUBMITTED', getMessage('CONTACT_SUBMITTED', locale), {
         submissionId: submission.id,

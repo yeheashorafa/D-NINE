@@ -22,7 +22,14 @@ export const sectorPage = defineType({
       description: 'يمكن الإضافة والحذف وإعادة الترتيب. يمكن ترك عنوان المجموعة فارغًا في القطاع الأول.',
       of: [defineArrayMember({ type: 'object', fields: [
         defineField({ name: 'title', title: 'عنوان المجموعة', type: 'localizedString' }),
-        defineField({ name: 'items', title: 'الخدمات', type: 'array', of: [defineArrayMember({ type: 'localizedString' })], validation: (Rule) => Rule.min(1) }),
+        defineField({
+          name: 'items',
+          title: 'الخدمات الفرعية',
+          description: 'أضف أو احذف أو أعد ترتيب الخدمات. كل خدمة تظهر كبطاقة في الموقع.',
+          type: 'array',
+          of: [defineArrayMember({ type: 'sectorServiceItem' })],
+          validation: (Rule) => Rule.required().min(1),
+        }),
       ] })],
     }),
     defineField({
@@ -32,7 +39,13 @@ export const sectorPage = defineType({
         defineField({ name: 'description', title: 'وصف الباقة', type: 'localizedText', validation: (Rule) => Rule.required() }),
       ] })],
     }),
-    defineField({ name: 'relatedCategories', title: 'تصنيفات الأعمال المرتبطة', type: 'array', group: 'work', of: [defineArrayMember({ type: 'reference', to: [{ type: 'contentCategory' }] })] }),
+    defineField({
+      name: 'relatedCategories', title: 'تصنيفات الأعمال المرتبطة', type: 'array', group: 'work',
+      of: [defineArrayMember({
+        type: 'reference', to: [{ type: 'contentCategory' }],
+        options: { filter: 'slug.current in $groups', filterParams: { groups: ['events', 'identity-design', 'media-production', 'content-marketing'] } },
+      })],
+    }),
     defineField({ name: 'active', title: 'ظاهر في الموقع', type: 'boolean', initialValue: true, validation: (Rule) => Rule.required() }),
     defineField({ name: 'order', title: 'الترتيب', type: 'number', initialValue: 0, validation: (Rule) => Rule.required().min(0) }),
     defineField({ name: 'seo', title: 'إعدادات SEO', type: 'seo', group: 'seo' }),

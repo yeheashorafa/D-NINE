@@ -2,14 +2,10 @@ import { groq } from 'next-sanity';
 
 export const categoriesQuery = groq`
   *[_type == "contentCategory" && active == true && slug.current in [
-    "motion-graphics",
-    "video-editing",
-    "social-media-design",
-    "print-design",
-    "brand-identity",
-    "artificial-intelligence",
-    "exhibitions",
-    "festivals"
+    "events",
+    "identity-design",
+    "media-production",
+    "content-marketing"
   ]] | order(order asc, _createdAt desc, _id asc) {
     _id,
     "id": _id,
@@ -18,7 +14,6 @@ export const categoriesQuery = groq`
     description,
     "icon": icon.asset->url,
     targetLink,
-    portfolioGroup,
     order,
     active
   }
@@ -33,7 +28,6 @@ export const categoryBySlugQuery = groq`
     description,
     "icon": icon.asset->url,
     targetLink,
-    portfolioGroup,
     order,
     active
   }

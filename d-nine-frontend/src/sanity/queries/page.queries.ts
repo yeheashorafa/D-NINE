@@ -24,22 +24,7 @@ export const testimonialFields = groq`
   featured,
   active,
   order,
-  relatedService->{_id, "slug": slug.current},
   relatedProject->{_id, "slug": slug.current}
-`;
-
-export const teamMemberFields = groq`
-  _id,
-  "id": _id,
-  name,
-  role,
-  bio,
-  "image": image.asset->url,
-  "imageAlt": image.alt,
-  socialLinks,
-  featured,
-  active,
-  order
 `;
 
 export const basePageFields = groq`
@@ -94,7 +79,6 @@ export const homePageQuery = groq`
       subtitle
     },
     "featuredProjects": featuredProjects[]->slug.current,
-    "featuredServices": featuredServices[]->slug.current,
     partnersHeader {
       badge,
       title,
@@ -110,7 +94,6 @@ export const homePageQuery = groq`
       badge,
       title,
       subtitle,
-      maxItems,
       selectedTestimonials[]-> {
         ${testimonialFields}
       }
@@ -166,24 +149,11 @@ export const aboutPageQuery = groq`
       "buttonLink": coalesce(url, buttonLink),
       variant
     },
-    team {
-      enabled,
-      badge,
-      title,
-      subtitle,
-      maxItems,
-      ctaLabel,
-      ctaPath,
-      selectedTeamMembers[]-> {
-        ${teamMemberFields}
-      }
-    },
     testimonials {
       enabled,
       badge,
       title,
       subtitle,
-      maxItems,
       selectedTestimonials[]-> {
         ${testimonialFields}
       }
@@ -209,7 +179,6 @@ export const servicesPageQuery = groq`
       badge,
       title,
       subtitle,
-      maxItems,
       selectedTestimonials[]-> {
         ${testimonialFields}
       }

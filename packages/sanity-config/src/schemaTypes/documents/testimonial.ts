@@ -71,14 +71,6 @@ export const testimonial = defineType({
       group: 'display',
     }),
     defineField({
-      name: 'relatedService',
-      title: 'Related Service',
-      type: 'reference',
-      to: [{ type: 'service' }],
-      description: 'Optional link to a primary service for contextual service page testimonials.',
-      group: 'relations',
-    }),
-    defineField({
       name: 'relatedProject',
       title: 'Related Project',
       type: 'reference',

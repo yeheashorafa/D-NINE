@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -24,10 +25,12 @@ export const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const portalRoot = typeof document === 'undefined' ? null : document.body;
 
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
+      const previousOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
 
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -62,7 +65,7 @@ export const Modal: React.FC<ModalProps> = ({
       }, 50);
 
       return () => {
-        document.body.style.overflow = '';
+        document.body.style.overflow = previousOverflow;
         window.removeEventListener('keydown', handleKeyDown);
         if (previousFocusRef.current) {
           previousFocusRef.current.focus();
@@ -82,10 +85,12 @@ export const Modal: React.FC<ModalProps> = ({
     full: 'max-w-[95vw]',
   }[maxWidth];
 
-  return (
+  if (!portalRoot) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center overflow-y-auto p-3 sm:p-6">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -93,7 +98,7 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: prefersReducedMotion ? 0.01 : 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
+            className="fixed inset-0 bg-slate-950/85 backdrop-blur-md"
             aria-hidden="true"
           />
 
@@ -107,7 +112,7 @@ export const Modal: React.FC<ModalProps> = ({
             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: prefersReducedMotion ? 0.01 : 0.25, ease: 'easeOut' }}
-            className={`relative w-full ${maxWidthClass} bg-slate-900 border border-slate-800 text-white rounded-3xl shadow-2xl overflow-hidden z-10`}
+            className={`relative z-10 flex max-h-[94dvh] w-full ${maxWidthClass} flex-col overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 text-white shadow-2xl`}
           >
             {/* Header / Close Button */}
             <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-800/60">
@@ -125,10 +130,11 @@ export const Modal: React.FC<ModalProps> = ({
             </div>
 
             {/* Content Body */}
-            <div className="p-4 sm:p-6">{children}</div>
+            <div className="min-h-0 overflow-auto p-3 sm:p-6">{children}</div>
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    portalRoot,
   );
 };

@@ -10,7 +10,7 @@ import type {
   SanitySiteSettingsDoc
 } from '../types';
 
-import { mapTestimonialsSection, mapTeamSection, mapPartnersList } from './section.mapper';
+import { mapTestimonialsSection, mapPartnersList } from './section.mapper';
 
 export function mapHomePage(doc: SanityHomePageDoc | null) {
   if (!doc) return null;
@@ -18,7 +18,6 @@ export function mapHomePage(doc: SanityHomePageDoc | null) {
     ...doc,
     partnersList: mapPartnersList(doc.partners),
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
-    teamSection: mapTeamSection(doc.teamPreview),
   };
 }
 
@@ -26,15 +25,19 @@ export function mapAboutPage(doc: SanityAboutPageDoc | null) {
   if (!doc) return null;
   return {
     ...doc,
-    teamSection: mapTeamSection(doc.team),
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
   };
 }
 
 export function mapServicesPage(doc: SanityServicesPageDoc | null) {
   if (!doc) return null;
+  const hasTestTitle = (value?: string) => /\b(edited|test|sample|lorem|placeholder)\b/i.test(value || '');
   return {
     ...doc,
+    heroTitle: {
+      ar: hasTestTitle(doc.heroTitle?.ar) ? 'حلول متكاملة من الفكرة إلى الأثر' : doc.heroTitle?.ar,
+      en: hasTestTitle(doc.heroTitle?.en) ? 'Integrated Solutions from Idea to Impact' : doc.heroTitle?.en,
+    },
     testimonialsSection: mapTestimonialsSection(doc.testimonials),
   };
 }

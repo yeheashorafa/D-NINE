@@ -21,7 +21,6 @@ describe('Singleton Page Services', () => {
     const mockData = {
       _id: 'home',
       heroSlides: [{ title: { ar: 'Test', en: 'Test' } }],
-      teamPreview: { enabled: true, selectedTeamMembers: [{ _id: 'm1', active: true, order: 1 }] },
       testimonials: { enabled: true, selectedTestimonials: [{ _id: 't1', active: true, order: 1 }] }
     };
     mockSanityFetch.mockResolvedValueOnce(mockData);
@@ -33,7 +32,6 @@ describe('Singleton Page Services', () => {
       tags: ['home-page', 'homePage'],
     }));
 
-    expect(result?.teamSection?.selectedTeamMembers).toHaveLength(1);
     expect(result?.testimonialsSection?.selectedTestimonials).toHaveLength(1);
   });
 
@@ -41,7 +39,6 @@ describe('Singleton Page Services', () => {
     const mockData = {
       _id: 'about',
       heroTitle: { ar: 'Test', en: 'Test' },
-      team: { enabled: true, selectedTeamMembers: [{ _id: 'm1', active: true, order: 1 }] },
       testimonials: { enabled: true, selectedTestimonials: [{ _id: 't1', active: true, order: 1 }] }
     };
     mockSanityFetch.mockResolvedValueOnce(mockData);
@@ -53,7 +50,6 @@ describe('Singleton Page Services', () => {
       tags: ['about-page', 'aboutPage'],
       stega: false,
     }));
-    expect(result?.teamSection?.selectedTeamMembers).toHaveLength(1);
     expect(result?.testimonialsSection?.selectedTestimonials).toHaveLength(1);
   });
 

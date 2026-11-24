@@ -1,16 +1,14 @@
 import { MetadataRoute } from 'next';
-import { getAllServiceSlugs } from '@/services/content/services.service';
 import { getAllProjectSlugs } from '@/services/content/projects.service';
 import { getAllBlogSlugs } from '@/services/content/blog.service';
 import { DEFAULT_SECTORS } from '@/features/sectors/sector-content';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dnine.agency';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dnine9.com';
   const locales = ['ar', 'en'];
 
   const staticPages = ['', '/about', '/services', '/work', '/blog', '/contact', '/privacy', '/terms'];
 
-  const serviceSlugs = await getAllServiceSlugs();
   const projectSlugs = await getAllProjectSlugs();
   const blogSlugs = await getAllBlogSlugs();
 
@@ -23,15 +21,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: page === '' ? 1.0 : 0.8,
-      });
-    });
-
-    serviceSlugs.forEach((slug) => {
-      entries.push({
-        url: `${baseUrl}/${locale}/services/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.7,
       });
     });
 

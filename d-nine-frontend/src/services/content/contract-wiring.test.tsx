@@ -36,7 +36,6 @@ vi.mock('@/services/content/services.service', () => ({
 }));
 
 vi.mock('@/services/content/team.service', () => ({
-  getTeamMembers: async () => [],
 }));
 
 vi.mock('@/i18n/navigation', () => ({
@@ -466,7 +465,7 @@ describe('Section J & Contract Wiring Verification', () => {
     expect(screen.queryByText('شريك 1')).toBeNull();
     expect(screen.queryByText('شريك 2')).toBeNull();
 
-    const hoverTarget = partnersSection?.querySelector('.group.px-1');
+    const hoverTarget = partnersSection?.querySelector('.partners-carousel');
     expect(hoverTarget).toBeTruthy();
 
     if (hoverTarget) {

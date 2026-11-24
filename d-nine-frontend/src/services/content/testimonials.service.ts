@@ -10,7 +10,7 @@ export async function getTestimonials(): Promise<TestimonialItem[]> {
   if (contentSource === 'sanity') {
     assertSanityConfig();
     const data = await sanityFetch<SanityTestimonialDoc[]>({
-      query: `*[_type == "testimonial" && !(_id in path("drafts.**"))] | order(rating desc, _createdAt desc)`,
+      query: `*[_type == "testimonial" && active != false && !(_id in path("drafts.**"))] | order(order asc, _createdAt asc)`,
       tags: ['testimonials'],
     });
     return (data || []).map(mapSanityTestimonial);

@@ -15,6 +15,7 @@ export const messages = {
     RATE_LIMITED: 'تم تجاوز الحد المسموح به للطلبات.',
     DATABASE_UNAVAILABLE: 'قاعدة البيانات غير متاحة حالياً.',
     EMAIL_DELIVERY_FAILED: 'فشل في إرسال البريد الإلكتروني.',
+    CONTACT_SAVED_EMAIL_FAILED: 'حُفظت رسالتك بأمان، لكن تعذر إرسال إشعار البريد الآن. يرجى المحاولة لاحقًا أو التواصل عبر واتساب.',
     INTERNAL_ERROR: 'حدث خطأ داخلي في الخادم.',
   },
   en: {
@@ -33,6 +34,7 @@ export const messages = {
     RATE_LIMITED: 'Too many requests, please try again later.',
     DATABASE_UNAVAILABLE: 'Database is currently unavailable.',
     EMAIL_DELIVERY_FAILED: 'Failed to deliver email.',
+    CONTACT_SAVED_EMAIL_FAILED: 'Your message was saved safely, but the email notification could not be delivered. Please try again later or contact us on WhatsApp.',
     INTERNAL_ERROR: 'An internal server error occurred.',
   },
 };

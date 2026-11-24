@@ -12,6 +12,7 @@ import {
   UserIcon,
   DropIcon,
 } from '@sanity/icons';
+import { InboundMessagesPanel } from '../components/InboundMessagesPanel';
 
 const SINGLETON_DOCUMENT_TYPES = [
   'homePage',
@@ -45,20 +46,16 @@ export const structure: StructureResolver = (S) =>
             .items([
               S.documentTypeListItem('project').title('المشاريع والأعمال (Projects)').icon(CaseIcon),
               S.listItem()
-                .title('التصنيفات والتخصصات (Categories — 8 Canonical)')
+                .title('تصنيفات الأعمال (4 فقط)')
                 .icon(TagIcon)
                 .child(
                   S.list()
-                    .title('التصنيفات الثابتة المعتمدة (8 Canonical Categories)')
+                    .title('التصنيفات الثابتة المعتمدة')
                     .items([
-                      S.documentListItem().schemaType('contentCategory').id('cat-motion-graphics').title('1. الموشن جرافيك (Motion Graphics)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-video-editing').title('2. المونتاج وتحرير الفيديو (Video Editing)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-social-media-design').title('3. تصاميم السوشيال ميديا (Social Media Design)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-print-design').title('4. التصاميم والمطبوعات (Print Design)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-brand-identity').title('5. تصميم الشعارات والهويات البصرية (Brand Identity)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-artificial-intelligence').title('6. الذكاء الاصطناعي والإنتاج الرقمي (Artificial Intelligence)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-exhibitions').title('7. المعارض وتجهيز المساحات (Exhibitions)'),
-                      S.documentListItem().schemaType('contentCategory').id('cat-festivals').title('8. المهرجانات والفعاليات (Festivals)'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-events').title('1. المعارض والملتقيات والمؤتمرات'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-identity-design').title('2. الهوية والتصاميم'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-media-production').title('3. الفيديو والإنتاج الإعلامي'),
+                      S.documentListItem().schemaType('contentCategory').id('cat-content-marketing').title('4. المحتوى والتسويق'),
                     ])
                 ),
             ])
@@ -72,9 +69,7 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('الخدمات')
             .items([
-              S.documentTypeListItem('service').title('قائمة الخدمات (Services)').icon(SparklesIcon),
-              S.documentTypeListItem('serviceOffering').title('الخدمات الفرعية (Service Offerings)').icon(SparklesIcon),
-              S.documentTypeListItem('sectorPage').title('القطاعات الرئيسية (Main Sectors)').icon(DocumentTextIcon),
+              S.documentTypeListItem('sectorPage').title('القطاعان والخدمات الفرعية').icon(DocumentTextIcon),
             ])
         ),
 
@@ -83,6 +78,11 @@ export const structure: StructureResolver = (S) =>
 
       // 5. آراء العملاء (Testimonials)
       S.documentTypeListItem('testimonial').title('آراء العملاء').icon(StarIcon),
+
+      S.listItem()
+        .title('الرسائل الواردة')
+        .icon(DocumentTextIcon)
+        .child(S.component(InboundMessagesPanel).title('الرسائل الواردة')),
 
       // 6. المدونة والمقالات (Blog)
       S.listItem()
@@ -123,9 +123,9 @@ export const structure: StructureResolver = (S) =>
       // 9. إعدادات الموقع (Site Settings)
       singletonListItem(S, 'siteSettings', 'إعدادات الموقع', CogIcon),
 
-      // Filter out singletons, teamMember (hidden from client), and manually organized types from fallback root list
+      // Filter out singletons and manually organized types from fallback root list
       ...S.documentTypeListItems().filter(
         (listItem) => !SINGLETON_DOCUMENT_TYPES.includes(listItem.getId() || '') &&
-          !['contentCategory', 'service', 'serviceOffering', 'sectorPage', 'project', 'partner', 'blogPost', 'author', 'testimonial', 'teamMember'].includes(listItem.getId() || '')
+          !['contentCategory', 'sectorPage', 'project', 'partner', 'blogPost', 'author', 'testimonial'].includes(listItem.getId() || '')
       ),
     ]);

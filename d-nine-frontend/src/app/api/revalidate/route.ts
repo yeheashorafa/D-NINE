@@ -20,11 +20,9 @@ const MAX_PAYLOAD_BYTES = 64 * 1024;
 const ALLOWED_DOCUMENT_TYPES: Record<string, readonly string[]> = Object.freeze({
   contentCategory: ['categories'],
   service: ['services'],
-  serviceOffering: ['service-offerings', 'services'],
   sectorPage: ['sectorPage', 'sectors', 'services'],
   project: ['projects'],
   testimonial: ['testimonials'],
-  teamMember: ['team-members'],
   blogPost: ['blog'],
   author: ['blog'],
   homePage: ['home-page', 'homePage', 'agency', 'projects', 'services', 'blog'],
@@ -66,7 +64,6 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
   ],
   contentCategory: ['/ar/work', '/en/work', '/ar', '/en'],
   service: ['/ar/services', '/en/services'],
-  serviceOffering: ['/ar/services', '/en/services'],
   sectorPage: ['/ar/services', '/en/services', '/ar', '/en'],
   project: ['/ar/work', '/en/work', '/ar', '/en'],
   testimonial: [
@@ -79,7 +76,6 @@ const BASE_ROUTES: Record<string, readonly string[]> = Object.freeze({
     '/ar/work',
     '/en/work',
   ],
-  teamMember: ['/ar', '/en', '/ar/about', '/en/about'],
   blogPost: ['/ar/blog', '/en/blog', '/ar', '/en'],
   author: ['/ar/blog', '/en/blog'],
   themeSettings: [

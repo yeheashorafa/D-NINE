@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getServiceBySlug } from '@/services/content/services.service';
 import { getAllProjects } from '@/services/content/projects.service';
-import { getTestimonialsForService } from '@/services/content/testimonials.service';
+import { getTestimonials } from '@/services/content/testimonials.service';
 import { RelatedServiceProjects } from './components/related-service-projects';
 import { Link } from '@/i18n/navigation';
 import { ArrowLeft, ArrowRight, CheckCircle2, HelpCircle } from 'lucide-react';
@@ -23,7 +23,7 @@ export async function ServiceDetailPage({ slug }: ServiceDetailPageProps) {
   const [service, allProjects, testimonials] = await Promise.all([
     getServiceBySlug(slug),
     getAllProjects(),
-    getTestimonialsForService(slug),
+    getTestimonials(),
   ]);
 
   if (!service) {

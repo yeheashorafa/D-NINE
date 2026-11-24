@@ -210,9 +210,19 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
     expect(nextBtn).toBeInTheDocument();
   });
 
+  it('scopes visual hover styles to each individual partner card', () => {
+    const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
+    const carousel = container.querySelector('.partners-carousel');
+    const cards = container.querySelectorAll('.group\\/partner');
+
+    expect(carousel).not.toHaveClass('group');
+    expect(cards).toHaveLength(testPartners.length);
+    cards.forEach((card) => expect(card).toHaveClass('hover:-translate-y-1'));
+  });
+
   it('hover => pause (stop) is called; mouseleave with no other reason => resume (start) is called', () => {
     const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
-    const hoverTarget = container.querySelector('.group.px-1') as HTMLDivElement;
+    const hoverTarget = container.querySelector('.partners-carousel') as HTMLDivElement;
     expect(hoverTarget).toBeInTheDocument();
 
     // 1. Mouse Enter
@@ -233,7 +243,7 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
   it('focus => pause is called; mouseleave while focus remains => resume is NOT called', () => {
     const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
     const swiperContainer = container.querySelector('[data-testid="swiper-mock-container"]') as HTMLDivElement;
-    const hoverTarget = container.querySelector('.group.px-1') as HTMLDivElement;
+    const hoverTarget = container.querySelector('.partners-carousel') as HTMLDivElement;
 
     // Hover first
     act(() => {
@@ -291,7 +301,7 @@ describe('PartnersSection Unit & Autoplay Controller Verification', () => {
   it('prefersReducedMotion stops autoplay and prevents resume even when reasons are cleared', () => {
     mockPrefersReducedMotion = true;
     const { container } = renderWithIntl(<PartnersSection partners={testPartners} />);
-    const hoverTarget = container.querySelector('.group.px-1') as HTMLDivElement;
+    const hoverTarget = container.querySelector('.partners-carousel') as HTMLDivElement;
     act(() => {
       hoverTarget.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
       hoverTarget.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));

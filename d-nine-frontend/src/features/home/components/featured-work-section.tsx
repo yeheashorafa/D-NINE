@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { ProjectItem } from '@/types/project';
 import { RevealSection } from '@/components/motion/reveal-section';
-import { DEFAULT_SECTORS } from '@/features/sectors/sector-content';
+import { PORTFOLIO_GROUPS, projectMatchesPortfolioGroup, type PortfolioGroup } from '@/features/sectors/sector-content';
 import type { ContentCategory } from '@/types/category';
 
 export interface FeaturedWorkSectionProps {
@@ -31,9 +31,7 @@ export const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({
 
   const filteredProjects = projects.filter((project) => {
     if (selectedCategory === 'all') return true;
-    const sector = DEFAULT_SECTORS.find((item) => item.slug === selectedCategory);
-    if (!sector) return true;
-    return sector.relatedCategorySlugs.includes(project.primaryCategorySlug) || project.categorySlugs.some((slug) => sector.relatedCategorySlugs.includes(slug));
+    return projectMatchesPortfolioGroup(project, selectedCategory as PortfolioGroup);
   });
 
   return (
@@ -63,19 +61,19 @@ export const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({
           >
             {t('all')}
           </button>
-          {DEFAULT_SECTORS.map((sector) => (
+          {PORTFOLIO_GROUPS.map((group) => (
             <button
-              key={sector.slug}
+              key={group.slug}
               type="button"
-              onClick={() => setSelectedCategory(sector.slug)}
+              onClick={() => setSelectedCategory(group.slug)}
               className={`px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${
-                selectedCategory === sector.slug
+                selectedCategory === group.slug
                   ? 'bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-md'
                   : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-cyan/40'
               }`}
-              aria-pressed={selectedCategory === sector.slug}
+              aria-pressed={selectedCategory === group.slug}
             >
-              {sector.title[locale]}
+              {group.title[locale]}
             </button>
           ))}
         </RevealSection>

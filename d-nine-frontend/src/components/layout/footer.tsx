@@ -2,20 +2,35 @@ import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { Logo } from './logo';
-import { getServices } from '@/services/content/services.service';
+import { getSectors } from '@/sanity/services/sector.service';
 import { SiteSettings } from '@/services/content/settings.service';
 import { siteConfig } from '@/config/site.config';
-import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowUpRight, ExternalLink } from 'lucide-react';
 
 export interface FooterProps {
   settings?: SiteSettings;
+}
+
+function SocialMark({ platform }: { platform: string }) {
+  const name = platform.toLowerCase();
+  const paths: Record<string, string> = {
+    instagram: 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm6.25-3.5a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5Z',
+    linkedin: 'M5 3.5A2.5 2.5 0 1 0 5 8a2.5 2.5 0 0 0 0-4.5ZM3 9h4v12H3V9Zm6.5 0h3.8v1.7h.1c.5-1 1.8-2.1 3.7-2.1 4 0 4.7 2.6 4.7 6V21h-4v-5.7c0-1.4 0-3.1-1.9-3.1s-2.2 1.5-2.2 3V21h-4V9Z',
+    youtube: 'M22 8.1a3 3 0 0 0-2.1-2.1C18 5.5 12 5.5 12 5.5s-6 0-7.9.5A3 3 0 0 0 2 8.1 31 31 0 0 0 1.5 12a31 31 0 0 0 .5 3.9A3 3 0 0 0 4.1 18c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.4-1.3.5-2.6.5-3.9s-.1-2.6-.5-3.9ZM10 15.5v-7l6 3.5-6 3.5Z',
+    facebook: 'M14 8h4V4h-4c-3.3 0-6 2.7-6 6v2H5v4h3v6h4v-6h4l1-4h-5v-2c0-1.1.9-2 2-2Z',
+    x: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z',
+    twitter: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z',
+  };
+  const path = paths[name];
+  if (!path) return <ExternalLink className="h-5 w-5" aria-hidden="true" />;
+  return <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d={path} /></svg>;
 }
 
 export async function Footer({ settings }: FooterProps) {
   const t = await getTranslations();
   const locale = await getLocale() as 'ar' | 'en';
   const isArabic = locale === 'ar';
-  const services = await getServices();
+  const sectors = await getSectors();
 
   const quickLinks = settings?.footerColumns && settings.footerColumns.length > 0
     ? settings.footerColumns[0].links.map(link => ({ href: link.href, label: link.label[locale] || link.label.en }))
@@ -55,18 +70,22 @@ export async function Footer({ settings }: FooterProps) {
               {settings?.socialLinks && settings.socialLinks.length > 0 ? (
                 settings.socialLinks
                   .filter((social) => social.url && social.url !== '#')
-                  .map(social => (
-                    <a
-                      key={social.platform}
-                      href={social.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={social.platform}
-                      className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-brand-cyan hover:border-brand-cyan/40 transition-colors shadow-sm dark:shadow-none uppercase text-xs font-bold"
-                    >
-                      {social.platform}
-                    </a>
-                  ))
+                  .map(social => {
+                    const normalizedPlatform = social.platform.toLowerCase();
+                    return (
+                      <a
+                        key={`${social.platform}-${social.url}`}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.platform}
+                        title={social.platform}
+                        className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-brand-cyan hover:border-brand-cyan/40 transition-colors shadow-sm dark:shadow-none"
+                      >
+                        <SocialMark platform={normalizedPlatform} />
+                      </a>
+                    );
+                  })
               ) : (
                 <>
                   <a
@@ -178,13 +197,13 @@ export async function Footer({ settings }: FooterProps) {
                   {t('footer.services')}
                 </h3>
                 <ul className="space-y-3 text-sm">
-                  {services.map((service) => (
-                    <li key={service.slug}>
+                  {sectors.map((sector) => (
+                    <li key={sector.slug}>
                       <Link
-                        href={`/services/${service.slug}`}
+                        href={`/services/sectors/${sector.slug}`}
                         className="text-slate-600 dark:text-slate-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1 group"
                       >
-                        <span>{service.title[locale as 'ar' | 'en']}</span>
+                        <span>{sector.title[locale]}</span>
                       </Link>
                     </li>
                   ))}

@@ -153,7 +153,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
         {/* Partners Logos Carousel */}
         <RevealSection>
           <div
-            className="relative group px-1 sm:px-2"
+            className="partners-carousel relative px-1 sm:px-2"
             onMouseEnter={() => pauseAutoplay('hover')}
             onMouseLeave={() => resumeAutoplay('hover')}
           >
@@ -232,7 +232,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                   <SwiperSlide key={partner.slideKey} className="h-auto">
                     <div className="w-full flex items-center justify-center p-1 sm:p-2">
                       <div
-                        className="relative w-full aspect-square rounded-full bg-white border border-slate-200/90 dark:border-white/15 shadow-sm hover:shadow-md hover:border-brand-cyan/40 transition-all duration-300 flex items-center justify-center p-5 sm:p-6 md:p-7 group select-none overflow-hidden mx-auto"
+                        className="group/partner relative mx-auto flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded-full border border-slate-200/90 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-cyan/40 hover:shadow-lg sm:p-5 md:p-6 dark:border-white/15"
                         style={{
                           aspectRatio: '1 / 1',
                           borderRadius: '9999px',
@@ -247,7 +247,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                               src={partner.logo}
                               alt={logoAlt}
                               fill
-                              className="object-contain filter transition-transform duration-300 group-hover:scale-105"
+                              className="object-contain p-1 transition-transform duration-300 group-hover/partner:scale-105"
                               sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 220px"
                             />
                           ) : (

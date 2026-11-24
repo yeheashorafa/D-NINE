@@ -7,7 +7,10 @@ const sectorFields = groq`
   title,
   introduction,
   "image": image.asset->url,
-  serviceGroups[]{title, items},
+  serviceGroups[]{
+    title,
+    items[]{slug, title, description, iconName}
+  },
   packages[]{title, description},
   "relatedCategorySlugs": relatedCategories[]->slug.current,
   active,

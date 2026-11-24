@@ -10,25 +10,27 @@ export class ContactService {
     // 1. Persist the submission
     const submission = await contactRepository.createSubmission(payload);
 
-    // 2. Try to send notification email — always swallow errors so the
-    //    saved submission remains successful even if email delivery fails.
+    let notificationSent = false;
+
+    // Persist first so a temporary SMTP failure can never lose the enquiry.
     if (env.CONTACT_NOTIFICATION_EMAIL) {
       try {
         const subject = payload.locale === 'ar' ? 'طلب تواصل جديد — D-NINE' : 'New D-NINE contact request';
 
-        await emailService.sendEmail({
+        notificationSent = (await emailService.sendEmail({
           to: env.CONTACT_NOTIFICATION_EMAIL,
           subject,
           text: createContactNotificationText(payload),
           html: createContactNotificationHtml(payload),
+          replyTo: payload.email,
           referenceId: submission.id,
-        });
+        })) === 'SENT';
       } catch (error) {
         logger.error({ error, submissionId: submission.id }, 'Failed to send contact notification email');
       }
     }
 
-    return submission;
+    return { submission, notificationSent };
   }
 }
 

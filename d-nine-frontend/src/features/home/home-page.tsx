@@ -2,24 +2,22 @@ import React from 'react';
 import { HeroSlider } from './components/hero-slider';
 import { CreativeSnapshotSection } from './components/creative-snapshot-section';
 import { FeaturedWorkSection } from './components/featured-work-section';
-import { CoreServicesSection } from './components/core-services-section';
 import { ProcessSection } from './components/process-section';
 import { PartnersSection } from './components/partners-section';
 import { TestimonialsSection } from './components/testimonials-section';
 import { FaqsSection } from './components/faqs-section';
 import { BookACallSection } from './components/book-a-call-section';
 import { getFeaturedProjects, getProjectsBySlugs } from '@/services/content/projects.service';
-import { getServices } from '@/services/content/services.service';
 import { getHomePage } from '@/sanity/services/page.service';
 import { getTestimonials } from '@/services/content/testimonials.service';
 import { getPartners } from '@/services/content/partners.service';
 import { getSectors } from '@/sanity/services/sector.service';
 import { WhyDnineSection } from './components/why-dnine-section';
+import { SectorServicesTabs } from '@/features/sectors/sector-services-tabs';
 
 export async function HomePage() {
-  const [featuredProjects, services, homeData, allTestimonials, allPartners, sectors] = await Promise.all([
+  const [featuredProjects, homeData, allTestimonials, allPartners, sectors] = await Promise.all([
     getFeaturedProjects(),
-    getServices(),
     getHomePage(),
     getTestimonials(),
     getPartners(),
@@ -31,13 +29,6 @@ export async function HomePage() {
     ? await getProjectsBySlugs(homeData.featuredProjects)
     : featuredProjects.slice(0, 6);
     
-  // Order featured services strictly according to client's curated selection order
-  const displayServices = homeData?.featuredServices?.length
-    ? homeData.featuredServices
-        .map(slug => services.find(s => s.slug === slug))
-        .filter((s): s is typeof services[number] => Boolean(s))
-    : services.slice(0, 6);
-
   // Slides with 4 localized fields or fallback
   const validSlides = (homeData?.heroSlides || []).map(slide => ({
     ...slide,
@@ -67,11 +58,8 @@ export async function HomePage() {
         data={homeData?.featuredWorkHeader}
       />
 
-      {/* 4. Core Services Overview */}
-      <CoreServicesSection
-        services={displayServices}
-        data={homeData?.coreServicesHeader}
-      />
+      {/* 5. Two CMS-managed sectors and their service groups. */}
+      <SectorServicesTabs sectors={sectors} header={homeData?.coreServicesHeader} />
 
       {/* 5. Agency Process */}
       <ProcessSection
@@ -89,9 +77,7 @@ export async function HomePage() {
       <TestimonialsSection data={{
         ...homeData?.testimonialsSection,
         enabled: homeData?.testimonialsSection?.enabled !== false,
-        selectedTestimonials: homeData?.testimonialsSection?.selectedTestimonials?.length
-          ? homeData.testimonialsSection.selectedTestimonials
-          : allTestimonials,
+        selectedTestimonials: allTestimonials,
       }} />
 
       {/* 8. FAQs */}

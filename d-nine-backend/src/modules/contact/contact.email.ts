@@ -10,6 +10,7 @@ Phone: ${payload.phone || 'Not provided'}
 Service: ${payload.serviceSlug}
 Language: ${payload.locale}
 Source Page: ${payload.sourcePage || 'Unknown'}
+Received At: ${new Date().toISOString()}
 
 Message:
 ${payload.message}
@@ -36,6 +37,7 @@ export function createContactNotificationHtml(payload: ContactSubmissionPayload)
       <tr><th>Service</th><td>${escapeHtml(payload.serviceSlug)}</td></tr>
       <tr><th>Language</th><td>${escapeHtml(payload.locale)}</td></tr>
       <tr><th>Source Page</th><td>${escapeHtml(payload.sourcePage || 'Unknown')}</td></tr>
+      <tr><th>Received At</th><td>${new Date().toISOString()}</td></tr>
     </table>
     <h3>Message</h3>
     <p>${escapeHtml(payload.message).replace(/\n/g, '<br>')}</p>

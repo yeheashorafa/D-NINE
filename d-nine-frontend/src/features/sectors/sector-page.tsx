@@ -32,7 +32,7 @@ export function SectorPage({ sector, projects, categories }: { sector: SectorCon
         <div className="grid md:grid-cols-2 gap-6">
           {sector.serviceGroups.map((group, index) => <article key={index} className="rounded-3xl border border-border bg-surface/80 dark:bg-card p-6 sm:p-8">
             {group.title && <h3 className="text-xl font-extrabold text-foreground mb-5">{group.title[locale]}</h3>}
-            <ul className="space-y-4">{group.items.map((item, itemIndex) => <li key={itemIndex} className="flex gap-3 text-text-muted leading-7"><BadgeCheck className="w-5 h-5 shrink-0 mt-1 text-brand-cyan" /><span>{item[locale]}</span></li>)}</ul>
+            <ul className="space-y-4">{group.items.map((item) => <li id={item.slug} key={item.slug} className="scroll-mt-32 flex gap-3 text-text-muted leading-7"><BadgeCheck className="w-5 h-5 shrink-0 mt-1 text-brand-cyan" /><span><strong className="block text-foreground">{item.title[locale]}</strong>{item.description[locale]}</span></li>)}</ul>
           </article>)}
         </div>
       </section>

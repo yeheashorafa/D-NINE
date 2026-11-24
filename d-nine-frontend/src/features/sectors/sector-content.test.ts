@@ -18,12 +18,16 @@ describe('client-approved content structure', () => {
     expect(DEFAULT_SECTORS[1].packages.map((item) => item.title.ar)).toEqual(['باقة حضور D9', 'باقة نمو D9']);
   });
 
-  it('maps portfolio into four approved groups and covers all eight legacy categories', () => {
+  it('maps portfolio into four approved groups while retaining legacy migration aliases', () => {
     expect(PORTFOLIO_GROUPS).toHaveLength(4);
-    expect(new Set(PORTFOLIO_GROUPS.flatMap((group) => group.categorySlugs))).toEqual(new Set([
+    expect(PORTFOLIO_GROUPS.map((group) => group.slug)).toEqual([
+      'events', 'identity-design', 'media-production', 'content-marketing',
+    ]);
+    const aliases = PORTFOLIO_GROUPS.flatMap((group) => group.categorySlugs);
+    for (const legacySlug of [
       'motion-graphics', 'video-editing', 'social-media-design', 'print-design',
       'brand-identity', 'artificial-intelligence', 'exhibitions', 'festivals',
-    ]));
+    ]) expect(aliases).toContain(legacySlug);
   });
 
   it('contains the approved Why D-NINE and About content', () => {

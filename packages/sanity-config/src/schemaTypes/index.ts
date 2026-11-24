@@ -5,7 +5,6 @@ import { localizedPortableText } from './objects/localized-portable-text';
 import { localizedStringArray } from './objects/localized-string-array';
 import { seo } from './objects/seo';
 import { projectMedia } from './objects/project-media';
-import { serviceDeliverable } from './objects/service-deliverable';
 import { serviceProcessStep } from './objects/service-process-step';
 import { serviceFaq } from './objects/service-faq';
 import { projectMetric } from './objects/project-metric';
@@ -19,16 +18,13 @@ import { footerColumn } from './objects/footer-column';
 import { contactMethod } from './objects/contact-method';
 import { office } from './objects/office';
 import { testimonialsSection } from './objects/testimonialsSection';
-import { teamSection } from './objects/teamSection';
+import { sectorServiceItem } from './objects/sector-service-item';
 import { lightThemePalette, darkThemePalette } from './objects/theme-palette';
 
 // Documents
 import { partner } from './documents/partner';
 import { testimonial } from './documents/testimonial';
-import { teamMember } from './documents/teamMember';
 import { contentCategory } from './documents/content-category';
-import { service } from './documents/service';
-import { serviceOffering } from './documents/service-offering';
 import { project } from './documents/project';
 import { blogPost } from './documents/blog-post';
 import { author } from './documents/author';
@@ -52,7 +48,6 @@ export const schemaTypes = [
   localizedStringArray,
   seo,
   projectMedia,
-  serviceDeliverable,
   serviceProcessStep,
   serviceFaq,
   projectMetric,
@@ -66,17 +61,14 @@ export const schemaTypes = [
   contactMethod,
   office,
   testimonialsSection,
-  teamSection,
+  sectorServiceItem,
   lightThemePalette,
   darkThemePalette,
 
   // Document Types
   partner,
   testimonial,
-  teamMember,
   contentCategory,
-  service,
-  serviceOffering,
   project,
   blogPost,
   author,
