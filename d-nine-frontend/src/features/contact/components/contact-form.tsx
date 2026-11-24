@@ -128,6 +128,15 @@ export const ContactForm: React.FC<ContactFormProps> = ({ categories, formTitle,
             )}
           </div>
 
+          <div className="space-y-1.5">
+            <label htmlFor="phone" className="text-xs font-bold text-foreground">{isArabic ? 'رقم الهاتف (مطلوب)' : 'Phone number (required)'}</label>
+            <input id="phone" type="tel" autoComplete="tel" dir="ltr" required maxLength={30}
+              {...register('phone')} aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? 'phone-error' : undefined}
+              className="w-full px-4 py-3 rounded-2xl bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan" />
+            {errors.phone && <p id="phone-error" role="alert" className="text-xs text-rose-500">{isArabic ? 'أدخل رقم هاتف صالحًا من 7 إلى 15 رقمًا.' : 'Enter a phone number with 7 to 15 digits.'}</p>}
+          </div>
+
           {/* Service Selection */}
           <div className="space-y-1.5">
             <label htmlFor="serviceSlug" className="text-xs font-bold text-foreground">{t('serviceLabel')}</label>
