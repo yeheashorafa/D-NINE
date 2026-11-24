@@ -55,6 +55,7 @@ const hstsHeader = {
 };
 
 const nextConfig: NextConfig = {
+  env: { SANITY_STUDIO_SUPABASE_INBOX_URL: process.env.SANITY_STUDIO_SUPABASE_INBOX_URL || '' },
   output: 'standalone',
   outputFileTracingRoot: monorepoRoot,
   reactStrictMode: true,

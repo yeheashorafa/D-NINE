@@ -70,5 +70,5 @@ export const env = {
   ...parsed.data,
   SMTP_PASSWORD: parsed.data.SMTP_PASSWORD || parsed.data.SMTP_PASS,
   CONTACT_NOTIFICATION_EMAIL:
-    parsed.data.CONTACT_NOTIFICATION_EMAIL || parsed.data.CONTACT_RECEIVER_EMAIL,
+    parsed.data.CONTACT_RECEIVER_EMAIL || parsed.data.CONTACT_NOTIFICATION_EMAIL,
 };

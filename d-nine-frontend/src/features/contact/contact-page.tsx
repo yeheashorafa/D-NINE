@@ -1,4 +1,5 @@
 import React from 'react';
+import { siteConfig } from '@/config/site.config';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getCategories } from '@/services/content/categories.service';
 import { getContactPage } from '@/sanity/services/page.service';
@@ -90,7 +91,9 @@ export async function ContactPage() {
                     <div>
                       <h3 className="font-bold text-foreground">{office.title?.[locale] || office.title?.en}</h3>
                       <p className="text-xs mt-1 whitespace-pre-wrap">
-                        {office.address?.[locale] || office.address?.en}
+                        {/^(الرياض|riyadh)$/i.test((office.address?.[locale] || '').trim())
+                          ? siteConfig.contact.locations[locale]
+                          : office.address?.[locale] || office.address?.en}
                       </p>
                       <p className="text-xs mt-1" dir="ltr">{settings.phoneDisplay}</p>
                       <p className="text-xs mt-1">{settings.email}</p>
@@ -129,7 +132,7 @@ export async function ContactPage() {
 
           {/* Form */}
           <div className="lg:col-span-7">
-            <ContactForm categories={categories} />
+            <ContactForm categories={categories} formTitle={pageData?.formTitle?.[locale]} successMessage={pageData?.successMessage?.[locale]} />
           </div>
         </div>
       </div>
